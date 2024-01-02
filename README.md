@@ -2,9 +2,9 @@
 비난·차별·혐오 표현의 글을 투명하게, 우리가 함께 만들어가는 온화한 익명 커뮤니티 Don’t be
 
 ## 💻 팀원 소개
-💙 서버 : 김보람
+🐰 서버 : 김보람
 
-🐸 서버 : 정홍준
+🐮 서버 : 정홍준
 | 김보람 | 정홍준 |
 | :---------:|:----------:|
 |<img width="330" height="350" alt="image" src="https://avatars.githubusercontent.com/u/128011308?s=400&u=633d530e6863dea1ad9f409fd2f979b85c018b6f&v=4"> | <img width="330" height="350" alt="image" src="https://github.com/Team-Puzzling/Puzzling_Server/assets/68415644/51bde41d-f223-44bc-b84b-fe47bb09fdde"> | 
