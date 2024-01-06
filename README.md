@@ -116,18 +116,27 @@
      </div>  </details>
 
 
-## 개발환경
-- Java 17
-- Spring
-- JPA
+## 개발환경 및 기술 스택
+|역할|종류|
+|-|-|
+|Framework|Spring, Spring Boot(3.2.1)|
+|Database|MySQL|
+|Database Service|RDS|
+|Programming Language|JAVA(17)|                                  
+|Version Control|GIT, Docker|
+|CICD|Github Action, Docker, Nginx|
+|Package Architecture|Domain|
+<br /> 
 
 ## 프로젝트 구조
 
 
 ## 아키텍트 구조
+![image](https://github.com/TeamDon-tBe/SERVER/assets/128011308/572c53b0-5b31-4fe5-8288-d52a5ad8730b)
 
 
 ## ERD
+![image](https://github.com/TeamDon-tBe/SERVER/assets/128011308/d06988e5-88fe-4aed-bbbc-f007f319f064)
 
 
 
