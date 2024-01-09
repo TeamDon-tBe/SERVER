@@ -1,9 +1,9 @@
-package com.dontbe.www.DontBeServer.api.member.auth.controller;
+package com.dontbe.www.DontBeServer.api.auth.controller;
 
-import com.dontbe.www.DontBeServer.api.member.auth.dto.request.AuthRequestDto;
-import com.dontbe.www.DontBeServer.api.member.auth.dto.response.AuthResponseDto;
-import com.dontbe.www.DontBeServer.api.member.auth.dto.response.AuthTokenResponseDto;
-import com.dontbe.www.DontBeServer.api.member.auth.service.AuthService;
+import com.dontbe.www.DontBeServer.api.auth.dto.request.AuthRequestDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.response.AuthResponseDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.response.AuthTokenResponseDto;
+import com.dontbe.www.DontBeServer.api.auth.service.AuthService;
 import com.dontbe.www.DontBeServer.common.config.jwt.JwtTokenProvider;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.response.SuccessStatus;
@@ -22,17 +22,19 @@ public class AuthController {
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping()
-    public ApiResponse<AuthResponseDto> socialLogin(@RequestHeader("Authorization") String socialAccessToken, @RequestBody AuthRequestDto authRequestDto) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+
+    public ApiResponse<AuthResponseDto>  socialLogin(@RequestHeader("Authorization") String socialAccessToken, @RequestBody AuthRequestDto authRequestDto) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         AuthResponseDto responseDto = authService.socialLogin(socialAccessToken, authRequestDto);
         // 로그인
         if (!responseDto.getIsNewUser()) {
             return ApiResponse.success(SuccessStatus.SIGNIN_SUCCESS, responseDto);
         }
-
         // 회원가입
         return ApiResponse.success(SuccessStatus.SIGNUP_SUCCESS, responseDto);
+
     }
 
     @GetMapping("/token")

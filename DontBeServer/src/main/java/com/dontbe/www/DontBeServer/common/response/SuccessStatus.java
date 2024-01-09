@@ -15,6 +15,7 @@ public enum SuccessStatus {
     SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
     SIGNIN_SUCCESS(HttpStatus.OK, "로그인 성공"),
     GET_NEW_TOKEN_SUCCESS(HttpStatus.OK,"토큰 재발급 성공"),
+    DRAWAL_SUCCESS(HttpStatus.OK,"유저 탈퇴 성공"),
     ;
 
     private final HttpStatus httpStatus;

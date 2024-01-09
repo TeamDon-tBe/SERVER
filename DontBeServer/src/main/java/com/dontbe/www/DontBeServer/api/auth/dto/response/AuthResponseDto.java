@@ -1,4 +1,4 @@
-package com.dontbe.www.DontBeServer.api.member.auth.dto.response;
+package com.dontbe.www.DontBeServer.api.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

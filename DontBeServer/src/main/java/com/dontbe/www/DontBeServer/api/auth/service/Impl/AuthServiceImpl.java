@@ -1,11 +1,14 @@
-package com.dontbe.www.DontBeServer.api.member.auth.service.Impl;
+package com.dontbe.www.DontBeServer.api.auth.service.Impl;
 
-import com.dontbe.www.DontBeServer.api.member.auth.SocialPlatform;
-import com.dontbe.www.DontBeServer.api.member.auth.dto.*;
-import com.dontbe.www.DontBeServer.api.member.auth.dto.request.AuthRequestDto;
-import com.dontbe.www.DontBeServer.api.member.auth.dto.response.*;
-import com.dontbe.www.DontBeServer.api.member.auth.service.AuthService;
-import com.dontbe.www.DontBeServer.api.member.auth.service.KakaoAuthService;
+import com.dontbe.www.DontBeServer.api.auth.SocialPlatform;
+import com.dontbe.www.DontBeServer.api.auth.dto.SocialInfoDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.response.AuthResponseDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.response.AuthTokenResponseDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.*;
+import com.dontbe.www.DontBeServer.api.auth.dto.request.AuthRequestDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.response.*;
+import com.dontbe.www.DontBeServer.api.auth.service.AuthService;
+import com.dontbe.www.DontBeServer.api.auth.service.KakaoAuthService;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
@@ -14,6 +17,7 @@ import com.dontbe.www.DontBeServer.common.config.jwt.JwtTokenProvider;
 import com.dontbe.www.DontBeServer.common.config.jwt.UserAuthentication;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +34,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponseDto socialLogin(String socialAccessToken, AuthRequestDto authRequestDto) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        if (authRequestDto.getSocialPlatform() == null) {
-            throw new BadRequestException(ErrorStatus.VALIDATION_REQUEST_MISSING_EXCEPTION.getMessage());
-        }
-        SocialPlatform socialPlatform = SocialPlatform.valueOf(authRequestDto.getSocialPlatform());
+        // DTO에서 처리하고 이건 빠져도 될 것 같습니다.
+//        if (authRequestDto.getSocialPlatform() == null) {
+//            throw new BadRequestException(ErrorStatus.VALIDATION_REQUEST_MISSING_EXCEPTION.getMessage());
+//        }
+         val socialPlatform = SocialPlatform.valueOf(authRequestDto.getSocialPlatform());
         SocialInfoDto socialData = getSocialData(socialPlatform, socialAccessToken);
         String refreshToken = jwtTokenProvider.generateRefreshToken();
         Boolean isExistUser = isMemberBySocialId(socialData.getId());
@@ -91,11 +96,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private SocialInfoDto getSocialData(SocialPlatform socialPlatform, String socialAccessToken) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        switch (socialPlatform) {
-            case KAKAO:
-                return kakaoAuthService.login(socialAccessToken);
-            default:
+
+        return switch (socialPlatform) {
+            case KAKAO -> kakaoAuthService.login(socialAccessToken);
+            default -> {
                 throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
-        }
+            }
+        };
+//        switch (socialPlatform) {
+//            case KAKAO:
+//                return kakaoAuthService.login(socialAccessToken);
+//            default:
+//                throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
+//        }
     }
 }
