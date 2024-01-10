@@ -33,7 +33,4 @@ public class CommentController {
         commentCommendService.deleteComment(MemberUtil.getMemberId(principal),commentId);
         return ApiResponse.success(DELETE_COMMENT_SUCCESS);
     }
-
-
-
 }

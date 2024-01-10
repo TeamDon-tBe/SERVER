@@ -32,7 +32,7 @@ public class Comment extends BaseTimeEntity {
 
     private String commentText;
 
-    @OneToMany(mappedBy = "comment", cascade = ALL)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommentLiked> commentLikeds = new ArrayList<>();
 
     @Builder
