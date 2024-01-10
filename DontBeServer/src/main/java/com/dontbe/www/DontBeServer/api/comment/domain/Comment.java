@@ -23,7 +23,7 @@ public class Comment extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id") //댓글 작성자 id
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
