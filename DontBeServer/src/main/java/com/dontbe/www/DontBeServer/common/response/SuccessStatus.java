@@ -25,8 +25,8 @@ public enum SuccessStatus {
     /**
      * comment
      */
-    POST_COMMENT_SUCCESS(HttpStatus.CREATED,"답글 작성 성공")
-    DELETE_CONTENT_SUCCESS(HttpStatus.OK,"게시물 삭제 성공"),
+    POST_COMMENT_SUCCESS(HttpStatus.CREATED,"답글 작성 성공"),
+    DELETE_CONTENT_SUCCESS(HttpStatus.OK,"게시물 삭제 성공")
     ;
 
     private final HttpStatus httpStatus;
