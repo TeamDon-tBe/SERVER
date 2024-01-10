@@ -31,24 +31,7 @@ public class ApiResponse<T> {
                         .message(successStatus.getMessage())
                         .data(data).build());
     }
-
-    //    public static ApiResponse success(SuccessStatus status, Object data) {
-//        return ApiResponse.builder()
-//                .status(status.getStatusCode())
-//                .success(true)
-//                .message(status.getMessage())
-//                .data(data)
-//                .build();
-//    }
-//
-//    public static ApiResponse success(int status, String message) {
-//        return ApiResponse.builder()
-//                .status(status)
-//                .success(true)
-//                .message(message)
-//                .build();
-//    }
-//
+  
     public static ApiResponse fail(int status, String message) {
         return ApiResponse.builder()
                 .status(status)
