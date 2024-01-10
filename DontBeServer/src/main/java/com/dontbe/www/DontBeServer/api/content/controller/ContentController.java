@@ -1,7 +1,6 @@
 package com.dontbe.www.DontBeServer.api.content.controller;
 
 import com.dontbe.www.DontBeServer.api.content.dto.request.ContentPostRequestDto;
-import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.content.service.ContentQueryService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
