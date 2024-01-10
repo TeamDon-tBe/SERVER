@@ -31,6 +31,7 @@ public enum ErrorStatus {
      */
     NOT_FOUND_MEMBER("해당하는 유저가 없습니다."),
     NOT_FOUND_CONTENT("해당하는 게시물이 없습니다."),
+    NOT_FOUND_COMMENT("해당하는 댓글이 없습니다."),
 
 
     /**

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.DELETE_COMMENT_SUCCESS;
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.POST_COMMENT_SUCCESS;
 
 @RestController
@@ -27,7 +28,9 @@ public class CommentController {
         commentCommendService.postComment(MemberUtil.getMemberId(principal),contentId, commentPostRequestDto);
         return ApiResponse.success(POST_COMMENT_SUCCESS);
     }
-
-
-
+    @DeleteMapping("comment/{commentId}")
+    public ResponseEntity<ApiResponse<Object>> deleteComment(Principal principal, @PathVariable Long commentId){    //작성자ID와 댓글ID가 같아야 함
+        commentCommendService.deleteComment(MemberUtil.getMemberId(principal),commentId);
+        return ApiResponse.success(DELETE_COMMENT_SUCCESS);
+    }
 }
