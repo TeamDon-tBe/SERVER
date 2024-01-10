@@ -16,7 +16,6 @@ public enum ErrorStatus {
     NO_TOKEN("토큰을 넣어주세요."),
     INVALID_MEMBER("유효하지 않은 유저입니다."),
     ANOTHER_ACCESS_TOKEN("지원하지 않는 소셜 플랫폼입니다."),
-    ALREADY_COMPLETE_ACTIONPLAN("이미 완료된 액션 플랜입니다."),
 
     /**
      * 401 UNAUTHORIZED
@@ -31,11 +30,8 @@ public enum ErrorStatus {
      * 404 NOT_FOUND
      */
     NOT_FOUND_MEMBER("해당하는 유저가 없습니다."),
-    NOT_FOUND_MEMBER_CAVE("유저가 생성한 동굴이 없습니다."),
-    NOT_FOUND_CAVE("해당하는 동굴이 없습니다."),
-    NOT_FOUND_SEED("해당하는 씨앗이 없습니다."),
-    NOT_FOUND_ACTIONPLAN("해당하는 액션 플랜이 없습니다."),
     NOT_FOUND_CONTENT("해당하는 게시물이 없습니다."),
+
 
     /**
      * 500 SERVER_ERROR
