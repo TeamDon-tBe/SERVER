@@ -5,5 +5,4 @@ import jakarta.validation.constraints.NotBlank;
 public record ContentPostRequestDto(
         @NotBlank String contentText
 ) {
-
 }
