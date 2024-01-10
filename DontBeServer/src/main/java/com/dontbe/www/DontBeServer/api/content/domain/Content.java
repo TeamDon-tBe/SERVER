@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +27,14 @@ public class Content extends BaseTimeEntity {
     private Member member;
 
     @NotNull
-    private String text;
+    private String contentText;
 
     @OneToMany(mappedBy = "content", cascade = ALL)
     private List<ContentLiked> contentLikeds = new ArrayList<>();
 
     @Builder
-    public Content(Member member, String text) {
+    public Content(Member member, String contentText) {
         this.member = member;
-        this.text = text;
+        this.contentText = contentText;
     }
 }
