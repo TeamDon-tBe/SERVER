@@ -1,10 +1,10 @@
-package com.dontbe.www.DontBeServer.api.member.auth.service;
+package com.dontbe.www.DontBeServer.api.auth.service;
 
 import com.dontbe.www.DontBeServer.common.exception.BaseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.dontbe.www.DontBeServer.api.member.auth.dto.SocialInfoDto;
+import com.dontbe.www.DontBeServer.api.auth.dto.SocialInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
