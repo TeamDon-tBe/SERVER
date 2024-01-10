@@ -20,6 +20,7 @@ public enum SuccessStatus {
     /**
      * content
      */
+    GET_CONTENT_DETAIL_SUCCESS(HttpStatus.OK, "게시물 상세 조회 성공"),
     POST_CONTENT_SUCCESS(HttpStatus.CREATED,"게시글 작성 성공"),
 
     /**

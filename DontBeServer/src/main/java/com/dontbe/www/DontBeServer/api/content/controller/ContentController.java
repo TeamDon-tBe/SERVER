@@ -1,7 +1,9 @@
 package com.dontbe.www.DontBeServer.api.content.controller;
 
 import com.dontbe.www.DontBeServer.api.content.dto.request.ContentPostRequestDto;
+import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetDetailsResponseDto;
 import com.dontbe.www.DontBeServer.api.content.service.ContentCommandService;
+import com.dontbe.www.DontBeServer.api.content.service.ContentQueryService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import jakarta.validation.Valid;
@@ -18,6 +20,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @RequestMapping("api/v1")
 public class ContentController {
     private final ContentCommandService contentCommandService;
+    private final ContentQueryService contentQueryService;
 
     @PostMapping("content")
     public ResponseEntity<ApiResponse<Object>> postContent(Principal principal, @Valid @RequestBody ContentPostRequestDto contentPostRequestDto) {
@@ -31,4 +34,8 @@ public class ContentController {
         return ApiResponse.success(DELETE_CONTENT_SUCCESS);
     }
 
+    @GetMapping("content/{contentId}/detail")
+    public ResponseEntity<ApiResponse<ContentGetDetailsResponseDto>> getContentDetail(Principal principal, @PathVariable("contentId") Long contentId) {
+        return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetail(MemberUtil.getMemberId(principal), contentId));
+    }
 }

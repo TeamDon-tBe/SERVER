@@ -1,5 +1,6 @@
 package com.dontbe.www.DontBeServer.api.content.domain;
 
+import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -11,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -29,9 +29,11 @@ public class Content extends BaseTimeEntity {
     @NotNull
     private String contentText;
 
-    @OneToMany(mappedBy = "content", cascade = ALL)
+    @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
     private List<ContentLiked> contentLikeds = new ArrayList<>();
 
+    @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
     @Builder
     public Content(Member member, String contentText) {
         this.member = member;
