@@ -25,7 +25,7 @@ public class CommentCommendService {
         Comment comment = Comment.builder()
                 .member(member)
                 .content(content)
-                .commentText(commentPostRequestDto.getCommentText())
+                .commentText(commentPostRequestDto.commentText())
                 .build();
 
         Comment savedComment = commentRepository.save(comment);
