@@ -21,6 +21,7 @@ public enum ErrorStatus {
     /**
      * 401 UNAUTHORIZED
      */
+    UNAUTHORIZED_MEMBER("권한이 없는 유저입니다."),
     UNAUTHORIZED_TOKEN("유효하지 않은 토큰입니다."),
     KAKAO_UNAUTHORIZED_USER("카카오 로그인 실패. 만료되었거나 잘못된 카카오 토큰입니다."),
     SIGNIN_REQUIRED("access, refreshToken 모두 만료되었습니다. 재로그인이 필요합니다."),
@@ -34,6 +35,7 @@ public enum ErrorStatus {
     NOT_FOUND_CAVE("해당하는 동굴이 없습니다."),
     NOT_FOUND_SEED("해당하는 씨앗이 없습니다."),
     NOT_FOUND_ACTIONPLAN("해당하는 액션 플랜이 없습니다."),
+    NOT_FOUND_CONTENT("해당하는 게시물이 없습니다."),
 
     /**
      * 500 SERVER_ERROR
