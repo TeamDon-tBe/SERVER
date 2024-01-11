@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    int countByContent(Content content);
+
     Optional<Comment> findCommentById(Long commentId);
 
     default Comment findCommentByIdOrThrow(Long commentId) {

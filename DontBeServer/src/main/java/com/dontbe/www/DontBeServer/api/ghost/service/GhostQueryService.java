@@ -1,4 +1,4 @@
-package com.dontbe.www.DontBeServer.api.ghost.domain;
+package com.dontbe.www.DontBeServer.api.ghost.service;
 
 
 import lombok.RequiredArgsConstructor;
