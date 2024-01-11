@@ -10,6 +10,7 @@ import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
+import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.exception.UnAuthorizedException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,9 @@ public class ContentCommandService {
     public void likeContent(Long memberId, Long contentId, ContentLikedRequestDto contentLikedRequestDto) {
         Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
         Content content = contentRepository.findContentByIdOrThrow(contentId);
+
+        isDuplicateContentLike(content, triggerMember);
+
         Member targetMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
         ContentLiked contentLiked =  ContentLiked.builder()
                 .content(content)
@@ -69,6 +73,12 @@ public class ContentCommandService {
         Long contentMemberId = content.getMember().getId();
         if (!contentMemberId.equals(memberId)) {
             throw new UnAuthorizedException(ErrorStatus.UNAUTHORIZED_MEMBER.getMessage());
+        }
+    }
+
+    private void isDuplicateContentLike(Content content, Member member) {
+        if(contentLikedRepository.existsByContentAndMember(content,member)) {
+            throw new BadRequestException(ErrorStatus.DUPLICATION_CONTENT_LIKE.getMessage());
         }
     }
 }
