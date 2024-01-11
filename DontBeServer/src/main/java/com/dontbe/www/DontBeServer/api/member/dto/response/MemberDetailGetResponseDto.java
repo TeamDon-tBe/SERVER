@@ -2,15 +2,15 @@ package com.dontbe.www.DontBeServer.api.member.dto.response;
 
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 
-public record MemberDetailGetReponseDto(
+public record MemberDetailGetResponseDto(
         Long memberId,
         String joinDate,
         String showMemberId,
         String socialPlatform,
         String versionInformation
 ) {
-    public static MemberDetailGetReponseDto of(Member member, String joinDate){
-        return new MemberDetailGetReponseDto(
+    public static MemberDetailGetResponseDto of(Member member, String joinDate){
+        return new MemberDetailGetResponseDto(
                 member.getId(),
                 joinDate,
                 member.getSocialId(),

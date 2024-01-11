@@ -1,11 +1,11 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
-import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetReponseDto;
+import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
+import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.service.MemberService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +28,13 @@ public class MemberController {
     }
 
     @GetMapping("member-data")
-    public ResponseEntity<ApiResponse<MemberDetailGetReponseDto>> getMemberDetail(Principal principal){
+    public ResponseEntity<ApiResponse<MemberDetailGetResponseDto>> getMemberDetail(Principal principal){
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_MEMBER_DETAIL,memberService.getMemberDetail(memberId));
+        return ApiResponse.success(GET_MEMBER_DETAIL, memberService.getMemberDetail(memberId));
+    }
+
+    @GetMapping("viewmember/{viewmemberId}")
+    public ResponseEntity<ApiResponse<MemberGetProfileResponseDto>> getMemberProfile(Principal principal,@PathVariable(name = "viewmemberId") Long viewmemberId) {
+        return ApiResponse.success(GET_PROFILE_SUCCESS, memberService.getMemberProfile(viewmemberId));
     }
 }

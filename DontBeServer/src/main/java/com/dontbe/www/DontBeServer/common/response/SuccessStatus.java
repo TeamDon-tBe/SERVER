@@ -35,7 +35,8 @@ public enum SuccessStatus {
     /**
      * member
      */
-    GET_MEMBER_DETAIL(HttpStatus.OK,"계정 정보 조회 성공")
+    GET_MEMBER_DETAIL(HttpStatus.OK,"계정 정보 조회 성공"),
+    GET_PROFILE_SUCCESS(HttpStatus.OK,"유저 프로필 조회 성공")
     ;
 
     private final HttpStatus httpStatus;
