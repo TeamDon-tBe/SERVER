@@ -8,12 +8,10 @@ import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
+import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +30,7 @@ public class ContentQueryService {
         Long writerMemberId = content.getMember().getId();
         boolean isGhost = ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(writerMemberId, memberId);
         boolean isLiked = contentLikedRepository.existsByContentAndMember(content,member);
-        LocalDateTime contentTime = content.getCreatedAt();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String time = contentTime.format(formatter);
+        String time = TimeUtilCustom.refineTime(content.getCreatedAt());
         int likedNumber = contentLikedRepository.countByContent(content);
         int commentNumber = commentRepository.countByContent(content);
 

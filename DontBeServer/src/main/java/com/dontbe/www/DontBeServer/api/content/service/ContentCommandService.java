@@ -65,6 +65,21 @@ public class ContentCommandService {
         Notification savedNotification = notificationRepository.save(notification);
     }
 
+    public void unlikeContent(Long memberId, Long contentId) {
+        Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Content content = contentRepository.findContentByIdOrThrow(contentId);
+
+        if(!contentLikedRepository.existsByContentAndMember(content,triggerMember)){
+            throw new BadRequestException(ErrorStatus.UNEXITST_CONTENT_LIKE.getMessage());
+        }
+
+        contentLikedRepository.deleteByContentAndMember(content,triggerMember);
+
+        Member targetMember = contentRepository.findContentByIdOrThrow(contentId).getMember();
+
+        notificationRepository.deleteByNotificationTargetMemberAndNotificationTriggerMemberIdAndNotificationTriggerTypeAndNotificationTriggerId(
+                targetMember, memberId, "contentLiked", contentId);
+    }
 
     private void deleteValidate(Long memberId, Long contentId) {
         Content content = contentRepository.findById(contentId)
