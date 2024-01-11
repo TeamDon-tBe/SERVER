@@ -45,4 +45,11 @@ public class ContentController {
         contentCommandService.likeContent(memberId, contentId,contentLikedRequestDto);
         return ApiResponse.success(CONTENT_LIKE_SUCCESS);
     }
+
+    @DeleteMapping("content/{contentId}/unliked")
+    public ResponseEntity<ApiResponse<Object>> unlikeContent(Principal principal, @PathVariable("contentId") Long contentId) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        contentCommandService.unlikeContent(memberId, contentId);
+        return ApiResponse.success(CONTENT_UNLIKE_SUCCESS);
+    }
 }

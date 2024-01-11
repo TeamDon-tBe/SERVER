@@ -9,4 +9,6 @@ public interface ContentLikedRepository extends JpaRepository<ContentLiked,Long>
     boolean existsByContentAndMember(Content content, Member member);
 
     int countByContent(Content content);
+
+    void deleteByContentAndMember(Content content, Member member);
 }
