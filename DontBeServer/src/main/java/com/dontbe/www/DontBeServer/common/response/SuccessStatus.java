@@ -30,7 +30,12 @@ public enum SuccessStatus {
      * comment
      */
     POST_COMMENT_SUCCESS(HttpStatus.CREATED,"답글 작성 성공"),
-    DELETE_COMMENT_SUCCESS(HttpStatus.OK, "답글 삭제 성공")
+    DELETE_COMMENT_SUCCESS(HttpStatus.OK, "답글 삭제 성공"),
+
+    /**
+     * member
+     */
+    GET_MEMBER_DETAIL(HttpStatus.OK,"계정 정보 조회 성공")
     ;
 
     private final HttpStatus httpStatus;
