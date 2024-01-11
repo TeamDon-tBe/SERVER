@@ -1,7 +1,7 @@
 package com.dontbe.www.DontBeServer.api.content.controller;
 
-import com.dontbe.www.DontBeServer.api.content.dto.request.ContentPostRequestDto;
-import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetDetailsResponseDto;
+import com.dontbe.www.DontBeServer.api.content.dto.request.*;
+import com.dontbe.www.DontBeServer.api.content.dto.response.*;
 import com.dontbe.www.DontBeServer.api.content.service.ContentCommandService;
 import com.dontbe.www.DontBeServer.api.content.service.ContentQueryService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
@@ -37,5 +37,12 @@ public class ContentController {
     @GetMapping("content/{contentId}/detail")
     public ResponseEntity<ApiResponse<ContentGetDetailsResponseDto>> getContentDetail(Principal principal, @PathVariable("contentId") Long contentId) {
         return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetail(MemberUtil.getMemberId(principal), contentId));
+    }
+
+    @PostMapping("content/{contentId}/liked")
+    public ResponseEntity<ApiResponse<Object>> likeContent(Principal principal, @PathVariable("contentId") Long contentId, @Valid @RequestBody ContentLikedRequestDto contentLikedRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        contentCommandService.likeContent(memberId, contentId,contentLikedRequestDto);
+        return ApiResponse.success(CONTENT_LIKE_SUCCESS);
     }
 }

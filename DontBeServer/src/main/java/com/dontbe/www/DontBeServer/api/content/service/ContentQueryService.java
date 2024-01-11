@@ -40,15 +40,4 @@ public class ContentQueryService {
 
         return ContentGetDetailsResponseDto.of(writerMember, content, isGhost, isLiked, time, likedNumber, commentNumber);
     }
-
-    private LocalDateTime factoringLocalDateTime(LocalDateTime localDateTime) {
-        return LocalDateTime.of(
-                localDateTime.getYear(),
-                localDateTime.getMonth(),
-                localDateTime.getDayOfMonth(),
-                localDateTime.getHour(),
-                localDateTime.getMinute(),
-                localDateTime.getSecond()
-        );
-    }
 }
