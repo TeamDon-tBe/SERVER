@@ -1,5 +1,6 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.service.MemberService;
@@ -36,5 +37,12 @@ public class MemberController {
     @GetMapping("viewmember/{viewmemberId}")
     public ResponseEntity<ApiResponse<MemberGetProfileResponseDto>> getMemberProfile(Principal principal,@PathVariable(name = "viewmemberId") Long viewmemberId) {
         return ApiResponse.success(GET_PROFILE_SUCCESS, memberService.getMemberProfile(viewmemberId));
+    }
+
+    @PostMapping("ghost")
+    public ResponseEntity<ApiResponse<Object>> clickMemberGhost(Principal principal,@RequestBody MemberClickGhostRequestDto memberClickGhostRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        memberService.clickMemberGhost(memberId, memberClickGhostRequestDto);
+        return ApiResponse.success(CLICK_MEMBER_GHOST_SUCCESS);
     }
 }

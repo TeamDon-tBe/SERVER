@@ -30,7 +30,7 @@
 
 ### 커밋 예시
 
-`ex ) git commit -m "#1 [FEAT] 회원가입 기능 완료"`
+`ex ) git commit -m "[FEAT] 회원가입 기능 완료"`
 
 <br>
 
