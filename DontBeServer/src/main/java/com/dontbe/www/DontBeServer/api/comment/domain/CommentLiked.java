@@ -3,6 +3,7 @@ package com.dontbe.www.DontBeServer.api.comment.domain;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,10 @@ public class CommentLiked extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public CommentLiked(Comment comment, Member member){
+        this.comment = comment;
+        this.member = member;
+    }
 }

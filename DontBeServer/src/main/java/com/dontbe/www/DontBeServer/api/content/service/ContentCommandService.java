@@ -53,16 +53,19 @@ public class ContentCommandService {
                 .build();
         ContentLiked savedContentLiked = contentLikedRepository.save(contentLiked);
 
+
         //위에가 게시물 좋아요 관련, 아래는 노티 테이블 채우기. 노티에 게시글 내용이 없어서 빈스트링 제공.
-        Notification notification = Notification.builder()
-                .notificationTargetMember(targetMember)
-                .notificationTriggerMemberId(triggerMember.getId())
-                .notificationTriggerType(contentLikedRequestDto.alarmTriggerType())
-                .notificationTriggerId(contentId)
-                .isNotificationChecked(false)
-                .notificationText("")
-                .build();
-        Notification savedNotification = notificationRepository.save(notification);
+        if(triggerMember != targetMember){  //자신 게시물에 대한 좋아요 누르면 알림 발생 x
+            Notification notification = Notification.builder()
+                    .notificationTargetMember(targetMember)
+                    .notificationTriggerMemberId(triggerMember.getId())
+                    .notificationTriggerType(contentLikedRequestDto.alarmTriggerType())
+                    .notificationTriggerId(contentId)
+                    .isNotificationChecked(false)
+                    .notificationText("")
+                    .build();
+            Notification savedNotification = notificationRepository.save(notification);
+        }
     }
 
     public void unlikeContent(Long memberId, Long contentId) {

@@ -19,7 +19,10 @@ public enum ErrorStatus {
     DUPLICATION_CONTENT_LIKE("이미 좋아요를 누른 게시물입니다."),
     UNEXITST_CONTENT_LIKE("좋아요를 누르지 않은 게시물입니다."),
     GHOST_HIGHLIMIT("투명도는 0이상일 수 없습니다."),
+    DUPLICATION_COMMENT_LIKE("이미 좋아요를 누른 답글입니다."),
+    UNEXITST_CONMMENT_LIKE("좋아요를 누르지 않은 답글입니다."),
     DUPLICATION_MEMBER_GHOST("이미 투명도를 누른 대상입니다."),
+
     /**
      * 401 UNAUTHORIZED
      */
@@ -34,7 +37,7 @@ public enum ErrorStatus {
      */
     NOT_FOUND_MEMBER("해당하는 유저가 없습니다."),
     NOT_FOUND_CONTENT("해당하는 게시물이 없습니다."),
-    NOT_FOUND_COMMENT("해당하는 댓글이 없습니다."),
+    NOT_FOUND_COMMENT("해당하는 답글이 없습니다."),
 
 
     /**
