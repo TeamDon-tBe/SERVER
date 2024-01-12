@@ -69,6 +69,11 @@ public class Member extends BaseTimeEntity {
         this.socialPlatform = socialPlatform;
         this.profileUrl = profileUrl;
         this.memberIntro = "";
+        this.memberGhost = 0;
+    }
+
+    public void decreaseGhost() {
+        this.memberGhost--;
     }
 
 //    public static Member create() {
