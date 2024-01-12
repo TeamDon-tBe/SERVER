@@ -1,7 +1,8 @@
 package com.dontbe.www.DontBeServer.api.member.service.Impl;
 
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
-import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetReponseDto;
+import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
+import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.member.service.MemberService;
 import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
@@ -23,9 +24,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDetailGetReponseDto getMemberDetail(Long memberId) {
+    public MemberDetailGetResponseDto getMemberDetail(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
         String time = TimeUtilCustom.refineTimeMemberDetail(member.getCreatedAt());
-        return MemberDetailGetReponseDto.of(member, time);
+        return MemberDetailGetResponseDto.of(member, time);
+    }
+
+    @Override
+    public MemberGetProfileResponseDto getMemberProfile(Long memberId) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        return MemberGetProfileResponseDto.of(member);
     }
 }
