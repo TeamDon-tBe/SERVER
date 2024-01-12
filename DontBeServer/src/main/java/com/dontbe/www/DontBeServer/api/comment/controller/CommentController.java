@@ -30,7 +30,6 @@ public class CommentController {
         commentCommendService.deleteComment(MemberUtil.getMemberId(principal),commentId);
         return ApiResponse.success(DELETE_COMMENT_SUCCESS);
     }
-
     @PostMapping("comment/{commentId}/liked")
     public ResponseEntity<ApiResponse<Object>> likeComment(Principal principal, @PathVariable Long commentId, @Valid @RequestBody CommentLikedRequestDto commentLikedRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
