@@ -71,16 +71,18 @@ public class CommentCommendService {
                 .build();
         CommentLiked savedCommentLiked = commentLikedRepository.save(commentLiked);
 
-        //노티 엔티티와 연결
-        Notification notification = Notification.builder()
-                .notificationTargetMember(targetMember)
-                .notificationTriggerMemberId(triggerMember.getId())
-                .notificationTriggerType(commentLikedRequestDto.notificationTriggerType())
-                .notificationTriggerId(commentId)
-                .isNotificationChecked(false)
-                .notificationText(comment.getCommentText())
-                .build();
-        Notification savedNotification = notificationRepository.save(notification);
+        if(triggerMember != targetMember){  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
+            //노티 엔티티와 연결
+            Notification notification = Notification.builder()
+                    .notificationTargetMember(targetMember)
+                    .notificationTriggerMemberId(triggerMember.getId())
+                    .notificationTriggerType(commentLikedRequestDto.notificationTriggerType())
+                    .notificationTriggerId(commentId)
+                    .isNotificationChecked(false)
+                    .notificationText(comment.getCommentText())
+                    .build();
+            Notification savedNotification = notificationRepository.save(notification);
+        }
     }
     private void isDuplicateCommentLike(Comment comment, Member member){
         if(commentLikedRepository.existsByCommentAndMember(comment,member)) {
