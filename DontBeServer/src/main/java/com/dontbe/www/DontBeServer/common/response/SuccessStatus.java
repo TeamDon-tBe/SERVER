@@ -39,7 +39,8 @@ public enum SuccessStatus {
      */
     GET_MEMBER_DETAIL(HttpStatus.OK,"계정 정보 조회 성공"),
     GET_PROFILE_SUCCESS(HttpStatus.OK,"유저 프로필 조회 성공"),
-    CLICK_MEMBER_GHOST_SUCCESS(HttpStatus.CREATED,"투명도 낮추기 성공")
+    CLICK_MEMBER_GHOST_SUCCESS(HttpStatus.CREATED,"투명도 낮추기 성공"),
+    PATCH_MEMBER_PROFILE(HttpStatus.OK, "프로필 수정 완료")
     ;
 
     private final HttpStatus httpStatus;

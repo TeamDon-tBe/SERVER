@@ -1,6 +1,7 @@
 package com.dontbe.www.DontBeServer.api.member.service;
 
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 
@@ -13,4 +14,6 @@ public interface MemberService {
     MemberGetProfileResponseDto getMemberProfile(Long memberId);
 
     void clickMemberGhost(Long memberId, MemberClickGhostRequestDto memberClickGhostRequestDto);
+
+    void updateMemberProfile(Long memberId, MemberProfilePatchRequestDto memberProfilePatchRequestDto);
 }
