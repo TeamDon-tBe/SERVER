@@ -2,11 +2,11 @@ package com.dontbe.www.DontBeServer.api.comment.service;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 import com.dontbe.www.DontBeServer.api.comment.domain.CommentLiked;
+import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentPostRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
-import com.dontbe.www.DontBeServer.api.content.domain.ContentLiked;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
@@ -14,16 +14,10 @@ import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.exception.UnAuthorizedException;
-import com.dontbe.www.DontBeServer.common.response.ApiResponse;
-import com.dontbe.www.DontBeServer.common.response.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
-import com.dontbe.www.DontBeServer.common.util.MemberUtil;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.CONTENT_UNLIKE_SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +57,7 @@ public class CommentCommendService {
         }
     }
 
-    public void likeComment(Long memberId, Long commentId, @Valid CommentLikedRequestDto commentLikedRequestDto){
+    public void likeComment(Long memberId, Long commentId, CommentLikedRequestDto commentLikedRequestDto){
 
         Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);

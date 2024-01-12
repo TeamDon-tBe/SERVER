@@ -1,16 +1,14 @@
 package com.dontbe.www.DontBeServer.api.comment.controller;
 
+import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentPostRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.service.CommentCommendService;
-import com.dontbe.www.DontBeServer.api.content.dto.request.ContentLikedRequestDto;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
-import com.dontbe.www.DontBeServer.common.response.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
