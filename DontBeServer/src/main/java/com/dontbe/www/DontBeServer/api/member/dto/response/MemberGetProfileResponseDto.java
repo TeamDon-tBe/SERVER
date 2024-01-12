@@ -9,13 +9,13 @@ public record MemberGetProfileResponseDto(
         String memberIntro,
         int memberGhost
 ) {
-    public static MemberGetProfileResponseDto of(Member member){
+    public static MemberGetProfileResponseDto of(Member member, int memberGhost){
         return new MemberGetProfileResponseDto(
                 member.getId(),
                 member.getNickname(),
                 member.getProfileUrl(),
                 member.getMemberIntro(),
-                member.getMemberGhost()
+                memberGhost
         );
     }
 }
