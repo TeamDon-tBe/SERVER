@@ -5,6 +5,7 @@ import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetRespon
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.member.service.MemberService;
+import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberGetProfileResponseDto getMemberProfile(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
-        return MemberGetProfileResponseDto.of(member);
+        int memberGhost = GhostUtil.refineGhost(member.getMemberGhost());
+        return MemberGetProfileResponseDto.of(member, memberGhost);
     }
 }

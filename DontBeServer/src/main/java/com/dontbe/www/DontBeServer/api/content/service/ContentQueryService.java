@@ -8,6 +8,7 @@ import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
+import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class ContentQueryService {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
         Content content = contentRepository.findContentByIdOrThrow(contentId);
         Member writerMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
+        int writerMemberGhost = GhostUtil.refineGhost(writerMember.getMemberGhost());
         Long writerMemberId = content.getMember().getId();
         boolean isGhost = ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(writerMemberId, memberId);
         boolean isLiked = contentLikedRepository.existsByContentAndMember(content,member);
@@ -34,6 +36,6 @@ public class ContentQueryService {
         int likedNumber = contentLikedRepository.countByContent(content);
         int commentNumber = commentRepository.countByContent(content);
 
-        return ContentGetDetailsResponseDto.of(writerMember, content, isGhost, isLiked, time, likedNumber, commentNumber);
+        return ContentGetDetailsResponseDto.of(writerMember, writerMemberGhost, content, isGhost, isLiked, time, likedNumber, commentNumber);
     }
 }

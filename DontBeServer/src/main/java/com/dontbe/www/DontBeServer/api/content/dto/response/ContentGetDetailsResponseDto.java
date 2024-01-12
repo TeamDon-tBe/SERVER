@@ -15,13 +15,13 @@ public record ContentGetDetailsResponseDto(
         int commentNumber,
         String contentText
 ) {
-    public static ContentGetDetailsResponseDto of(Member member, Content content, boolean isGhost, boolean isLiked, String time, int likedNumber, int commentNumber){
+    public static ContentGetDetailsResponseDto of(Member member, int memberGhost, Content content, boolean isGhost, boolean isLiked, String time, int likedNumber, int commentNumber){
         return new ContentGetDetailsResponseDto(
                 member.getId(),
                 member.getProfileUrl(),
                 member.getNickname(),
                 isGhost,
-                member.getMemberGhost(),
+                memberGhost,
                 isLiked,
                 time,
                 likedNumber,
