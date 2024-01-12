@@ -61,6 +61,8 @@ public class CommentCommendService {
 
         Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
+        Long contentId = comment.getContent().getId();
+
 
         isDuplicateCommentLike(comment, triggerMember);
 
@@ -77,7 +79,7 @@ public class CommentCommendService {
                     .notificationTargetMember(targetMember)
                     .notificationTriggerMemberId(triggerMember.getId())
                     .notificationTriggerType(commentLikedRequestDto.notificationTriggerType())
-                    .notificationTriggerId(commentId)
+                    .notificationTriggerId(contentId)
                     .isNotificationChecked(false)
                     .notificationText(comment.getCommentText())
                     .build();
