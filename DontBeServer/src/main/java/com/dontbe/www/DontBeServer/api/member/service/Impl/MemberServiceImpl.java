@@ -1,10 +1,10 @@
 package com.dontbe.www.DontBeServer.api.member.service.Impl;
 
-import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.ghost.domain.Ghost;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
@@ -73,6 +73,29 @@ public class MemberServiceImpl implements MemberService {
         Notification savedNotification = notificationRepository.save(notification);
 
         targetMember.decreaseGhost();
+    }
+
+
+    @Transactional
+    public void updateMemberProfile(Long memberId, MemberProfilePatchRequestDto memberProfilePatchRequestDto) {
+        Member existingMember = memberRepository.findMemberByIdOrThrow(memberId);
+
+        // 업데이트할 속성만 복사
+        if (memberProfilePatchRequestDto.nickname() != null) {
+            existingMember.updateNickname(memberProfilePatchRequestDto.nickname());
+        }
+        if (memberProfilePatchRequestDto.member_intro() != null) {
+            existingMember.updateMemberIntro(memberProfilePatchRequestDto.member_intro());
+        }
+        if (memberProfilePatchRequestDto.profile_url() != null) {
+            existingMember.updateProfileUrl(memberProfilePatchRequestDto.profile_url());
+        }
+        if (memberProfilePatchRequestDto.is_alarm_allowed() | !memberProfilePatchRequestDto.is_alarm_allowed()) {
+            existingMember.updateMemberIsAlarmAllowed(memberProfilePatchRequestDto.is_alarm_allowed());
+        }
+
+        // 저장
+        Member savedMember = memberRepository.save(existingMember);
     }
 
     private void isDuplicateMemberGhost(Member triggerMember, Member targetMemmber) {

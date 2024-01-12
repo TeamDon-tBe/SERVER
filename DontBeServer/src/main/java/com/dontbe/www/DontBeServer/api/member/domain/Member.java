@@ -76,13 +76,21 @@ public class Member extends BaseTimeEntity {
         this.memberGhost--;
     }
 
-//    public static Member create() {
-//        return Member.builder()
-//                .nickname()
-//                .socialId()
-//                .socialPlatform()
-//                .profileUrl()
-//    }
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
+
+    public void updateProfileUrl(String newProfileUrl) {
+        this.profileUrl = newProfileUrl;
+    }
+
+    public void updateMemberIntro(String newMemberIntro) {
+        this.memberIntro = newMemberIntro;
+    }
+
+    public void updateMemberIsAlarmAllowed(boolean newIsAlarmAllowed) {
+        this.isAlarmAllowed = newIsAlarmAllowed;
+    }
 
     public void updateRefreshToken (String refreshToken) {
         this.refreshToken = refreshToken;

@@ -1,6 +1,7 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.service.MemberService;
@@ -44,5 +45,12 @@ public class MemberController {
         Long memberId = MemberUtil.getMemberId(principal);
         memberService.clickMemberGhost(memberId, memberClickGhostRequestDto);
         return ApiResponse.success(CLICK_MEMBER_GHOST_SUCCESS);
+    }
+
+    @PatchMapping("user-profile")
+    public ResponseEntity<ApiResponse<Object>> updateMemberProfile(Principal principal, @RequestBody MemberProfilePatchRequestDto memberProfilePatchRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        memberService.updateMemberProfile(memberId, memberProfilePatchRequestDto);
+        return ApiResponse.success(PATCH_MEMBER_PROFILE);
     }
 }
