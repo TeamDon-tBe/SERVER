@@ -1,12 +1,14 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberNicknameCheckRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.service.MemberService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +54,11 @@ public class MemberController {
         Long memberId = MemberUtil.getMemberId(principal);
         memberService.updateMemberProfile(memberId, memberProfilePatchRequestDto);
         return ApiResponse.success(PATCH_MEMBER_PROFILE);
+    }
+
+    @GetMapping("nickname-validation")
+    public ResponseEntity<ApiResponse<Object>> checkMemberNickname(Principal principal, @Valid @RequestBody MemberNicknameCheckRequestDto memberNicknameCheckRequestDto) {
+        memberService.checkNicknameValidate(memberNicknameCheckRequestDto);
+        return ApiResponse.success(NICKNAME_CHECK_SUCCESS);
     }
 }
