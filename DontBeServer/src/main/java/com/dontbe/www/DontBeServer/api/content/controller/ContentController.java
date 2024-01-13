@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
@@ -51,5 +52,11 @@ public class ContentController {
         Long memberId = MemberUtil.getMemberId(principal);
         contentCommandService.unlikeContent(memberId, contentId);
         return ApiResponse.success(CONTENT_UNLIKE_SUCCESS);
+    }
+
+    @GetMapping("content/all")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll(memberId));
     }
 }

@@ -24,6 +24,7 @@ public enum SuccessStatus {
     POST_CONTENT_SUCCESS(HttpStatus.CREATED,"게시글 작성 성공"),
     DELETE_CONTENT_SUCCESS(HttpStatus.OK,"게시글 삭제 성공"),
     CONTENT_UNLIKE_SUCCESS(HttpStatus.OK,"게시글 좋아요 취소 성공"),
+    GET_CONTENT_ALL_SUCCESS(HttpStatus.OK, "게시물 리스트 조회 성공"),
 
     /**
      * comment
