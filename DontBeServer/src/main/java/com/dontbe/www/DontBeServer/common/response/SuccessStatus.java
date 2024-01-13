@@ -42,7 +42,11 @@ public enum SuccessStatus {
     GET_PROFILE_SUCCESS(HttpStatus.OK,"유저 프로필 조회 성공"),
     CLICK_MEMBER_GHOST_SUCCESS(HttpStatus.CREATED,"투명도 낮추기 성공"),
     PATCH_MEMBER_PROFILE(HttpStatus.OK, "프로필 수정 완료"),
-    NICKNAME_CHECK_SUCCESS(HttpStatus.OK, "사용 가능한 닉네임 입니다.")
+    NICKNAME_CHECK_SUCCESS(HttpStatus.OK, "사용 가능한 닉네임 입니다."),
+    /**
+     * member
+     */
+    READ_NOTIFICATION_SUCCESS(HttpStatus.CREATED,"노티 체크 성공")
     ;
 
     private final HttpStatus httpStatus;

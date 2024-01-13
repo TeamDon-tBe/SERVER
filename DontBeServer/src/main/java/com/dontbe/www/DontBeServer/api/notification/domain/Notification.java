@@ -40,4 +40,8 @@ public class Notification extends BaseTimeEntity{
         this.isNotificationChecked = isNotificationChecked;
         this.NotificationText = notificationText;
     }
+
+    public void readNotification(){
+        this.isNotificationChecked = true;
+    }
 }
