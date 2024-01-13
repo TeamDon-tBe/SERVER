@@ -59,4 +59,10 @@ public class ContentController {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll(memberId));
     }
+
+    @GetMapping("member/{memberId}/contents")
+    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal, @PathVariable("memberId") Long targetMemberId) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
+    }
 }
