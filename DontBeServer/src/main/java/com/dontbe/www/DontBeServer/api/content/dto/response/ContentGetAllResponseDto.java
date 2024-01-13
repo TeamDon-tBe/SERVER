@@ -16,9 +16,6 @@ public record ContentGetAllResponseDto (
         int likedNumber,
         int commentNumber
 ) {
-//    public ContentGetAllResponseDto(Long id, String profileUrl, String nickname, Long id1, String contentText, String time, boolean isGhost, int memberGhost, boolean isLiked, String time1, int likedNumber, int commentNumber, String contentText1) {
-//    }
-
     public static ContentGetAllResponseDto of(Member writerMember, Content content, boolean isGhost, boolean isLiked, String time, int likedNumber, int commentNumber) {
         return new ContentGetAllResponseDto(
                 writerMember.getId(),
