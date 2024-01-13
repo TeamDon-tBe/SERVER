@@ -136,7 +136,8 @@
 
 
 ## ERD
-![image](https://github.com/TeamDon-tBe/SERVER/assets/128011308/d06988e5-88fe-4aed-bbbc-f007f319f064)
+<img width="1175" alt="스크린샷 2024-01-13 오후 10 27 45" src="https://github.com/TeamDon-tBe/SERVER/assets/97835512/1a1e0443-29a5-4cd3-b18c-baddbf0278b2">
+
 
 
 
