@@ -1,15 +1,10 @@
 package com.dontbe.www.DontBeServer.api.comment.service;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
-import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDto;
-import com.dontbe.www.DontBeServer.api.comment.dto.response.ListCommentAllResponseDto;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
-import com.dontbe.www.DontBeServer.api.content.domain.Content;
-import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
-import com.dontbe.www.DontBeServer.api.ghost.domain.Ghost;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
