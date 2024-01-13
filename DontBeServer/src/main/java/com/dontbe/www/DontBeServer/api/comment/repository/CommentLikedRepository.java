@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CommentLikedRepository extends JpaRepository<CommentLiked, Long> {
     boolean existsByCommentAndMember(Comment comment, Member member);
 
-    //int countByComment(Comment comment);
+    int countByComment(Comment comment);
 
     void deleteByCommentAndMember(Comment comment, Member member);
 }

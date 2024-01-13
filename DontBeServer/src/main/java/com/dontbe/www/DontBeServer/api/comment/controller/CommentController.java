@@ -3,7 +3,7 @@ package com.dontbe.www.DontBeServer.api.comment.controller;
 import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentPostRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.service.CommentCommendService;
-import com.dontbe.www.DontBeServer.api.member.domain.Member;
+import com.dontbe.www.DontBeServer.api.comment.service.CommentQueryService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentCommendService commentCommendService;
-
+    private final CommentQueryService commentQueryService;
 
     @PostMapping("content/{contentId}/comment")
     public ResponseEntity<ApiResponse<Object>> postComment(Principal principal, @PathVariable Long contentId, @Valid @RequestBody CommentPostRequestDto commentPostRequestDto) {
@@ -43,4 +43,10 @@ public class CommentController {
         commentCommendService.unlikeComment(memberId, commentId);
         return ApiResponse.success(COMMENT_UNLIKE_SUCCESS);
     }
+    @GetMapping("content/{contentId}/comment/all")
+    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId){
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
+    }
+
 }

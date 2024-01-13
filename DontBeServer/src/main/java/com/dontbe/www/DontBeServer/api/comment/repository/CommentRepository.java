@@ -13,6 +13,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findCommentById(Long commentId);
 
+    Comment findCommentByContentId(Long contentId);
+
     default Comment findCommentByIdOrThrow(Long commentId) {
         return findCommentById(commentId)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_COMMENT.getMessage()));
