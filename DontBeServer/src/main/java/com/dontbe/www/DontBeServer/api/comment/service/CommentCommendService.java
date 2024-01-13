@@ -81,7 +81,7 @@ public class CommentCommendService {
                     .notificationTargetMember(targetMember)
                     .notificationTriggerMemberId(triggerMember.getId())
                     .notificationTriggerType(commentLikedRequestDto.notificationTriggerType())
-                    .notificationTriggerId(contentId)
+                    .notificationTriggerId(commentId)   //에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기
                     .isNotificationChecked(false)
                     .notificationText(comment.getCommentText())
                     .build();
