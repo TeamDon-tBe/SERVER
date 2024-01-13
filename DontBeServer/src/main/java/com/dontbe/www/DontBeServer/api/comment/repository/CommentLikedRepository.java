@@ -11,5 +11,5 @@ public interface CommentLikedRepository extends JpaRepository<CommentLiked, Long
 
     //int countByComment(Comment comment);
 
-    //void deleteByCommentAndMember(Comment comment, Member member);
+    void deleteByCommentAndMember(Comment comment, Member member);
 }

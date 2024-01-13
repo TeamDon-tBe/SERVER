@@ -3,6 +3,7 @@ package com.dontbe.www.DontBeServer.api.comment.controller;
 import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentLikedRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.request.CommentPostRequestDto;
 import com.dontbe.www.DontBeServer.api.comment.service.CommentCommendService;
+import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import jakarta.validation.Valid;
@@ -35,5 +36,11 @@ public class CommentController {
         Long memberId = MemberUtil.getMemberId(principal);
         commentCommendService.likeComment(memberId, commentId, commentLikedRequestDto);
         return ApiResponse.success(COMMENT_LIKE_SUCCESS);
+    }
+    @DeleteMapping("comment/{commentId}/unliked")
+    public ResponseEntity<ApiResponse<Object>> unlikeComment(Principal principal,@PathVariable Long commentId) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        commentCommendService.unlikeComment(memberId, commentId);
+        return ApiResponse.success(COMMENT_UNLIKE_SUCCESS);
     }
 }
