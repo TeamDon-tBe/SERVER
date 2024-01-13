@@ -5,6 +5,7 @@ import com.dontbe.www.DontBeServer.common.exception.NotFoundException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ContentRepository extends JpaRepository<Content,Long> {
@@ -14,4 +15,6 @@ public interface ContentRepository extends JpaRepository<Content,Long> {
         return findContentById(contentId)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_CONTENT.getMessage()));
     }
+
+    List<Content> findAllByMemberId(Long memberId);
 }

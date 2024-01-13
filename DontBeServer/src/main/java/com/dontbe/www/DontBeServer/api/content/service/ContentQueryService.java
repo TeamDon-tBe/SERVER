@@ -2,6 +2,7 @@ package com.dontbe.www.DontBeServer.api.content.service;
 
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
+import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllByMemberResponseDto;
 import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllResponseDto;
 import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetDetailsResponseDto;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository;
@@ -49,6 +50,18 @@ public class ContentQueryService {
         return contents.stream()
                 .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
                         ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
+                        contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
+                        contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
+                .collect(Collectors.toList());
+    }
+
+    public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId) {
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
+        List<Content> contents = contentRepository.findAllByMemberId(targetMemberId);
+        return contents.stream()
+                .map(content -> ContentGetAllByMemberResponseDto.of(targetMember, content,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(targetMember,usingMember),
                         contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
                         contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
                 .collect(Collectors.toList());
