@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -79,15 +81,37 @@ public class CommentCommendService {
                     .notificationTargetMember(targetMember)
                     .notificationTriggerMemberId(triggerMember.getId())
                     .notificationTriggerType(commentLikedRequestDto.notificationTriggerType())
-                    .notificationTriggerId(contentId)
+                    .notificationTriggerId(commentId)   //에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기
                     .isNotificationChecked(false)
                     .notificationText(comment.getCommentText())
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
         }
     }
-    private void isDuplicateCommentLike(Comment comment, Member member){
-        if(commentLikedRepository.existsByCommentAndMember(comment,member)) {
+
+    public void unlikeComment(Long memberId, Long commentId){
+        Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
+        Member targetMember = commentRepository.findCommentByIdOrThrow(commentId).getMember();
+
+        //로그인 유저가 trigger유저이고 답글id가 triggerId일때
+        if(commentLikedRepository.existsByCommentAndMember(comment,triggerMember)){
+
+            commentLikedRepository.deleteByCommentAndMember(comment,triggerMember);
+
+            notificationRepository.deleteByNotificationTargetMemberAndNotificationTriggerMemberIdAndNotificationTriggerTypeAndNotificationTriggerId
+                    (targetMember, memberId,"commentLiked", comment.getId());
+
+        }else{ //댓글좋아요 엔티티에 존재하지 않을 경우 예외처리
+            throw new BadRequestException(ErrorStatus.UNEXITST_COMENT_LIKE.getMessage());
+        }
+        //게시물 작성자 = target,
+
+
+    }
+
+    private void isDuplicateCommentLike(Comment comment, Member member) {
+        if (commentLikedRepository.existsByCommentAndMember(comment, member)) {
             throw new BadRequestException(ErrorStatus.DUPLICATION_COMMENT_LIKE.getMessage());
         }
     }

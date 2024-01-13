@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessStatus {
-
     /**
      * auth
      */
@@ -32,7 +31,7 @@ public enum SuccessStatus {
     POST_COMMENT_SUCCESS(HttpStatus.CREATED,"답글 작성 성공"),
     DELETE_COMMENT_SUCCESS(HttpStatus.OK, "답글 삭제 성공"),
     COMMENT_LIKE_SUCCESS(HttpStatus.CREATED,"답글 좋아요 성공"),
-    COMMENT_UNLIKE_SUCCESS(HttpStatus.OK,"댓글 좋아요 취소 성공"),
+    COMMENT_UNLIKE_SUCCESS(HttpStatus.OK,"답글 좋아요 취소 성공"),
 
     /**
      * member
