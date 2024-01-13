@@ -44,9 +44,10 @@ public enum SuccessStatus {
     PATCH_MEMBER_PROFILE(HttpStatus.OK, "프로필 수정 완료"),
     NICKNAME_CHECK_SUCCESS(HttpStatus.OK, "사용 가능한 닉네임 입니다."),
     /**
-     * member
+     * notification
      */
-    READ_NOTIFICATION_SUCCESS(HttpStatus.CREATED,"노티 체크 성공")
+    READ_NOTIFICATION_SUCCESS(HttpStatus.CREATED,"노티 체크 성공"),
+    COUNT_NOTIFICATION_SUCCESS(HttpStatus.OK,"노티 개수 체크 완료")
     ;
 
     private final HttpStatus httpStatus;
