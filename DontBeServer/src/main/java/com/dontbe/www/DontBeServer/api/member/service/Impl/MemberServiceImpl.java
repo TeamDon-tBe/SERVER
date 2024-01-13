@@ -4,6 +4,7 @@ import com.dontbe.www.DontBeServer.api.ghost.domain.Ghost;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberNicknameCheckRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
@@ -96,6 +97,12 @@ public class MemberServiceImpl implements MemberService {
 
         // 저장
         Member savedMember = memberRepository.save(existingMember);
+    }
+
+    public void checkNicknameValidate(MemberNicknameCheckRequestDto memberNicknameCheckRequestDto) {
+        if(memberRepository.existsByNickname(memberNicknameCheckRequestDto.nickname())){
+            throw new BadRequestException(ErrorStatus.NICKNAME_VALIDATE_ERROR.getMessage());
+        }
     }
 
     private void isDuplicateMemberGhost(Member triggerMember, Member targetMemmber) {

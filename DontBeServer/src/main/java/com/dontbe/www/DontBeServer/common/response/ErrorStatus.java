@@ -22,6 +22,7 @@ public enum ErrorStatus {
     DUPLICATION_COMMENT_LIKE("이미 좋아요를 누른 답글입니다."),
     UNEXITST_CONMMENT_LIKE("좋아요를 누르지 않은 답글입니다."),
     DUPLICATION_MEMBER_GHOST("이미 투명도를 누른 대상입니다."),
+    NICKNAME_VALIDATE_ERROR("이미 존재하는 닉네임입니다."),
 
     /**
      * 401 UNAUTHORIZED
