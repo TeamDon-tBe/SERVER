@@ -1,6 +1,7 @@
 package com.dontbe.www.DontBeServer.api.ghost.domain;
 
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
+import com.dontbe.www.DontBeServer.common.entity.BaseDateEntity;
 import com.dontbe.www.DontBeServer.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Ghost extends BaseTimeEntity {
+public class Ghost extends BaseDateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
