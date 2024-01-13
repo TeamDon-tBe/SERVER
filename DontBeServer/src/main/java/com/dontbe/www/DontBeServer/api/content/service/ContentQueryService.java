@@ -2,6 +2,7 @@ package com.dontbe.www.DontBeServer.api.content.service;
 
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
+import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllResponseDto;
 import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetDetailsResponseDto;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
@@ -13,6 +14,9 @@ import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +41,16 @@ public class ContentQueryService {
         int commentNumber = commentRepository.countByContent(content);
 
         return ContentGetDetailsResponseDto.of(writerMember, writerMemberGhost, content, isGhost, isLiked, time, likedNumber, commentNumber);
+    }
+
+    public List<ContentGetAllResponseDto> getContentAll(Long memberId) {
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+        List<Content> contents = contentRepository.findAll();
+        return contents.stream()
+                .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
+                        contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
+                        contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
+                .collect(Collectors.toList());
     }
 }
