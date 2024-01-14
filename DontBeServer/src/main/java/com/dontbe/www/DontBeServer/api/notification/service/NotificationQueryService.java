@@ -41,15 +41,13 @@ public class NotificationQueryService {
                         oneNotification,
                         oneNotification.isNotificationChecked(),
                         notificationTriggerId(oneNotification.getNotificationTriggerType(),
-                                oneNotification.getNotificationTargetMember(), oneNotification )
+                                oneNotification.getNotificationTriggerId(), oneNotification )
                 )).collect(Collectors.toList());
     }
 
-    private long notificationTriggerId (String triggerType, Member targetMember , Notification notification){
+    private long notificationTriggerId (String triggerType, Long triggerId, Notification notification){
 
-        List<Comment> commentList = commentRepository.findCommentByMember(targetMember);
-        return notificationList.stream()
-                .map(oneCommet->  )
+        Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
 
         //답글관련(답글좋아요 혹은 답글 작성)시 게시물 id 반환
         if(triggerType.equals("comment") || triggerType.equals("commentLiked")){
