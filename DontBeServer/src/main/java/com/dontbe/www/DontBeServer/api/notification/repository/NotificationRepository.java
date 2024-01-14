@@ -14,4 +14,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findAllByNotificationTargetMemberAndIsNotificationChecked(Member member, boolean b);
 
     int countByNotificationTargetMemberAndIsNotificationChecked(Member member, boolean b);
+
+    List<Notification> findNotificationsByNotificationTargetMember(Member member);
+
+    //boolean findIsNotificationCheckedById(Long notificationId);
 }

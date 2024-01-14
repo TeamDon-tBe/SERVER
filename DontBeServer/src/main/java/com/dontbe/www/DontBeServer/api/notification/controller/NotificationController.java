@@ -7,10 +7,7 @@ import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -34,5 +31,11 @@ public class NotificationController {
     public ResponseEntity<ApiResponse<NotificaitonCountResponseDto>> countNotification(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(COUNT_NOTIFICATION_SUCCESS, notificationQueryService.countUnreadNotification(memberId));
+    }
+
+    @GetMapping("member/{targetMemberId}/notification")
+    public ResponseEntity<ApiResponse<Object>> getNotification(Principal principal, @PathVariable Long targetMemberId) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAll(memberId, targetMemberId));
     }
 }
