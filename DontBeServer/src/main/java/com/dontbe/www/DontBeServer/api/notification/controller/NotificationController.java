@@ -7,10 +7,7 @@ import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -23,7 +20,7 @@ public class NotificationController {
     private final NotificationCommandService notificationCommandService;
     private final NotificationQueryService notificationQueryService;
 
-    @PostMapping("notification-check")
+    @PatchMapping("notification-check")
     public ResponseEntity<ApiResponse<Object>> readNotification(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         notificationCommandService.readNotification(memberId);
