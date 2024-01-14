@@ -35,6 +35,7 @@ public enum SuccessStatus {
     COMMENT_LIKE_SUCCESS(HttpStatus.CREATED,"답글 좋아요 성공"),
     COMMENT_UNLIKE_SUCCESS(HttpStatus.OK,"답글 좋아요 취소 성공"),
     GET_COMMENT_ALL_SUCCESS(HttpStatus.OK,"게시물에 해당하는 답글 리스트 조회 성공"),
+    GET_MEMBER_COMMENT_SECCESS(HttpStatus.OK,"멤버에 해당하는 답글 리스트 조회 성공"),
 
     /**
      * member

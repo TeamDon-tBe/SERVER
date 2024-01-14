@@ -48,5 +48,9 @@ public class CommentController {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
     }
-
+    @GetMapping("member/{memberId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
+        Long usingMemberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
+    }
 }
