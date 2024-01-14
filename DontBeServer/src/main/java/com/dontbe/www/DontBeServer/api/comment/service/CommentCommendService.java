@@ -39,7 +39,6 @@ public class CommentCommendService {
                 .content(content)
                 .commentText(commentPostRequestDto.commentText())
                 .build();
-
         Comment savedComment = commentRepository.save(comment);
     }
 
@@ -105,9 +104,6 @@ public class CommentCommendService {
         }else{ //댓글좋아요 엔티티에 존재하지 않을 경우 예외처리
             throw new BadRequestException(ErrorStatus.UNEXITST_COMENT_LIKE.getMessage());
         }
-        //게시물 작성자 = target,
-
-
     }
 
     private void isDuplicateCommentLike(Comment comment, Member member) {
