@@ -9,4 +9,5 @@ public class SocialInfoDto {
     private String id;
     private String nickname;
     private String profileUrl;
+    private String email;
 }
