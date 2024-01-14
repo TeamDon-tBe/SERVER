@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
                         .socialId(socialData.getId())
                         .profileUrl(GHOST_IMAGE)
                         .memberEmail(socialData.getEmail())
+                        .socialNickname(socialData.getNickname())
                         .build();
 
                 memberRepository.save(member);

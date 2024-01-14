@@ -53,6 +53,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_email")
     private String memberEmail;
 
+    @Column(name = "social_nickname")
+    private String socialNickname;
+
     @OneToMany(mappedBy = "notificationTargetMember",cascade = ALL)
     private List<Notification> targetNotification = new ArrayList<>();
 
@@ -66,7 +69,7 @@ public class Member extends BaseTimeEntity {
     private List<Report> targetReport = new ArrayList<>();
 
     @Builder
-    private Member(String nickname, SocialPlatform socialPlatform, String socialId, String profileUrl, String memberEmail) {
+    private Member(String nickname, SocialPlatform socialPlatform, String socialId, String profileUrl, String memberEmail, String socialNickname) {
         this.nickname = nickname;
         this.socialId = socialId;
         this.socialPlatform = socialPlatform;
@@ -74,6 +77,7 @@ public class Member extends BaseTimeEntity {
         this.memberIntro = "";
         this.memberGhost = 0;
         this.memberEmail = memberEmail;
+        this.socialNickname = socialNickname;
     }
 
     public void decreaseGhost() {
