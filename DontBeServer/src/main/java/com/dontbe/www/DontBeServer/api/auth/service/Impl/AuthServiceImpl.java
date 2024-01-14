@@ -27,6 +27,8 @@ import java.security.spec.InvalidKeySpecException;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+    private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
+
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoAuthService kakaoAuthService;
     private final MemberRepository memberRepository;
@@ -50,7 +52,8 @@ public class AuthServiceImpl implements AuthService {
                         .nickname(socialData.getNickname())
                         .socialPlatform(socialPlatform)
                         .socialId(socialData.getId())
-                        .profileUrl(socialData.getProfileUrl())
+                        .profileUrl(GHOST_IMAGE)
+                        .memberEmail(socialData.getEmail())
                         .build();
 
                 memberRepository.save(member);
@@ -60,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
                 member.updateRefreshToken(refreshToken);
 
-                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, socialData.getProfileUrl(), true);
+                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member .getProfileUrl(), true);
 
             }
             else {

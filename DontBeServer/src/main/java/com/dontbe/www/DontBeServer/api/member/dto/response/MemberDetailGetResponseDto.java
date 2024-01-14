@@ -13,7 +13,7 @@ public record MemberDetailGetResponseDto(
         return new MemberDetailGetResponseDto(
                 member.getId(),
                 joinDate,
-                member.getSocialId(),
+                member.getMemberEmail(),
                 member.getSocialPlatform().name() + " SOCIAL LOGIN",
                 "1.0.01"
         );
