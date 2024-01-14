@@ -1,5 +1,7 @@
 package com.dontbe.www.DontBeServer.api.notification.service;
 
+import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
+import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class NotificationQueryService {
     private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
+    private final CommentRepository commentRepository;
 
     public NotificaitonCountResponseDto countUnreadNotification(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -30,15 +33,27 @@ public class NotificationQueryService {
         Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
         List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMember(targetMember);
 
-        //System.out.println("usingMemberId : "+ usingMember.getId().toString());
 
-        //댓글알림이면 triggerId > contentId반환추가하기
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDto.of(
                         usingMember,
                         memberRepository.findMemberByIdOrThrow(oneNotification.getNotificationTriggerMemberId()),
                         oneNotification,
-                        oneNotification.isNotificationChecked()
+                        oneNotification.isNotificationChecked(),
+                        notificationTriggerId(oneNotification.getNotificationTriggerType(),
+                                oneNotification.getNotificationTargetMember(), oneNotification )
                 )).collect(Collectors.toList());
+    }
+
+    private long notificationTriggerId (String triggerType, Member targetMember , Notification notification){
+
+        List<Comment> commentList = commentRepository.findCommentByMember(targetMember);
+        return notificationList.stream()
+                .map(oneCommet->  )
+
+        //답글관련(답글좋아요 혹은 답글 작성)시 게시물 id 반환
+        if(triggerType.equals("comment") || triggerType.equals("commentLiked")){
+            return comment.getContent().getId();
+        }else {return notification.getNotificationTriggerId();}
     }
 }
