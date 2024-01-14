@@ -45,6 +45,7 @@ public enum SuccessStatus {
     CLICK_MEMBER_GHOST_SUCCESS(HttpStatus.CREATED,"투명도 낮추기 성공"),
     PATCH_MEMBER_PROFILE(HttpStatus.OK, "프로필 수정 완료"),
     NICKNAME_CHECK_SUCCESS(HttpStatus.OK, "사용 가능한 닉네임 입니다."),
+    NOTIFICATION_ALL_SUCCESS(HttpStatus.OK,"알림 전체 조회 성공"),
     /**
      * notification
      */
