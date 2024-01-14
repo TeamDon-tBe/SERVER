@@ -21,6 +21,7 @@ public class NotificationQueryService {
     private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
     private final CommentRepository commentRepository;
+    private final String SYSTEM_PROFILEURL = "https://github.com/TeamDon-tBe/SERVER/assets/128011308/327d416e-ef1f-4c10-961d-4d9b85632d87";
 
     public NotificaitonCountResponseDto countUnreadNotification(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -28,11 +29,10 @@ public class NotificationQueryService {
         return NotificaitonCountResponseDto.of(number);
     }
 
-    public List<NotificationAllResponseDto> getNotificationAll(Long memberId, Long targetMemberId){
+    public List<NotificationAllResponseDto> getNotificationAll(Long memberId){
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
-        Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
-        List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMember(targetMember);
-
+        System.out.println("1");
+        List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMember(usingMember);
 
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDto.of(
@@ -41,17 +41,32 @@ public class NotificationQueryService {
                         oneNotification,
                         oneNotification.isNotificationChecked(),
                         notificationTriggerId(oneNotification.getNotificationTriggerType(),
-                                oneNotification.getNotificationTriggerId(), oneNotification )
+                                oneNotification.getNotificationTriggerId(), oneNotification),
+                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType())
                 )).collect(Collectors.toList());
     }
 
     private long notificationTriggerId (String triggerType, Long triggerId, Notification notification){
 
         Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
-
+        System.out.println("2");
         //답글관련(답글좋아요 혹은 답글 작성)시 게시물 id 반환
         if(triggerType.equals("comment") || triggerType.equals("commentLiked")){
+            System.out.println("3");
             return comment.getContent().getId();
-        }else {return notification.getNotificationTriggerId();}
+        }else {
+            System.out.println("4");
+            return notification.getNotificationTriggerId();}
+    }
+
+    private String profileUrl(Long notificationId, String triggerType){
+        Notification notification = notificationRepository.findNotificationById(notificationId);
+        Member triggerMember = memberRepository.findMemberByIdOrThrow(notification.getNotificationTriggerMemberId());
+        System.out.println("5");
+        if(triggerType.equals("comment") || triggerType.equals("commentLiked") || triggerType.equals("contentLiked")){
+            return triggerMember.getProfileUrl();
+        }else{
+            return SYSTEM_PROFILEURL;
+        }
     }
 }

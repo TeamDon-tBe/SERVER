@@ -33,9 +33,9 @@ public class NotificationController {
         return ApiResponse.success(COUNT_NOTIFICATION_SUCCESS, notificationQueryService.countUnreadNotification(memberId));
     }
 
-    @GetMapping("member/{targetMemberId}/notification")
-    public ResponseEntity<ApiResponse<Object>> getNotification(Principal principal, @PathVariable Long targetMemberId) {
+    @GetMapping("/notification-all")
+    public ResponseEntity<ApiResponse<Object>> getNotification(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAll(memberId, targetMemberId));
+        return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAll(memberId));
     }
 }

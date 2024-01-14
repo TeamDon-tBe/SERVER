@@ -17,5 +17,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     List<Notification> findNotificationsByNotificationTargetMember(Member member);
 
-    //boolean findIsNotificationCheckedById(Long notificationId);
+    Notification findNotificationById(Long notificationId);
+
+//    default Notification findNotificationByIdOrThrow(Long notificationId) {
+//        return findNotificationByIdOrThrow(notificationId)
+//        orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_NOTIFICATION.getMessage()));
+//    }
 }
