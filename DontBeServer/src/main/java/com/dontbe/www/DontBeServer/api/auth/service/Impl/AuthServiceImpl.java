@@ -28,6 +28,7 @@ import java.security.spec.InvalidKeySpecException;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
+    private final static String DEFAULT_NICKNAME="";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoAuthService kakaoAuthService;
@@ -36,10 +37,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponseDto socialLogin(String socialAccessToken, AuthRequestDto authRequestDto) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        // DTO에서 처리하고 이건 빠져도 될 것 같습니다.
-//        if (authRequestDto.getSocialPlatform() == null) {
-//            throw new BadRequestException(ErrorStatus.VALIDATION_REQUEST_MISSING_EXCEPTION.getMessage());
-//        }
+
          val socialPlatform = SocialPlatform.valueOf(authRequestDto.getSocialPlatform());
         SocialInfoDto socialData = getSocialData(socialPlatform, socialAccessToken);
         String refreshToken = jwtTokenProvider.generateRefreshToken();
@@ -49,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
             // 신규 유저 저장
             if (!isExistUser.booleanValue()) {
                 Member member = Member.builder()
-                        .nickname(socialData.getNickname())
+                        .nickname(DEFAULT_NICKNAME)//.nickname(socialData.getNickname())
                         .socialPlatform(socialPlatform)
                         .socialId(socialData.getId())
                         .profileUrl(GHOST_IMAGE)
