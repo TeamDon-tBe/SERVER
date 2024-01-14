@@ -48,7 +48,7 @@ public enum SuccessStatus {
     /**
      * notification
      */
-    READ_NOTIFICATION_SUCCESS(HttpStatus.CREATED,"노티 체크 성공"),
+    READ_NOTIFICATION_SUCCESS(HttpStatus.OK,"노티 체크 성공"),
     COUNT_NOTIFICATION_SUCCESS(HttpStatus.OK,"노티 개수 체크 완료")
     ;
 
