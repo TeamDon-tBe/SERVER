@@ -19,7 +19,7 @@ public class GhostScheduler {
         this.ghostDbRepository = ghostDbRepository;
     }
 
-    @Scheduled(cron = "0 20 20 * * ?") // 매일 00:00에 실행
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 00:00에 실행
     @Transactional
     public void updateGhostStatus() {
         LocalDate fiveDaysAgo = LocalDate.now().minusDays(5);
