@@ -5,7 +5,6 @@ import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberRe
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDto;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
-import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
@@ -14,8 +13,6 @@ import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +24,9 @@ public class CommentQueryService {
     private final CommentRepository commentRepository;
     private final GhostRepository ghostRepository;
     private final CommentLikedRepository commentLikedRepository;
-    private final ContentRepository contentRepository;
 
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
-        List<Comment> commentList = commentRepository.findAll();
+        List<Comment> commentList = commentRepository.findCommentsByContentId(contentId);
 
         return commentList.stream()
                 .map( oneComment -> CommentAllResponseDto.of(
@@ -59,7 +55,6 @@ public class CommentQueryService {
     }
 
     private boolean checkGhost(Long usingMemberId, Long commentId){
-        Member member = memberRepository.findMemberByIdOrThrow(usingMemberId);
         Member writerMember = commentRepository.findCommentByIdOrThrow(commentId).getMember();
         return ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(usingMemberId, writerMember.getId());
     }
