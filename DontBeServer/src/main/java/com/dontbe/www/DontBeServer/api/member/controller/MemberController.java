@@ -57,8 +57,8 @@ public class MemberController {
     }
 
     @GetMapping("nickname-validation")
-    public ResponseEntity<ApiResponse<Object>> checkMemberNickname(Principal principal, @Valid @RequestBody MemberNicknameCheckRequestDto memberNicknameCheckRequestDto) {
-        memberService.checkNicknameValidate(memberNicknameCheckRequestDto);
+    public ResponseEntity<ApiResponse<Object>> checkMemberNickname(Principal principal,@RequestParam(value = "nickname") String nickname) {
+        memberService.checkNicknameValidate(nickname);
         return ApiResponse.success(NICKNAME_CHECK_SUCCESS);
     }
 }

@@ -16,5 +16,5 @@ public interface ContentRepository extends JpaRepository<Content,Long> {
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_CONTENT.getMessage()));
     }
 
-    List<Content> findAllByMemberId(Long memberId);
+    List<Content> findAllByMemberIdOrderByCreatedAtDesc(Long memberId);
 }

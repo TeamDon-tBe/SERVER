@@ -32,7 +32,7 @@ public class NotificationQueryService {
     public List<NotificationAllResponseDto> getNotificationAll(Long memberId){
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         System.out.println("1");
-        List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMember(usingMember);
+        List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMemberOrderByCreatedAtDesc(usingMember);
 
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDto.of(

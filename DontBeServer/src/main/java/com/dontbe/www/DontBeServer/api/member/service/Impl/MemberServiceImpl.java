@@ -99,8 +99,8 @@ public class MemberServiceImpl implements MemberService {
         Member savedMember = memberRepository.save(existingMember);
     }
 
-    public void checkNicknameValidate(MemberNicknameCheckRequestDto memberNicknameCheckRequestDto) {
-        if(memberRepository.existsByNickname(memberNicknameCheckRequestDto.nickname())){
+    public void checkNicknameValidate(String nickname) {
+        if(memberRepository.existsByNickname(nickname)){
             throw new BadRequestException(ErrorStatus.NICKNAME_VALIDATE_ERROR.getMessage());
         }
     }
