@@ -34,11 +34,10 @@ public class CommentQueryService {
         PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
-        if (cursor==0) {
-            commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
-
+        if (cursor==-1) {
+             commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
         } else {
-            commentList = commentRepository.findContentNextPage(cursor, contentId, pageRequest);
+            commentList = commentRepository.findNextPage(cursor, contentId, pageRequest);
         }
 
         return commentList.stream()
@@ -59,7 +58,6 @@ public class CommentQueryService {
 
         if (cursor==-1) {
             commentList = commentRepository.findCommentsTopByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
-
         } else {
             commentList = commentRepository.findMemberNextPage(cursor, memberId, pageRequest);
         }
