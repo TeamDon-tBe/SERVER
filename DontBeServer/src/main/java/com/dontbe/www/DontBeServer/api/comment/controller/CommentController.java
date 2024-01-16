@@ -49,8 +49,8 @@ public class CommentController {
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
     }
     @GetMapping("member/{memberId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
+    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
         Long usingMemberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));
     }
 }

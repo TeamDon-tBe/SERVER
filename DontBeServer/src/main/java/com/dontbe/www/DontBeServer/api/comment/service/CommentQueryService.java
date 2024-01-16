@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,6 @@ public class CommentQueryService {
 
         if (cursor==-1) {
              commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
-
         } else {
             commentList = commentRepository.findNextPage(cursor, contentId, pageRequest);
         }
@@ -54,8 +52,15 @@ public class CommentQueryService {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId) {
-        List<Comment> commentList = commentRepository.findCommentsByMemberIdOrderByCreatedAtAsc(memberId);
+    public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId, Long cursor) {
+        PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+        Slice<Comment> commentList;
+
+        if (cursor==-1) {
+            commentList = commentRepository.findCommentsTopByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
+        } else {
+            commentList = commentRepository.findMemberNextPage(cursor, memberId, pageRequest);
+        }
 
         return commentList.stream()
                 .map(oneComment -> CommentAllByMemberResponseDto.of(
@@ -81,7 +86,6 @@ public class CommentQueryService {
 
     private int checkMemberGhost(Long commentId) {
         Member member = commentRepository.findCommentByIdOrThrow(commentId).getMember();
-        //contentRepository.findContentByIdOrThrow(commentId).getMember();
         return GhostUtil.refineGhost(member.getMemberGhost());
     }
 
