@@ -36,33 +36,44 @@ public class NotificationQueryService {
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDto.of(
                         usingMember,
-                        memberRepository.findMemberByIdOrThrow(oneNotification.getNotificationTriggerMemberId()),
+                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
                         oneNotification,
                         oneNotification.isNotificationChecked(),
-                        notificationTriggerId(oneNotification.getNotificationTriggerType(),
+                        refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
                                 oneNotification.getNotificationTriggerId(), oneNotification),
                         profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType())
                 )).collect(Collectors.toList());
     }
 
-    private long notificationTriggerId (String triggerType, Long triggerId, Notification notification){
+    private long refineNotificationTriggerId (String triggerType, Long triggerId, Notification notification){
 
 //        Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
         //답글관련(답글좋아요 혹은 답글 작성)시 게시물 id 반환
-        if(triggerType.equals("comment") || triggerType.equals("commentLiked")){
+        if(triggerType.equals("comment") || triggerType.equals("commentLiked")) {
             Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
             return comment.getContent().getId();
-        }else {
+        }else{
+            if(triggerType.equals("actingContinue")||triggerType.equals("userBan")) {
+                return -1;
+            }
             return notification.getNotificationTriggerId();}
     }
 
     private String profileUrl(Long notificationId, String triggerType){
-        Notification notification = notificationRepository.findNotificationById(notificationId);
-        Member triggerMember = memberRepository.findMemberByIdOrThrow(notification.getNotificationTriggerMemberId());
         if(triggerType.equals("comment") || triggerType.equals("commentLiked") || triggerType.equals("contentLiked")){
+            Notification notification = notificationRepository.findNotificationById(notificationId);
+            Member triggerMember = memberRepository.findMemberByIdOrThrow(notification.getNotificationTriggerMemberId());
             return triggerMember.getProfileUrl();
         }else{
             return SYSTEM_PROFILEURL;
         }
+    }
+
+    //운영 노티의 경우 트리거 유저가 없기 때문에 "System"을 반환하도록 수정
+    private String isSystemOrUser(Long memberId) {
+        if(memberId != -1) {
+            return memberRepository.findMemberByIdOrThrow(memberId).getNickname();
+        }
+        else return "System";
     }
 }

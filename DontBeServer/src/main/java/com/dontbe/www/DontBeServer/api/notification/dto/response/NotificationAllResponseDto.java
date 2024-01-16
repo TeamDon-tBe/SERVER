@@ -15,12 +15,12 @@ public record NotificationAllResponseDto(
         String notificationText, //	댓글 노티에 나올 댓글 내용
         boolean isNotificationChecked    //	유저가 확인한 노티인지 아닌지
 ) {
-    public static NotificationAllResponseDto of(Member usingMember, Member triggerMember, Notification notification,
+    public static NotificationAllResponseDto of(Member usingMember, String triggerMemberNickname, Notification notification,
                                                 boolean isNotificationChecked, Long notificationTriggerId, String imageUrl) {
         return new NotificationAllResponseDto(
                 usingMember.getId(),
                 usingMember.getNickname(),
-                triggerMember.getNickname(),
+                triggerMemberNickname,
                 imageUrl,
                 notification.getNotificationTriggerType(),
                 TimeUtilCustom.refineTime(notification.getCreatedAt()),

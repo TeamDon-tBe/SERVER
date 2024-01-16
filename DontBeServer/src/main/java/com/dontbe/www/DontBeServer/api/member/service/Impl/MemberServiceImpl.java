@@ -20,6 +20,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +57,7 @@ public class MemberServiceImpl implements MemberService {
         Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
         Member targetMember = memberRepository.findMemberByIdOrThrow(memberClickGhostRequestDto.targetMemberId());
 
+        mySelfGhostBlock(triggerMember,targetMember);
         isDuplicateMemberGhost(triggerMember,targetMember);
 
         Ghost ghost = Ghost.builder()
@@ -74,6 +77,18 @@ public class MemberServiceImpl implements MemberService {
         Notification savedNotification = notificationRepository.save(notification);
 
         targetMember.decreaseGhost();
+
+        if(targetMember.getMemberGhost() == -85) {
+            Notification ghostNotification = Notification.builder()
+                    .notificationTargetMember(targetMember)
+                    .notificationTriggerMemberId(memberId)
+                    .notificationTriggerType("beGhost")
+                    .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId())
+                    .isNotificationChecked(false)
+                    .notificationText("")
+                    .build();
+            Notification savedGhostNotification = notificationRepository.save(ghostNotification);
+        }
     }
 
 
@@ -105,9 +120,15 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    private void isDuplicateMemberGhost(Member triggerMember, Member targetMemmber) {
-        if(ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(targetMemmber,triggerMember)) {
+    private void isDuplicateMemberGhost(Member triggerMember, Member targetMember) {
+        if(ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(targetMember,triggerMember)) {
             throw new BadRequestException(ErrorStatus.DUPLICATION_MEMBER_GHOST.getMessage());
+        }
+    }
+
+    private void mySelfGhostBlock(Member triggerMember, Member targetMember) {
+        if(Objects.equals(triggerMember.getId(), targetMember.getId())) {
+            throw new BadRequestException(ErrorStatus.GHOST_MYSELF_BLOCK.getMessage());
         }
     }
 }
