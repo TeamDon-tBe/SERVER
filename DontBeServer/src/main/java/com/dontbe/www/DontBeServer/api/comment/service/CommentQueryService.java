@@ -26,7 +26,7 @@ public class CommentQueryService {
     private final CommentLikedRepository commentLikedRepository;
 
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
-        List<Comment> commentList = commentRepository.findCommentsByContentId(contentId);
+        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId);
 
         return commentList.stream()
                 .map( oneComment -> CommentAllResponseDto.of(
@@ -41,7 +41,7 @@ public class CommentQueryService {
     }
 
     public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId){
-        List<Comment> commentList = commentRepository.findCommentsByMemberId(memberId);
+        List<Comment> commentList = commentRepository.findCommentsByMemberIdOrderByCreatedAtAsc(memberId);
 
         return commentList.stream()
                 .map( oneComment -> CommentAllByMemberResponseDto.of(

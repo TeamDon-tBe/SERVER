@@ -18,5 +18,5 @@ public interface MemberService {
 
     void updateMemberProfile(Long memberId, MemberProfilePatchRequestDto memberProfilePatchRequestDto);
 
-    void checkNicknameValidate(MemberNicknameCheckRequestDto memberNicknameCheckRequestDto);
+    void checkNicknameValidate(String nickname);
 }
