@@ -37,7 +37,7 @@ public class CommentQueryService {
         if (cursor==-1) {
              commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
         } else {
-            commentList = commentRepository.findNextPage(cursor, contentId, pageRequest);
+            commentList = commentRepository.findContentNextPage(cursor, contentId, pageRequest);
         }
 
         return commentList.stream()
