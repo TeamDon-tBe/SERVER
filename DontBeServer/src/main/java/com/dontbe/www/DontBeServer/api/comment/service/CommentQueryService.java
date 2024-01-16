@@ -13,7 +13,6 @@ import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,14 +28,14 @@ public class CommentQueryService {
     private final GhostRepository ghostRepository;
     private final CommentLikedRepository commentLikedRepository;
 
-    private final int DEFAULT_PAGE_SIZE = 5;
+    private final int DEFAULT_PAGE_SIZE = 20;
 
 
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId, Long cursor) {
         PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
-        if (cursor==0) {
+        if (cursor==-1) {
              commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
 
         } else {
