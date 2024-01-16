@@ -31,7 +31,6 @@ public class NotificationQueryService {
 
     public List<NotificationAllResponseDto> getNotificationAll(Long memberId){
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
-        System.out.println("1");
         List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMemberOrderByCreatedAtDesc(usingMember);
 
         return notificationList.stream()
@@ -48,21 +47,18 @@ public class NotificationQueryService {
 
     private long notificationTriggerId (String triggerType, Long triggerId, Notification notification){
 
-        Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
-        System.out.println("2");
+//        Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
         //답글관련(답글좋아요 혹은 답글 작성)시 게시물 id 반환
         if(triggerType.equals("comment") || triggerType.equals("commentLiked")){
-            System.out.println("3");
+            Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
             return comment.getContent().getId();
         }else {
-            System.out.println("4");
             return notification.getNotificationTriggerId();}
     }
 
     private String profileUrl(Long notificationId, String triggerType){
         Notification notification = notificationRepository.findNotificationById(notificationId);
         Member triggerMember = memberRepository.findMemberByIdOrThrow(notification.getNotificationTriggerMemberId());
-        System.out.println("5");
         if(triggerType.equals("comment") || triggerType.equals("commentLiked") || triggerType.equals("contentLiked")){
             return triggerMember.getProfileUrl();
         }else{
