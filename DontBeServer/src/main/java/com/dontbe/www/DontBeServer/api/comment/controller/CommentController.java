@@ -43,14 +43,14 @@ public class CommentController {
         commentCommendService.unlikeComment(memberId, commentId);
         return ApiResponse.success(COMMENT_UNLIKE_SUCCESS);
     }
-    @GetMapping("content/{contentId}/comment/all")
-    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId){
+    @GetMapping("content/{contentId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
+        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
     }
     @GetMapping("member/{memberId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
+    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
         Long usingMemberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));
     }
 }
