@@ -5,6 +5,8 @@ import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.exception.NotFoundException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Comment findCommentByMember(Member member);
 
-    List<Comment> findCommentsByContentIdOrderByCreatedAtAsc(Long contentId);
+    Slice<Comment> findCommentsByContentIdOrderByCreatedAtAsc(Long contentId, Pageable pageable);
 
     List<Comment> findCommentsByMemberIdOrderByCreatedAtAsc(Long memberId);
 

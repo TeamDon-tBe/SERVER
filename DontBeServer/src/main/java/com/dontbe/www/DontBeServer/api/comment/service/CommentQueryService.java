@@ -11,6 +11,9 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -25,8 +28,12 @@ public class CommentQueryService {
     private final GhostRepository ghostRepository;
     private final CommentLikedRepository commentLikedRepository;
 
-    public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
-        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId);
+    private final int DEFAULT_PAGE_SIZE = 20;
+
+
+    public List<CommentAllResponseDto> getCommentAll( Long memberId, Long contentId, int cursor) {
+        PageRequest pageRequest = PageRequest.of(cursor,DEFAULT_PAGE_SIZE);
+        Slice<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId, pageRequest);
 
         return commentList.stream()
                 .map( oneComment -> CommentAllResponseDto.of(
