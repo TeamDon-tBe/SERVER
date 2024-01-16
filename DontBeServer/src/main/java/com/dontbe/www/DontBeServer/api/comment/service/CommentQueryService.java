@@ -57,7 +57,7 @@ public class CommentQueryService {
         PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
-        if (cursor==0) {
+        if (cursor==-1) {
             commentList = commentRepository.findCommentsTopByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
 
         } else {
