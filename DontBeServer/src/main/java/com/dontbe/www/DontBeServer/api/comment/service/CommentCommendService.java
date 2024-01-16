@@ -54,7 +54,7 @@ public class CommentCommendService {
         Long commentMemberId = comment.getMember().getId();
         System.out.println(commentId);
         if (!commentMemberId.equals(memberId)) {    //답글작성자 != 현재 유저 >> 권한error
-            throw new UnAuthorizedException(ErrorStatus.UNAUTHORIZED_MEMBER.getMessage());
+            throw new BadRequestException(ErrorStatus.UNAUTHORIZED_MEMBER.getMessage());
         }
     }
 

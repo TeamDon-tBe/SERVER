@@ -90,7 +90,7 @@ public class ContentCommandService {
 
         Long contentMemberId = content.getMember().getId();
         if (!contentMemberId.equals(memberId)) {
-            throw new UnAuthorizedException(ErrorStatus.UNAUTHORIZED_MEMBER.getMessage());
+            throw new BadRequestException (ErrorStatus.UNAUTHORIZED_MEMBER.getMessage());
         }
     }
 
