@@ -43,8 +43,8 @@ public class CommentController {
         commentCommendService.unlikeComment(memberId, commentId);
         return ApiResponse.success(COMMENT_UNLIKE_SUCCESS);
     }
-    @GetMapping("content/{contentId}/comment")
-    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") int cursor){    //cursor= last commentId
+    @GetMapping("content/{contentId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
     }

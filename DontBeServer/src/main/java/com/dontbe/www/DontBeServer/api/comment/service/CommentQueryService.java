@@ -11,11 +11,12 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,31 +29,38 @@ public class CommentQueryService {
     private final GhostRepository ghostRepository;
     private final CommentLikedRepository commentLikedRepository;
 
-    private final int DEFAULT_PAGE_SIZE = 20;
+    private final int DEFAULT_PAGE_SIZE = 5;
 
 
-    public List<CommentAllResponseDto> getCommentAll( Long memberId, Long contentId, int cursor) {
-        PageRequest pageRequest = PageRequest.of(cursor,DEFAULT_PAGE_SIZE);
-        Slice<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId, pageRequest);
+    public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId, Long cursor) {
+        PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+        Slice<Comment> commentList;
+
+        if (cursor==0) {
+             commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
+
+        } else {
+            commentList = commentRepository.findNextPage(cursor, contentId, pageRequest);
+        }
 
         return commentList.stream()
-                .map( oneComment -> CommentAllResponseDto.of(
+                .map(oneComment -> CommentAllResponseDto.of(
                         memberRepository.findMemberByIdOrThrow(memberId),
                         checkGhost(memberId, oneComment.getId()),
                         checkMemberGhost(oneComment.getId()),
-                        checkLikedComment(memberId,oneComment.getId()),
+                        checkLikedComment(memberId, oneComment.getId()),
                         TimeUtilCustom.refineTime(oneComment.getCreatedAt()),
                         likedNumber(contentId),
                         oneComment.getCommentText()))
                 .collect(Collectors.toList());
     }
 
-    public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId){
+    public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId) {
         List<Comment> commentList = commentRepository.findCommentsByMemberIdOrderByCreatedAtAsc(memberId);
 
         return commentList.stream()
-                .map( oneComment -> CommentAllByMemberResponseDto.of(
-                    memberRepository.findMemberByIdOrThrow(memberId),
+                .map(oneComment -> CommentAllByMemberResponseDto.of(
+                        memberRepository.findMemberByIdOrThrow(memberId),
                         checkLikedComment(principalId, oneComment.getId()),
                         checkGhost(principalId, oneComment.getId()),
                         checkMemberGhost(oneComment.getId()),
@@ -61,21 +69,24 @@ public class CommentQueryService {
                 ).collect(Collectors.toList());
     }
 
-    private boolean checkGhost(Long usingMemberId, Long commentId){
+    private boolean checkGhost(Long usingMemberId, Long commentId) {
         Member writerMember = commentRepository.findCommentByIdOrThrow(commentId).getMember();
         return ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(usingMemberId, writerMember.getId());
     }
+
     private boolean checkLikedComment(Long usingMemberId, Long commentId) {
         Member member = memberRepository.findMemberByIdOrThrow(usingMemberId);
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
-        return commentLikedRepository.existsByCommentAndMember(comment,member);
+        return commentLikedRepository.existsByCommentAndMember(comment, member);
     }
-    private int checkMemberGhost(Long commentId){
+
+    private int checkMemberGhost(Long commentId) {
         Member member = commentRepository.findCommentByIdOrThrow(commentId).getMember();
         //contentRepository.findContentByIdOrThrow(commentId).getMember();
         return GhostUtil.refineGhost(member.getMemberGhost());
     }
-    private int likedNumber(Long commentId){
+
+    private int likedNumber(Long commentId) {
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
         return commentLikedRepository.countByComment(comment);
     }
