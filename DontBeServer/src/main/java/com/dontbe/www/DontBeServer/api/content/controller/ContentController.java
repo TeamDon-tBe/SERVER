@@ -28,7 +28,6 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 public class ContentController {
     private final ContentCommandService contentCommandService;
     private final ContentQueryService contentQueryService;
-    private final CommentQueryService commentQueryService;
 
     @PostMapping("content")
     @Operation(summary = "게시글 작성 API 입니다.",description = "Content Post")
@@ -80,11 +79,18 @@ public class ContentController {
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll(memberId));
     }
 
-    @GetMapping("member/{memberId}/contents")
-    @Operation(summary = "게시글 페이지네이션 조회 API 입니다.",description = "ContentGetPagination")
-    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
-                                                                                                     @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
-        Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId, cursor));
-    }
+//    @GetMapping("member/{memberId}/contents")
+//    @Operation(summary = "게시글 페이지네이션 조회 API 입니다.",description = "ContentGetPagination")
+//    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
+//                                                                                                     @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
+//        Long memberId = MemberUtil.getMemberId(principal);
+//        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId, cursor));
+//    }
+@GetMapping("member/{memberId}/contents")
+@Operation(summary = "게시글 페이지네이션 조회 API 입니다.",description = "ContentGetPagination")
+public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
+                                                                                                 @PathVariable("memberId") Long targetMemberId) {
+    Long memberId = MemberUtil.getMemberId(principal);
+    return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
+}
 }
