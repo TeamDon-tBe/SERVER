@@ -16,6 +16,8 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     int countByContent(Content content);
 
+    List<Comment> findCommentsByContentId(Long contentId);
+
     Optional<Comment> findCommentById(Long commentId);
 
     List<Comment> findCommentsByContentIdOrderByCreatedAtDesc(Long contentId);

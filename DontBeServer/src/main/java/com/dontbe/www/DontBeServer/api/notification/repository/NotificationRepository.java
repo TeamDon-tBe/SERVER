@@ -19,6 +19,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Notification findNotificationById(Long notificationId);
 
+    //게시물에 해당하는 모든 유저의 좋아요 노티 삭제
+    void deleteByNotificationTriggerTypeAndNotificationTriggerId(String triggerType, Long triggerId);
+
 //    default Notification findNotificationByIdOrThrow(Long notificationId) {
 //        return findNotificationByIdOrThrow(notificationId)
 //        orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_NOTIFICATION.getMessage()));

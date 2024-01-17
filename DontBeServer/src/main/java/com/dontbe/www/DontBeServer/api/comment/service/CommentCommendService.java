@@ -59,6 +59,10 @@ public class CommentCommendService {
 
     public void deleteComment(Long memberId, Long commentId) {
         deleteValidate(memberId, commentId);
+
+        notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",commentId);
+        notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment",commentId);
+
         commentRepository.deleteById(commentId);
     }
 
