@@ -31,7 +31,7 @@ public class ContentQueryService {
     private final GhostRepository ghostRepository;
     private final ContentLikedRepository contentLikedRepository;
 
-    private final int DEFAULT_PAGE_SIZE = 5;
+    //private final int DEFAULT_PAGE_SIZE = 20;
 
     public ContentGetDetailsResponseDto getContentDetail(Long memberId, Long contentId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -78,8 +78,8 @@ public class ContentQueryService {
                         contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
                 .collect(Collectors.toList());
     }*/
-
-    public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId, Long cursor) {
+    public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId) {
+    //public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId, Long cursor) {
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
         List<Content> contents = contentRepository.findAllByMemberIdOrderByCreatedAtDesc(targetMemberId);

@@ -74,5 +74,6 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
         Long usingMemberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));
-    }*/
+    }
+    */
 }
