@@ -34,6 +34,7 @@ public class CommentQueryService {
 
         return commentList.stream()
                 .map( oneComment -> CommentAllResponseDto.of(
+                        oneComment.getId(),
                         memberRepository.findMemberByIdOrThrow(memberId),
                         checkGhost(memberId, oneComment.getId()),
                         checkMemberGhost(oneComment.getId()),

@@ -4,6 +4,7 @@ import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 
 public record CommentAllResponseDto(
+        Long commentId, //답글 고유 id
         Long memberId,  //	댓글 작성자 Id
         String memberProfileUrl,     //작성자 프로필 사진url
         String memberNickname,	//댓글 작성자 닉네임
@@ -14,8 +15,9 @@ public record CommentAllResponseDto(
         String commentText,	//댓글 내용
         String  time	//답글이 작성된 시간을 (년-월-일 시:분:초)
 ) {
-    public static CommentAllResponseDto of(Member writerMember,boolean isGhost,int memberGhost, boolean isLiked, String time, int likedNumber, String commentText){
+    public static CommentAllResponseDto of(Long commentId, Member writerMember,boolean isGhost,int memberGhost, boolean isLiked, String time, int likedNumber, String commentText){
         return new CommentAllResponseDto(
+                commentId,
                 writerMember.getId(),
                 writerMember.getProfileUrl(),
                 writerMember.getNickname(),
