@@ -29,7 +29,35 @@ public class CommentQueryService {
 
     private final int DEFAULT_PAGE_SIZE = 20;
 
+    public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
+        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtDesc(contentId);
 
+        return commentList.stream()
+                .map( oneComment -> CommentAllResponseDto.of(
+                        memberRepository.findMemberByIdOrThrow(memberId),
+                        checkGhost(memberId, oneComment.getId()),
+                        checkMemberGhost(oneComment.getId()),
+                        checkLikedComment(memberId,oneComment.getId()),
+                        TimeUtilCustom.refineTime(oneComment.getCreatedAt()),
+                        likedNumber(contentId),
+                        oneComment.getCommentText()))
+                .collect(Collectors.toList());
+    }
+
+    public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId){
+        List<Comment> commentList = commentRepository.findCommentsByMemberIdOrderByCreatedAtDesc(memberId);
+
+        return commentList.stream()
+                .map( oneComment -> CommentAllByMemberResponseDto.of(
+                        memberRepository.findMemberByIdOrThrow(memberId),
+                        checkLikedComment(principalId, oneComment.getId()),
+                        checkGhost(principalId, oneComment.getId()),
+                        checkMemberGhost(oneComment.getId()),
+                        likedNumber(oneComment.getId()),
+                        oneComment)
+                ).collect(Collectors.toList());
+    }
+    /*
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId, Long cursor) {
         PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
@@ -72,6 +100,7 @@ public class CommentQueryService {
                         oneComment)
                 ).collect(Collectors.toList());
     }
+    */
 
     private boolean checkGhost(Long usingMemberId, Long commentId) {
         Member writerMember = commentRepository.findCommentByIdOrThrow(commentId).getMember();
