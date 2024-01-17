@@ -39,7 +39,7 @@ public class CommentQueryService {
                         checkMemberGhost(oneComment.getId()),
                         checkLikedComment(memberId,oneComment.getId()),
                         TimeUtilCustom.refineTime(oneComment.getCreatedAt()),
-                        likedNumber(contentId),
+                        likedNumber(oneComment.getId()),
                         oneComment.getCommentText()))
                 .collect(Collectors.toList());
     }
