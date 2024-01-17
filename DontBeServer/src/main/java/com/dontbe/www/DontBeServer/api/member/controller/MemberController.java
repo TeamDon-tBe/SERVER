@@ -51,7 +51,7 @@ public class MemberController {
     }
 
     @PostMapping("ghost")
-    @Operation(summary = "유저 프로필 정보 조회 API입니다.",description = "MemberGhost")
+    @Operation(summary = "투명도 낮추는 API입니다.",description = "MemberGhost")
     public ResponseEntity<ApiResponse<Object>> clickMemberGhost(Principal principal,@RequestBody MemberClickGhostRequestDto memberClickGhostRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         memberService.clickMemberGhost(memberId, memberClickGhostRequestDto);
