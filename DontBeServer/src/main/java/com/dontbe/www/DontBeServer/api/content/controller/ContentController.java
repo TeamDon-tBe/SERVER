@@ -1,5 +1,6 @@
 package com.dontbe.www.DontBeServer.api.content.controller;
 
+import com.dontbe.www.DontBeServer.api.comment.service.CommentQueryService;
 import com.dontbe.www.DontBeServer.api.content.dto.request.*;
 import com.dontbe.www.DontBeServer.api.content.dto.response.*;
 import com.dontbe.www.DontBeServer.api.content.service.ContentCommandService;
@@ -7,6 +8,7 @@ import com.dontbe.www.DontBeServer.api.content.service.ContentQueryService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,12 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1")
+@SecurityRequirement(name = "JWT Auth")
 @Tag(name="게시글 관련", description = "Content API Document")
 public class ContentController {
     private final ContentCommandService contentCommandService;
     private final ContentQueryService contentQueryService;
+    private final CommentQueryService commentQueryService;
 
     @PostMapping("content")
     @Operation(summary = "게시글 작성 API 입니다.",description = "Content Post")
@@ -61,27 +65,26 @@ public class ContentController {
         contentCommandService.unlikeContent(memberId, contentId);
         return ApiResponse.success(CONTENT_UNLIKE_SUCCESS);
     }
-
-      @GetMapping("content/{contentId}/comment/all")
-    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId){
-        Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
-    }
-    @GetMapping("member/{memberId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
-        Long usingMemberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
-    }
     /*
-    @GetMapping("content/{contentId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
+    @GetMapping("contents")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal, @RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
-    }
-    @GetMapping("member/{memberId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
-        Long usingMemberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll2(memberId, cursor));
     }
     */
+
+    @GetMapping("content/all")
+    @Operation(summary = "게시글 전체 조회 API 입니다.",description = "ContentGetAll")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll(memberId));
+    }
+
+    @GetMapping("member/{memberId}/contents")
+    @Operation(summary = "게시글 페이지네이션 조회 API 입니다.",description = "ContentGetPagination")
+    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
+                                                                                                     @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId, cursor));
+    }
 }

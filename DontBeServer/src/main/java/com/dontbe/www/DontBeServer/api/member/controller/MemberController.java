@@ -9,6 +9,7 @@ import com.dontbe.www.DontBeServer.api.member.service.MemberService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @RestController
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT Auth")
 @Tag(name="멤버 관련",description = "Member Api Document")
 public class MemberController {
     private final MemberService memberService;

@@ -7,6 +7,7 @@ import com.dontbe.www.DontBeServer.api.comment.service.CommentQueryService;
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @RestController
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT Auth")
 @Tag(name="답글 관련",description = "Comment Api Document")
 public class CommentController {
     private final CommentCommendService commentCommendService;
@@ -44,31 +46,31 @@ public class CommentController {
         return ApiResponse.success(COMMENT_LIKE_SUCCESS);
     }
     @DeleteMapping("comment/{commentId}/unliked")
-    @Operation(summary = "답글 좋아요 취소 API입니다.", description = "CommentUnlike")
+    @Operation(summary = "답글 좋아요 취소 API 입니다.", description = "CommentUnlike")
     public ResponseEntity<ApiResponse<Object>> unlikeComment(Principal principal,@PathVariable Long commentId) {
         Long memberId = MemberUtil.getMemberId(principal);
         commentCommendService.unlikeComment(memberId, commentId);
         return ApiResponse.success(COMMENT_UNLIKE_SUCCESS);
     }
     @GetMapping("content/{contentId}/comment/all")
+    @Operation(summary = "게시물에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByContent")
     public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId){
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
     }
     @GetMapping("member/{memberId}/comments")
+    @Operation(summary = "멤버에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByMember")
     public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
         Long usingMemberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
     }
     /*
     @GetMapping("content/{contentId}/comments")
-    @Operation(summary = "게시글 답글 리스트 조회 API입니다.", description = "CommentAllByContent")
     public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
     }
     @GetMapping("member/{memberId}/comments")
-    @Operation(summary = "유저의 답글 리스트 조회 API입니다.", description = "CommentAllByMember")
     public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
         Long usingMemberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));

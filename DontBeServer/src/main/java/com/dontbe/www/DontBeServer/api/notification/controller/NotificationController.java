@@ -6,6 +6,7 @@ import com.dontbe.www.DontBeServer.api.notification.service.NotificationQuerySer
 import com.dontbe.www.DontBeServer.common.response.ApiResponse;
 import com.dontbe.www.DontBeServer.common.util.MemberUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @RestController
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT Auth")
 @Tag(name="노티 관련",description = "Notification Api Document")
 public class NotificationController {
     private final NotificationCommandService notificationCommandService;
