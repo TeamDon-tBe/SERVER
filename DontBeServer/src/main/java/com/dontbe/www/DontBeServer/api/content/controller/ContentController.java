@@ -37,7 +37,7 @@ public class ContentController {
     }
 
     @DeleteMapping("content/{contentId}")
-    @Operation(summary = "게시글 작성 API 입니다.",description = "Content Delete")
+    @Operation(summary = "게시글 삭제 API 입니다.",description = "Content Delete")
     public ResponseEntity<ApiResponse<Object>> deleteContent(Principal principal, @PathVariable("contentId") Long contentId) {
         contentCommandService.deleteContent(MemberUtil.getMemberId(principal),contentId);
         return ApiResponse.success(DELETE_CONTENT_SUCCESS);
