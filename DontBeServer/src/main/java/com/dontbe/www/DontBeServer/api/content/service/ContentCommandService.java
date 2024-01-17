@@ -48,7 +48,7 @@ public class ContentCommandService {
         for(Comment comment : comments) {
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",comment.getId());
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());
-            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("Comment", comment.getId());
+            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
             commentLikedRepository.deleteByComment(comment);
 //            commentRepository.deleteById(comment.getId());
         }
