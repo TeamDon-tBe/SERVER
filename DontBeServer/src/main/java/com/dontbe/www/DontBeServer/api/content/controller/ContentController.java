@@ -54,6 +54,14 @@ public class ContentController {
         return ApiResponse.success(CONTENT_UNLIKE_SUCCESS);
     }
 
+    /*
+    @GetMapping("contents")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal, @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll2(memberId, cursor));
+    }
+    */
+
     @GetMapping("content/all")
     public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
@@ -61,8 +69,9 @@ public class ContentController {
     }
 
     @GetMapping("member/{memberId}/contents")
-    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal, @PathVariable("memberId") Long targetMemberId) {
+    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
+                                                                                                     @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId, cursor));
     }
 }
