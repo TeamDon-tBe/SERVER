@@ -50,7 +50,7 @@ public class ContentQueryService {
 
     public List<ContentGetAllResponseDto> getContentAll(Long memberId) {
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
-        List<Content> contents = contentRepository.findAll();
+        List<Content> contents = contentRepository.findAllByOrderByCreatedAtDesc();
         return contents.stream()
                 .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
                         ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
