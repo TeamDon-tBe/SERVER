@@ -13,6 +13,8 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import com.dontbe.www.DontBeServer.common.util.TimeUtilCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,8 @@ public class ContentQueryService {
     private final CommentRepository commentRepository;
     private final GhostRepository ghostRepository;
     private final ContentLikedRepository contentLikedRepository;
+
+    private final int DEFAULT_PAGE_SIZE = 5;
 
     public ContentGetDetailsResponseDto getContentDetail(Long memberId, Long contentId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -55,7 +59,27 @@ public class ContentQueryService {
                 .collect(Collectors.toList());
     }
 
-    public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId) {
+    /*
+    public List<ContentGetAllResponseDto> getContentAll2(Long memberId, Long cursor) {
+        PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Slice<Content> contentList;
+
+        if (cursor==-1) {
+            contentList = contentRepository.findAllTop(pageRequest);
+        } else {
+            contentList = contentRepository.findcontentNextPage(cursor, pageRequest);
+        }
+
+        return contentList.stream()
+                .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
+                        contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
+                        contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
+                .collect(Collectors.toList());
+    }*/
+
+    public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId, Long cursor) {
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
         List<Content> contents = contentRepository.findAllByMemberIdOrderByCreatedAtDesc(targetMemberId);

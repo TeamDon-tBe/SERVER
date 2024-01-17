@@ -62,17 +62,26 @@ public class ContentController {
         return ApiResponse.success(CONTENT_UNLIKE_SUCCESS);
     }
 
-    @GetMapping("content/all")
-    @Operation(summary = "게시글 전체 리스트 조회 APi 입니다.",description = "Content Get All")
-    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal) {
+      @GetMapping("content/{contentId}/comment/all")
+    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId){
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll(memberId));
+        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
     }
-
-    @GetMapping("member/{memberId}/contents")
-    @Operation(summary = "유저 별 게시글 리스트 조회 API 입니다.",description = "ContentGetByMember")
-    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal, @PathVariable("memberId") Long targetMemberId) {
+    @GetMapping("member/{memberId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
+        Long usingMemberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
+    }
+    /*
+    @GetMapping("content/{contentId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
+        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
     }
+    @GetMapping("member/{memberId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
+        Long usingMemberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));
+    }
+    */
 }
