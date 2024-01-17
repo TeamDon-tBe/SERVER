@@ -15,6 +15,9 @@ public interface ContentRepository extends JpaRepository<Content,Long> {
     Optional<Content> findContentById(Long contentId);
 
     //게시물 전체 조회 관련
+
+    List<Content> findAllByOrderByCreatedAtDesc();
+
     List<Content> findAllByMemberIdOrderByCreatedAtDesc(Long memberId);
     /*
         Slice<Content> findAllTop(PageRequest pageRequest);
