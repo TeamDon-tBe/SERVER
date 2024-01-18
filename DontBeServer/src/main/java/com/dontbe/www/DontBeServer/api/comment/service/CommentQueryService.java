@@ -105,7 +105,7 @@ public class CommentQueryService {
 
     private boolean checkGhost(Long usingMemberId, Long commentId) {
         Member writerMember = commentRepository.findCommentByIdOrThrow(commentId).getMember();
-        return ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(usingMemberId, writerMember.getId());
+        return ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(writerMember.getId(), usingMemberId);
     }
 
     private boolean checkLikedComment(Long usingMemberId, Long commentId) {
