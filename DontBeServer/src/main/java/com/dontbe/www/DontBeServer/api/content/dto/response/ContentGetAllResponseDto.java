@@ -16,7 +16,7 @@ public record ContentGetAllResponseDto (
         int likedNumber,
         int commentNumber
 ) {
-    public static ContentGetAllResponseDto of(Member writerMember, Content content, boolean isGhost, boolean isLiked, String time, int likedNumber, int commentNumber) {
+    public static ContentGetAllResponseDto of(Member writerMember, Content content, boolean isGhost,int refinedMemberGhost, boolean isLiked, String time, int likedNumber, int commentNumber) {
         return new ContentGetAllResponseDto(
                 writerMember.getId(),
                 writerMember.getProfileUrl(),
@@ -25,7 +25,7 @@ public record ContentGetAllResponseDto (
                 content.getContentText(),
                 time,
                 isGhost,
-                writerMember.getMemberGhost(),
+                refinedMemberGhost,
                 isLiked,
                 likedNumber,
                 commentNumber

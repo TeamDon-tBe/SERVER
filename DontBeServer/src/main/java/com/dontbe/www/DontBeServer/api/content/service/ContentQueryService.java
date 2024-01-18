@@ -53,7 +53,7 @@ public class ContentQueryService {
         List<Content> contents = contentRepository.findAllByOrderByCreatedAtDesc();
         return contents.stream()
                 .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
-                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),GhostUtil.refineGhost(content.getMember().getMemberGhost()),
                         contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
                         contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
                 .collect(Collectors.toList());
