@@ -84,7 +84,7 @@ public class ContentQueryService {
         Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
         List<Content> contents = contentRepository.findAllByMemberIdOrderByCreatedAtDesc(targetMemberId);
         return contents.stream()
-                .map(content -> ContentGetAllByMemberResponseDto.of(targetMember, content,
+                .map(content -> ContentGetAllByMemberResponseDto.of(targetMember,GhostUtil.refineGhost(content.getMember().getMemberGhost()), content,
                         ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(targetMember,usingMember),
                         contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
                         contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
