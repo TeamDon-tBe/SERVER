@@ -23,6 +23,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentsByContentIdOrderByCreatedAtDesc(Long contentId);
 
     List<Comment> findCommentsByMemberIdOrderByCreatedAtDesc(Long memberId);
+
+    List<Comment> findCommentsByContentIdOrderByCreatedAtAsc(Long contentId);
     /*
     //게시물에 해당하는 답글 리스트 조회
     @Query("SELECT c FROM Comment c WHERE c.id <= ?1 AND c.content.id = ?2 ORDER BY c.createdAt DESC")
