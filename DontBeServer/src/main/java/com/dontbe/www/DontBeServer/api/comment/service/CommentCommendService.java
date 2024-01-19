@@ -47,7 +47,7 @@ public class CommentCommendService {
             //노티 엔티티와 연결
             Notification notification = Notification.builder()
                     .notificationTargetMember(contentWritingMember)
-                    .notificationTriggerMemberId(contentWritingMember.getId())
+                    .notificationTriggerMemberId(usingMember.getId())
                     .notificationTriggerType(commentPostRequestDto.notificationTriggerType())
                     .notificationTriggerId(comment.getId())   //에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기
                     .isNotificationChecked(false)
