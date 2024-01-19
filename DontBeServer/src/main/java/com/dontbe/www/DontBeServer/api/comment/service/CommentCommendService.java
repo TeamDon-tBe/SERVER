@@ -62,6 +62,7 @@ public class CommentCommendService {
 
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",commentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment",commentId);
+        notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost", commentId);
 
         commentRepository.deleteById(commentId);
     }
