@@ -30,7 +30,7 @@ public class CommentQueryService {
     private final int DEFAULT_PAGE_SIZE = 20;
 
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
-        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId);
+        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtDesc(contentId);
 
         return commentList.stream()
                 .map( oneComment -> CommentAllResponseDto.of(
