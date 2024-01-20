@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
                 .notificationTargetMember(targetMember)
                 .notificationTriggerMemberId(memberId)
                 .notificationTriggerType(memberClickGhostRequestDto.alarmTriggerType())
-                .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId())
+                .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId()) //2차 스프린트 : 에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기(refineNotificationTriggerId에 추가)
                 .isNotificationChecked(false)
                 .notificationText("")
                 .build();
