@@ -1,9 +1,7 @@
 package com.dontbe.www.DontBeServer.common.config.jwt;
 
-import com.auth0.jwt.JWT;
+import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
-import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
-import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -120,18 +118,9 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Long validateMemberRefreshToken(String accessToken, String refreshToken) {
-        Long memberId = Long.valueOf(JWT.decode(accessToken).getSubject());
-//        Claims claims = Jwts.parser()
-//                .setSigningKey(secretKey)
-//                .parseClaimsJws(accessToken)
-//                .getBody();
-//
-//        Long memberId = Long.valueOf(claims.getSubject());
 
-        memberRepository.findByIdAndRefreshToken(memberId, refreshToken)
-                .orElseThrow(() -> new BadRequestException(ErrorStatus.INVALID_MEMBER.getMessage()));
-
-        return memberId;
+    public Long validateMemberRefreshToken(String refreshToken) {
+        Member member = memberRepository.findByRefreshTokenOrThrow(refreshToken);
+        return member.getId();
     }
 }
