@@ -34,7 +34,10 @@ public class ContentCommandService {
     private final CommentLikedRepository commentLikedRepository;
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
+        isGhostMember(memberId);
+
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
+
         Content content = Content.builder()
                 .member(member)
                 .contentText(contentPostRequestDto.contentText())
@@ -115,6 +118,13 @@ public class ContentCommandService {
     private void isDuplicateContentLike(Content content, Member member) {
         if(contentLikedRepository.existsByContentAndMember(content,member)) {
             throw new BadRequestException(ErrorStatus.DUPLICATION_CONTENT_LIKE.getMessage());
+        }
+    }
+
+    private void isGhostMember(Long memberId) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        if(member.getMemberGhost()<=-85) {
+            throw new BadRequestException(ErrorStatus.GHOST_USER.getMessage());
         }
     }
 }

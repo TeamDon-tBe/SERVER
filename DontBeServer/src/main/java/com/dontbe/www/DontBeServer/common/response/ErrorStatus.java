@@ -24,6 +24,7 @@ public enum ErrorStatus {
     DUPLICATION_MEMBER_GHOST("이미 투명도를 누른 대상입니다."),
     NICKNAME_VALIDATE_ERROR("이미 존재하는 닉네임입니다."),
     GHOST_MYSELF_BLOCK("본인의 투명도를 내릴 수 없습니다."),
+    GHOST_USER("투명도가 -85이하라서 글이나 답글을 작성할 수 없습니다."),
 
     /**
      * 401 UNAUTHORIZED

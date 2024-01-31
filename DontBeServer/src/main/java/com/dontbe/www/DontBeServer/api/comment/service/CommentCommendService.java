@@ -13,13 +13,10 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
-import com.dontbe.www.DontBeServer.common.exception.UnAuthorizedException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +29,11 @@ public class CommentCommendService {
     private final NotificationRepository notificationRepository;
 
     public void postComment(Long memberId, Long contentId, CommentPostRequestDto commentPostRequestDto){
+        isGhostMember(memberId);
+
         Content content = contentRepository.findContentByIdOrThrow(contentId); // 게시물id 잘못됐을 때 에러
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);   //사용하고 있는 회원
+
         Comment comment = Comment.builder()
                 .member(usingMember)
                 .content(content)
@@ -43,6 +43,7 @@ public class CommentCommendService {
 
         //답글 작성 시 게시물 작상자에게 알림 발생
         Member contentWritingMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
+
         if(usingMember != contentWritingMember){  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
             //노티 엔티티와 연결
             Notification notification = Notification.builder()
@@ -129,6 +130,13 @@ public class CommentCommendService {
     private void isDuplicateCommentLike(Comment comment, Member member) {
         if (commentLikedRepository.existsByCommentAndMember(comment, member)) {
             throw new BadRequestException(ErrorStatus.DUPLICATION_COMMENT_LIKE.getMessage());
+        }
+    }
+
+    private void isGhostMember(Long memberId) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        if(member.getMemberGhost()<=-85) {
+            throw new BadRequestException(ErrorStatus.GHOST_USER.getMessage());
         }
     }
 }
