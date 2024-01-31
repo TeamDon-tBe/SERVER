@@ -14,8 +14,8 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
-import com.dontbe.www.DontBeServer.common.exception.UnAuthorizedException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
+import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +34,9 @@ public class ContentCommandService {
     private final CommentLikedRepository commentLikedRepository;
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
-        isGhostMember(memberId);
-
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
+
+        GhostUtil.isGhostMember(member.getMemberGhost());
 
         Content content = Content.builder()
                 .member(member)
@@ -118,13 +118,6 @@ public class ContentCommandService {
     private void isDuplicateContentLike(Content content, Member member) {
         if(contentLikedRepository.existsByContentAndMember(content,member)) {
             throw new BadRequestException(ErrorStatus.DUPLICATION_CONTENT_LIKE.getMessage());
-        }
-    }
-
-    private void isGhostMember(Long memberId) {
-        Member member = memberRepository.findMemberByIdOrThrow(memberId);
-        if(member.getMemberGhost()<=-85) {
-            throw new BadRequestException(ErrorStatus.GHOST_USER.getMessage());
         }
     }
 }

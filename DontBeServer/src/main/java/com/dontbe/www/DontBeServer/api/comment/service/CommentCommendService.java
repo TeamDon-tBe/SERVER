@@ -14,6 +14,7 @@ import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
+import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +30,10 @@ public class CommentCommendService {
     private final NotificationRepository notificationRepository;
 
     public void postComment(Long memberId, Long contentId, CommentPostRequestDto commentPostRequestDto){
-        isGhostMember(memberId);
-
         Content content = contentRepository.findContentByIdOrThrow(contentId); // 게시물id 잘못됐을 때 에러
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);   //사용하고 있는 회원
+
+        GhostUtil.isGhostMember(usingMember.getMemberGhost());
 
         Comment comment = Comment.builder()
                 .member(usingMember)
@@ -130,13 +131,6 @@ public class CommentCommendService {
     private void isDuplicateCommentLike(Comment comment, Member member) {
         if (commentLikedRepository.existsByCommentAndMember(comment, member)) {
             throw new BadRequestException(ErrorStatus.DUPLICATION_COMMENT_LIKE.getMessage());
-        }
-    }
-
-    private void isGhostMember(Long memberId) {
-        Member member = memberRepository.findMemberByIdOrThrow(memberId);
-        if(member.getMemberGhost()<=-85) {
-            throw new BadRequestException(ErrorStatus.GHOST_USER.getMessage());
         }
     }
 }

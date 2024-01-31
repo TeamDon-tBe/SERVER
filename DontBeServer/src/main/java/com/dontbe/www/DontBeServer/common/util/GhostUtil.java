@@ -16,4 +16,10 @@ public class GhostUtil {
         }
         return input;
     }
+
+    public static void isGhostMember(int memberGhost) {
+        if(memberGhost<=-85) {
+            throw new BadRequestException(ErrorStatus.GHOST_USER.getMessage());
+        }
+    }
 }
