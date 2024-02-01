@@ -14,8 +14,8 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
-import com.dontbe.www.DontBeServer.common.exception.UnAuthorizedException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
+import com.dontbe.www.DontBeServer.common.util.GhostUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +35,9 @@ public class ContentCommandService {
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
+
+        GhostUtil.isGhostMember(member.getMemberGhost());
+
         Content content = Content.builder()
                 .member(member)
                 .contentText(contentPostRequestDto.contentText())
