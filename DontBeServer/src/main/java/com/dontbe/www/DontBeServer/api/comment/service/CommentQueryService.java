@@ -30,7 +30,7 @@ public class CommentQueryService {
     private final int DEFAULT_PAGE_SIZE = 20;
 
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
-        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtDesc(contentId);
+        List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId);
 
         return commentList.stream()
                 .map( oneComment -> CommentAllResponseDto.of(
@@ -64,7 +64,7 @@ public class CommentQueryService {
         Slice<Comment> commentList;
 
         if (cursor==-1) {
-             commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtDesc(contentId, pageRequest);
+             commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtAsc(contentId, pageRequest);
         } else {
             commentList = commentRepository.findContentNextPage(cursor, contentId, pageRequest);
         }
