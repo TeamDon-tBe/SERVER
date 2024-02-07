@@ -124,7 +124,7 @@ public class CommentCommendService {
                     (targetMember, memberId,"commentLiked", comment.getId());
 
         }else{ //댓글좋아요 엔티티에 존재하지 않을 경우 예외처리
-            throw new BadRequestException(ErrorStatus.UNEXITST_COMENT_LIKE.getMessage());
+            throw new BadRequestException(ErrorStatus.UNEXIST_COMMENT_LIKE.getMessage());
         }
     }
 
