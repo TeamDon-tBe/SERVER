@@ -5,6 +5,7 @@ import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberRe
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDto;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
+import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
@@ -26,10 +27,13 @@ public class CommentQueryService {
     private final CommentRepository commentRepository;
     private final GhostRepository ghostRepository;
     private final CommentLikedRepository commentLikedRepository;
+    private final ContentRepository contentRepository;
 
-    private final int DEFAULT_PAGE_SIZE = 20;
+    private final int COMMENT_DEFAULT_PAGE_SIZE = 15;
 
     public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId) {
+        contentRepository.findContentByIdOrThrow(contentId);
+
         List<Comment> commentList = commentRepository.findCommentsByContentIdOrderByCreatedAtAsc(contentId);
 
         return commentList.stream()
@@ -46,6 +50,7 @@ public class CommentQueryService {
     }
 
     public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId){
+        memberRepository.findMemberByIdOrThrow(memberId);
         List<Comment> commentList = commentRepository.findCommentsByMemberIdOrderByCreatedAtDesc(memberId);
 
         return commentList.stream()
@@ -58,35 +63,39 @@ public class CommentQueryService {
                         oneComment)
                 ).collect(Collectors.toList());
     }
-    /*
-    public List<CommentAllResponseDto> getCommentAll(Long memberId, Long contentId, Long cursor) {
-        PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+
+    public List<CommentAllResponseDto> getCommentAllPagination(Long memberId, Long contentId, Long cursor) {
+        contentRepository.findContentByIdOrThrow(contentId);
+        PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
         if (cursor==-1) {
-             commentList = commentRepository.findCommentsTopByContentIdOrderByCreatedAtAsc(contentId, pageRequest);
+             commentList = commentRepository.findCommentsTop15ByContentIdOrderByCreatedAtAsc(contentId, pageRequest);
         } else {
             commentList = commentRepository.findContentNextPage(cursor, contentId, pageRequest);
         }
 
         return commentList.stream()
                 .map(oneComment -> CommentAllResponseDto.of(
-                        memberRepository.findMemberByIdOrThrow(memberId),
+                        oneComment.getId(),
+                        memberRepository.findMemberByIdOrThrow(oneComment.getMember().getId()),
                         checkGhost(memberId, oneComment.getId()),
                         checkMemberGhost(oneComment.getId()),
-                        checkLikedComment(memberId, oneComment.getId()),
+                        checkLikedComment(memberId,oneComment.getId()),
                         TimeUtilCustom.refineTime(oneComment.getCreatedAt()),
-                        likedNumber(contentId),
+                        likedNumber(oneComment.getId()),
                         oneComment.getCommentText()))
                 .collect(Collectors.toList());
     }
 
-    public List<CommentAllByMemberResponseDto> getMemberComment(Long principalId, Long memberId, Long cursor) {
-        PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+    public List<CommentAllByMemberResponseDto> getMemberCommentPagination(Long principalId, Long memberId, Long cursor) {
+        memberRepository.findMemberByIdOrThrow(memberId);
+
+        PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
         if (cursor==-1) {
-            commentList = commentRepository.findCommentsTopByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
+            commentList = commentRepository.findCommentsTop15ByMemberIdOrderByCreatedAtAsc(memberId, pageRequest);
         } else {
             commentList = commentRepository.findMemberNextPage(cursor, memberId, pageRequest);
         }
@@ -101,7 +110,6 @@ public class CommentQueryService {
                         oneComment)
                 ).collect(Collectors.toList());
     }
-    */
 
     private boolean checkGhost(Long usingMemberId, Long commentId) {
         Member writerMember = commentRepository.findCommentByIdOrThrow(commentId).getMember();
