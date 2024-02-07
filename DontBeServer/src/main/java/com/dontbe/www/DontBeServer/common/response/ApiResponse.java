@@ -1,13 +1,14 @@
 package com.dontbe.www.DontBeServer.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.http.ResponseEntity;
 
 @Builder
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
 
     private final int status;
