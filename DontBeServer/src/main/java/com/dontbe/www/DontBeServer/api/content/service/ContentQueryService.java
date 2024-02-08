@@ -31,7 +31,6 @@ public class ContentQueryService {
     private final GhostRepository ghostRepository;
     private final ContentLikedRepository contentLikedRepository;
 
-    //private final int DEFAULT_PAGE_SIZE = 20;
 
     public ContentGetDetailsResponseDto getContentDetail(Long memberId, Long contentId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -52,32 +51,43 @@ public class ContentQueryService {
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         List<Content> contents = contentRepository.findAllByOrderByCreatedAtDesc();
         return contents.stream()
-                .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
-                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),GhostUtil.refineGhost(content.getMember().getMemberGhost()),
-                        contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
-                        contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
+                .map(content -> ContentGetAllResponseDto.of(
+                        content.getMember(),
+                        content,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
+                        GhostUtil.refineGhost(content.getMember().getMemberGhost()),
+                        contentLikedRepository.existsByContentAndMember(content,usingMember),
+                        TimeUtilCustom.refineTime(content.getCreatedAt()),
+                        contentLikedRepository.countByContent(content),
+                        commentRepository.countByContent(content)))
                 .collect(Collectors.toList());
     }
 
-    /*
-    public List<ContentGetAllResponseDto> getContentAll2(Long memberId, Long cursor) {
-        PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE_SIZE);
+    public List<ContentGetAllResponseDto> getContentAllPagination(Long memberId, Long cursor) {
+        PageRequest pageRequest = PageRequest.of(0, 30);
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         Slice<Content> contentList;
 
-        if (cursor==-1) {
-            contentList = contentRepository.findAllTop(pageRequest);
-        } else {
-            contentList = contentRepository.findcontentNextPage(cursor, pageRequest);
-        }
+//        if (cursor==-1) {
+//            contentList = contentRepository.findContentsTop30ByIdOrderByCreatedAtAsc(pageRequest);
+//        } else {
+//            contentList = contentRepository.findContentsNextPage(cursor, pageRequest);
+//        }
+        contentList = contentRepository.findContentsNextPage(cursor, pageRequest);
 
         return contentList.stream()
-                .map(content -> ContentGetAllResponseDto.of(content.getMember(), content,
-                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(content.getMember(),usingMember),
-                        contentLikedRepository.existsByContentAndMember(content,usingMember), TimeUtilCustom.refineTime(content.getCreatedAt()),
-                        contentLikedRepository.countByContent(content), commentRepository.countByContent(content)))
+                .map(oneContent -> ContentGetAllResponseDto.of(
+                        oneContent.getMember(),
+                        oneContent,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(oneContent.getMember(),usingMember),
+                        GhostUtil.refineGhost(oneContent.getMember().getMemberGhost()),
+                        contentLikedRepository.existsByContentAndMember(oneContent,usingMember),
+                        TimeUtilCustom.refineTime(oneContent.getCreatedAt()),
+                        contentLikedRepository.countByContent(oneContent),
+                        commentRepository.countByContent(oneContent)))
                 .collect(Collectors.toList());
-    }*/
+    }
+
     public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId) {
     //public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId, Long cursor) {
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);

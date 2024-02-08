@@ -69,11 +69,7 @@ public class CommentQueryService {
         PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
-        if (cursor==-1) {
-             commentList = commentRepository.findCommentsTop15ByContentIdOrderByCreatedAtAsc(contentId, pageRequest);
-        } else {
-            commentList = commentRepository.findContentNextPage(cursor, contentId, pageRequest);
-        }
+        commentList = commentRepository.findCommentsByContentNextPage(cursor, contentId, pageRequest);
 
         return commentList.stream()
                 .map(oneComment -> CommentAllResponseDto.of(
@@ -94,11 +90,7 @@ public class CommentQueryService {
         PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
-        if (cursor==-1) {
-            commentList = commentRepository.findCommentsTop15ByMemberIdOrderByCreatedAtAsc(memberId, pageRequest);
-        } else {
-            commentList = commentRepository.findMemberNextPage(cursor, memberId, pageRequest);
-        }
+        commentList = commentRepository.findCommentsByMemberNextPage(cursor, memberId, pageRequest);
 
         return commentList.stream()
                 .map(oneComment -> CommentAllByMemberResponseDto.of(
