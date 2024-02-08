@@ -1,6 +1,5 @@
 package com.dontbe.www.DontBeServer.api.content.controller;
 
-import com.dontbe.www.DontBeServer.api.comment.service.CommentQueryService;
 import com.dontbe.www.DontBeServer.api.content.dto.request.*;
 import com.dontbe.www.DontBeServer.api.content.dto.response.*;
 import com.dontbe.www.DontBeServer.api.content.service.ContentCommandService;
@@ -79,14 +78,14 @@ public class ContentController {
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
     }
 
-    @GetMapping("contents")
+    @GetMapping("/contents")
     @Operation(summary = "페이지네이션이 적용된 게시글 전체 조회 API 입니다.",description = "ContentGetPagination")
     public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAllPagination(Principal principal, @RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllPagination(memberId, cursor));
     }
 
-    @GetMapping("member/{memberId}/member-contents")
+    @GetMapping("/member/{memberId}/member-contents")
     @Operation(summary = "페이지네이션이 적용된 멤버에 해당하는 게시글 리스트 조회 API 입니다.",description = "ContentByMemberPagination")
     public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMemberPagination(Principal principal,
                                                                                                      @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {

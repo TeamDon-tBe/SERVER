@@ -30,7 +30,7 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
     @Query("SELECT c FROM Content c WHERE c.id < ?1 AND c.member.id = ?2 ORDER BY c.createdAt DESC")
     Slice<Content> findContentsByMemberNextPage(Long lastContentId, Long memberId, PageRequest pageRequest);
 
-    Slice<Content> findContestsTop30ByMemberIdOrderByCreatedAtDesc(Long memberId,PageRequest pageRequest);
+    Slice<Content> findContestsTop20ByMemberIdOrderByCreatedAtDesc(Long memberId,PageRequest pageRequest);
 
     default Content findContentByIdOrThrow(Long contentId) {
         return findContentById(contentId)

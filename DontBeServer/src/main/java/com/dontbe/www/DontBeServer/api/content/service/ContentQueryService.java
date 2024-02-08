@@ -112,7 +112,7 @@ public class ContentQueryService {
         Slice<Content> contentList;
 
         if (cursor==-1) {
-            contentList = contentRepository.findContestsTop30ByMemberIdOrderByCreatedAtDesc(targetMemberId, pageRequest);
+            contentList = contentRepository.findContestsTop20ByMemberIdOrderByCreatedAtDesc(targetMemberId, pageRequest);
         } else {
             contentList = contentRepository.findContentsByMemberNextPage(cursor, targetMemberId ,pageRequest);
         }
