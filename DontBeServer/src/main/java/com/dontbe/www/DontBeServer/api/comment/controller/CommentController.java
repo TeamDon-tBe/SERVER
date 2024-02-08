@@ -70,8 +70,8 @@ public class CommentController {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAllPagination(memberId, contentId, cursor));
     }
-    @Operation(summary = "페이지네이션이 적용된 게시물에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByMemberPagination")
-    @GetMapping("member/{memberId}/my-comments")
+    @Operation(summary = "페이지네이션이 적용된 멤버에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByMemberPagination")
+    @GetMapping("member/{memberId}/member-comments")
     public ResponseEntity<ApiResponse<Object>> getMemberCommentPagination(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
         Long usingMemberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberCommentPagination(usingMemberId,memberId,cursor));

@@ -29,8 +29,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Slice<Comment> findCommentsByContentNextPage(Long lastCommentId, Long contentId, PageRequest pageRequest);
 
     //멤버에 해당하는 답글 리스트 조회
-    @Query("SELECT c FROM Comment c WHERE c.id > ?1 AND c.member.id = ?2  ORDER BY c.createdAt")
+    @Query("SELECT c FROM Comment c WHERE c.id < ?1 AND c.member.id = ?2  ORDER BY c.createdAt desc")
     Slice<Comment> findCommentsByMemberNextPage(Long lastCommentId, Long memberId,PageRequest pageRequest);
+
+    Slice<Comment> findCommentsTop15ByMemberIdOrderByCreatedAtDesc(Long memberId, PageRequest pageRequest);
 
     default Comment findCommentByIdOrThrow(Long commentId) {
         return findCommentById(commentId)

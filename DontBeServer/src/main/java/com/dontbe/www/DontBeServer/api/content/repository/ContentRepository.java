@@ -20,15 +20,17 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
     List<Content> findAllByMemberIdOrderByCreatedAtDesc(Long memberId);
 
-    //Slice<Content> findContentsTop30(PageRequest pageRequest);
-
-    @Query("SELECT c FROM Content c WHERE c.id > :lastContentId ORDER BY c.createdAt")
+    //게시글 리스트 조회
+    @Query("SELECT c FROM Content c WHERE c.id < :lastContentId ORDER BY c.createdAt DESC")
     Slice<Content> findContentsNextPage(Long lastContentId, PageRequest pageRequest);
 
-    //Slice<Content> findContentsTop30ByIdOrderByCreatedAtAsc(PageRequest pageRequest);
+    Slice<Content> findTop30ByOrderByCreatedAtDesc(PageRequest pageRequest);
 
-//    @Query("SELECT c FROM Content c WHERE c.id <= ?1 AND c.content.id = ?2 ORDER BY c.createdAt")
-//    Slice<Content> findContentsByIdOrderByCreatedAtDesc(Long lastContentId, PageRequest pageRequest);
+    //멤버에 해당하는 게시글 리스트 조회
+    @Query("SELECT c FROM Content c WHERE c.id < ?1 AND c.member.id = ?2 ORDER BY c.createdAt DESC")
+    Slice<Content> findContentsByMemberNextPage(Long lastContentId, Long memberId, PageRequest pageRequest);
+
+    Slice<Content> findContestsTop30ByMemberIdOrderByCreatedAtDesc(Long memberId,PageRequest pageRequest);
 
     default Content findContentByIdOrThrow(Long contentId) {
         return findContentById(contentId)

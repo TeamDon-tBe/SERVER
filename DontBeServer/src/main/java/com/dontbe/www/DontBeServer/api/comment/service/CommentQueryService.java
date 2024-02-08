@@ -90,7 +90,11 @@ public class CommentQueryService {
         PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
 
-        commentList = commentRepository.findCommentsByMemberNextPage(cursor, memberId, pageRequest);
+        if (cursor==-1) {
+            commentList = commentRepository.findCommentsTop15ByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
+        } else {
+            commentList = commentRepository.findCommentsByMemberNextPage(cursor, memberId, pageRequest);
+        }
 
         return commentList.stream()
                 .map(oneComment -> CommentAllByMemberResponseDto.of(
