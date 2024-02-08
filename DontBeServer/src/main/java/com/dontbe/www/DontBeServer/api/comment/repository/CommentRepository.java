@@ -2,7 +2,6 @@ package com.dontbe.www.DontBeServer.api.comment.repository;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
-import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.exception.NotFoundException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import org.springframework.data.domain.PageRequest;
