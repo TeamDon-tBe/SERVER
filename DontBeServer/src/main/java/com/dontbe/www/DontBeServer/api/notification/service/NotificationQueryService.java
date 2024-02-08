@@ -9,6 +9,8 @@ import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificaitonCou
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDto;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,15 +25,41 @@ public class NotificationQueryService {
     private final CommentRepository commentRepository;
     private final String SYSTEM_PROFILEURL = "https://github.com/TeamDon-tBe/SERVER/assets/128011308/327d416e-ef1f-4c10-961d-4d9b85632d87";
 
+    private final int NOTIFICATION_DEFAULT_PAGE_SIZE = 15;
+
     public NotificaitonCountResponseDto countUnreadNotification(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
         int number = notificationRepository.countByNotificationTargetMemberAndIsNotificationChecked(member, false);
         return NotificaitonCountResponseDto.of(number);
     }
 
-    public List<NotificationAllResponseDto> getNotificationAll(Long memberId){
+    public List<NotificationAllResponseDto> getNotificationAll(Long memberId){  //페이지네이션 적용 후 지우기
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         List<Notification> notificationList = notificationRepository.findNotificationsByNotificationTargetMemberOrderByCreatedAtDesc(usingMember);
+
+        return notificationList.stream()
+                .map(oneNotification -> NotificationAllResponseDto.of(
+                        usingMember,
+                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
+                        oneNotification,
+                        oneNotification.isNotificationChecked(),
+                        refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
+                                oneNotification.getNotificationTriggerId(), oneNotification),
+                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType())
+                )).collect(Collectors.toList());
+    }
+
+    public List<NotificationAllResponseDto> getNotificationAllPagination(Long memberId, Long cursor){
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+
+        PageRequest pageRequest = PageRequest.of(0, NOTIFICATION_DEFAULT_PAGE_SIZE);
+        Slice<Notification> notificationList;
+
+        if(cursor==-1){
+            notificationList = notificationRepository.findTop20ByNotificationTargetMemberOrderByCreatedAtDesc(usingMember, pageRequest);
+        }else{
+            notificationList = notificationRepository.findNotificationsNextPage(cursor, memberId, pageRequest);
+        }
 
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDto.of(

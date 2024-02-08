@@ -2,7 +2,10 @@ package com.dontbe.www.DontBeServer.api.notification.repository;
 
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -22,8 +25,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     //게시물에 해당하는 모든 유저의 좋아요 노티 삭제
     void deleteByNotificationTriggerTypeAndNotificationTriggerId(String triggerType, Long triggerId);
 
-//    default Notification findNotificationByIdOrThrow(Long notificationId) {
-//        return findNotificationByIdOrThrow(notificationId)
-//        orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_NOTIFICATION.getMessage()));
-//    }
+    //노티 리스트 조회
+    @Query("select n FROM Notification n where n.id < ?1 AND n.notificationTargetMember.id = ?2 ORDER BY n.createdAt DESC")
+    Slice<Notification> findNotificationsNextPage(Long lastNotificationId, Long memberId, PageRequest pageRequest);
+
+    Slice<Notification> findTop20ByNotificationTargetMemberOrderByCreatedAtDesc(Member memberId, PageRequest pageRequest );
 }

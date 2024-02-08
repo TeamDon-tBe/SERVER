@@ -40,10 +40,17 @@ public class NotificationController {
         return ApiResponse.success(COUNT_NOTIFICATION_SUCCESS, notificationQueryService.countUnreadNotification(memberId));
     }
 
-    @GetMapping("/notification-all")
+    @GetMapping("/notification-all")    //페이지네이션 적용 후 지우기
     @Operation(summary = "노티 전체 리스트 조회 API 입니다.",description = "NotificationGetAll")
     public ResponseEntity<ApiResponse<Object>> getNotification(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAll(memberId));
+    }
+
+    @GetMapping("/member-notifications")
+    @Operation(summary = "페이지네이션이 적용된 노티 전체 리스트 조회 API 입니다.",description = "NotificationGetPagination")
+    public ResponseEntity<ApiResponse<Object>> getNotificationAllPagination(Principal principal,@RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAllPagination(memberId, cursor));
     }
 }
