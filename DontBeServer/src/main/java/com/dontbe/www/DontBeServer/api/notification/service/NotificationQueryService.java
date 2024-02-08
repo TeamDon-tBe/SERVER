@@ -56,7 +56,7 @@ public class NotificationQueryService {
         Slice<Notification> notificationList;
 
         if(cursor==-1){
-            notificationList = notificationRepository.findTop20ByNotificationTargetMemberOrderByCreatedAtDesc(usingMember, pageRequest);
+            notificationList = notificationRepository.findTop15ByNotificationTargetMemberOrderByCreatedAtDesc(usingMember, pageRequest);
         }else{
             notificationList = notificationRepository.findNotificationsNextPage(cursor, memberId, pageRequest);
         }

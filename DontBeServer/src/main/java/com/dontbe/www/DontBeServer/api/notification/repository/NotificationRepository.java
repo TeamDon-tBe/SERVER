@@ -29,5 +29,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Query("select n FROM Notification n where n.id < ?1 AND n.notificationTargetMember.id = ?2 ORDER BY n.createdAt DESC")
     Slice<Notification> findNotificationsNextPage(Long lastNotificationId, Long memberId, PageRequest pageRequest);
 
-    Slice<Notification> findTop20ByNotificationTargetMemberOrderByCreatedAtDesc(Member memberId, PageRequest pageRequest );
+    Slice<Notification> findTop15ByNotificationTargetMemberOrderByCreatedAtDesc(Member memberId, PageRequest pageRequest);
 }
