@@ -2,7 +2,6 @@ package com.dontbe.www.DontBeServer.common.config.jwt;
 
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
-import com.dontbe.www.DontBeServer.common.util.SlackUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,11 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 
-import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 
@@ -34,8 +30,6 @@ public class JwtTokenProvider {
 
     @Value("${jwt.refresh-token.expire-length}")
     private Long refreshTokenExpireLength;
-
-    private final SlackUtil slackUtil;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String REFRESH_AUTHORIZATION_HEADER = "Refresh";
@@ -97,33 +91,23 @@ public class JwtTokenProvider {
     }
 
     // 토큰 유효성 검증
-    public JwtExceptionType validateToken(String token) throws IOException {
+    public JwtExceptionType validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
             return JwtExceptionType.VALID_JWT_TOKEN;
         } catch (io.jsonwebtoken.security.SignatureException exception) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            slackUtil.sendAlert(exception, request);
             log.error("잘못된 JWT 서명을 가진 토큰입니다.");
             return JwtExceptionType.INVALID_JWT_SIGNATURE;
         } catch (MalformedJwtException exception) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            slackUtil.sendAlert(exception, request);
             log.error("잘못된 JWT 토큰입니다.");
             return JwtExceptionType.INVALID_JWT_TOKEN;
         } catch (ExpiredJwtException exception) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            slackUtil.sendAlert(exception, request);
             log.error("만료된 JWT 토큰입니다.");
             return JwtExceptionType.EXPIRED_JWT_TOKEN;
         } catch (UnsupportedJwtException exception) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            slackUtil.sendAlert(exception, request);
             log.error("지원하지 않는 JWT 토큰입니다.");
             return JwtExceptionType.UNSUPPORTED_JWT_TOKEN;
         } catch (IllegalArgumentException exception) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            slackUtil.sendAlert(exception, request);
             log.error("JWT Claims가 비어있습니다.");
             return JwtExceptionType.EMPTY_JWT;
         }

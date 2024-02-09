@@ -26,8 +26,7 @@ public class ControllerExceptionAdvice {
     private final SlackUtil slackUtil;
 
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<ApiResponse> handleGlobalException(BaseException ex, final Exception error, final HttpServletRequest request) throws IOException {
-        slackUtil.sendAlert(error, request);
+    public ResponseEntity<ApiResponse> handleGlobalException(BaseException ex) {
         return ResponseEntity.status(ex.getStatusCode())
                 .body(ApiResponse.fail(ex.getStatusCode(), ex.getResponseMessage()));
     }
@@ -40,15 +39,13 @@ public class ControllerExceptionAdvice {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException ex, final Exception error, final HttpServletRequest request) throws IOException {
-        slackUtil.sendAlert(error, request);
+    public ResponseEntity<ApiResponse> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.fail(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ApiResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e, final Exception error, final HttpServletRequest request) throws IOException {
-        slackUtil.sendAlert(error, request);
+    protected ResponseEntity<ApiResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         FieldError fieldError = Objects.requireNonNull(e.getFieldError());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.fail(HttpStatus.BAD_REQUEST.value(),String.format("%s. (%s)", fieldError.getDefaultMessage(), fieldError.getField())));
