@@ -52,28 +52,28 @@ public class CommentController {
         commentCommendService.unlikeComment(memberId, commentId);
         return ApiResponse.success(COMMENT_UNLIKE_SUCCESS);
     }
-    @GetMapping("content/{contentId}/comment/all")
+    @GetMapping("content/{contentId}/comment/all")  //페이지네이션 적용 후 지우기
     @Operation(summary = "게시물에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByContent")
     public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId){
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId));
     }
-    @GetMapping("member/{memberId}/comments")
+    @GetMapping("member/{memberId}/comments")   //페이지네이션 적용 후 지우기
     @Operation(summary = "멤버에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByMember")
     public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId){
         Long usingMemberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId));
     }
-    /*
+    @Operation(summary = "페이지네이션이 적용된 게시물에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByContentPagination")
     @GetMapping("content/{contentId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getCommentAll(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
+    public ResponseEntity<ApiResponse<Object>> getCommentAllPagination(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAll(memberId, contentId, cursor));
+        return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAllPagination(memberId, contentId, cursor));
     }
-    @GetMapping("member/{memberId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getMemberComment(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
+    @Operation(summary = "페이지네이션이 적용된 멤버에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByMemberPagination")
+    @GetMapping("member/{memberId}/member-comments")
+    public ResponseEntity<ApiResponse<Object>> getMemberCommentPagination(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
         Long usingMemberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberComment(usingMemberId,memberId,cursor));
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberCommentPagination(usingMemberId,memberId,cursor));
     }
-    */
 }

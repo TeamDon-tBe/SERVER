@@ -1,6 +1,5 @@
 package com.dontbe.www.DontBeServer.api.content.controller;
 
-import com.dontbe.www.DontBeServer.api.comment.service.CommentQueryService;
 import com.dontbe.www.DontBeServer.api.content.dto.request.*;
 import com.dontbe.www.DontBeServer.api.content.dto.response.*;
 import com.dontbe.www.DontBeServer.api.content.service.ContentCommandService;
@@ -64,40 +63,33 @@ public class ContentController {
         contentCommandService.unlikeContent(memberId, contentId);
         return ApiResponse.success(CONTENT_UNLIKE_SUCCESS);
     }
-    /*
-    @GetMapping("contents")
-    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal, @RequestParam(value = "cursor") Long cursor) {
-        Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll2(memberId, cursor));
-    }
-    */
 
-    @GetMapping("content/all")
+    @GetMapping("content/all")   //페이지네이션 적용 후 지우기
     @Operation(summary = "게시글 전체 조회 API 입니다.",description = "ContentGetAll")
     public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAll(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAll(memberId));
     }
 
-    @GetMapping("member/{memberId}/contents")
+    @GetMapping("member/{memberId}/contents")   //페이지네이션 적용 후 지우기
     @Operation(summary = "멤버에 해당하는 게시글 조회 API 입니다.",description = "ContentGetAllByMember")
     public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal, @PathVariable("memberId") Long targetMemberId) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
     }
-//    @GetMapping("member/{memberId}/contents")
-//    @Operation(summary = "게시글 페이지네이션 조회 API 입니다.",description = "ContentGetPagination")
-//    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
-//                                                                                                     @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
-//        Long memberId = MemberUtil.getMemberId(principal);
-//        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId, cursor));
-//    }
-//@GetMapping("member/{memberId}/contents")
-//@Operation(summary = "게시글 페이지네이션 조회 API 입니다.",description = "ContentGetPagination")
-//public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMember(Principal principal,
-//                                                                                                 @PathVariable("memberId") Long targetMemberId) {
-//    Long memberId = MemberUtil.getMemberId(principal);
-//    return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllByMember(memberId, targetMemberId));
-//}
 
+    @GetMapping("/contents")
+    @Operation(summary = "페이지네이션이 적용된 게시글 전체 조회 API 입니다.",description = "ContentGetPagination")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAllPagination(Principal principal, @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllPagination(memberId, cursor));
+    }
+
+    @GetMapping("/member/{memberId}/member-contents")
+    @Operation(summary = "페이지네이션이 적용된 멤버에 해당하는 게시글 리스트 조회 API 입니다.",description = "ContentByMemberPagination")
+    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMemberPagination(Principal principal,
+                                                                                                     @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_MEMBER_CONTENT_SUCCESS, contentQueryService.getContentAllByMemberPagination(memberId, targetMemberId, cursor));
+    }
 }
