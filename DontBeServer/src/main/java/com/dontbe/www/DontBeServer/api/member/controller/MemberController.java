@@ -59,8 +59,9 @@ public class MemberController {
 
     @GetMapping("nickname-validation")
     @Operation(summary = "유저 닉네임 사용 가능 확인 API 입니다.",description = "NicknameValidation")
-    public ResponseEntity<ApiResponse<Object>> checkMemberNickname(Principal principal,@RequestParam(value = "nickname") String nickname) {
-        memberQueryService.checkNicknameValidate(nickname);
+    public ResponseEntity<ApiResponse<Object>> checkMemberNickname(Principal principal, @RequestParam(value = "nickname") String nickname) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        memberQueryService.checkNicknameValidate(memberId, nickname);
         return ApiResponse.success(NICKNAME_CHECK_SUCCESS);
     }
 }

@@ -30,7 +30,13 @@ public class MemberQueryService {
         return MemberGetProfileResponseDto.of(member, memberGhost);
     }
 
-    public void checkNicknameValidate(String nickname) {
+    public void checkNicknameValidate(Long memberId, String nickname) {
+        String userNickname = memberRepository.findMemberByIdOrThrow(memberId).getNickname();
+
+        if (nickname.equals(userNickname)) {
+            return;
+        }
+
         if(memberRepository.existsByNickname(nickname)){
             throw new BadRequestException(ErrorStatus.NICKNAME_VALIDATE_ERROR.getMessage());
         }
