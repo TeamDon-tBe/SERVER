@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@Where(clause = "isDeleted = false")
 public class Content extends BaseTimeEntity {
 
     private static final long CONTENT_RETENTION_PERIOD = 14L;   // 게시글 삭제 후 보유기간 14일로 설정
@@ -40,7 +42,7 @@ public class Content extends BaseTimeEntity {
     @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    private boolean isDeleted = false;
+    private boolean isDeleted = Boolean.FALSE;
 
     private LocalDateTime deleteAt;
 
