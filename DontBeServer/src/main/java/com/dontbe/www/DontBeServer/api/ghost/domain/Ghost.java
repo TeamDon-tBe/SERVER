@@ -28,10 +28,13 @@ public class Ghost extends BaseDateEntity {
 
     private boolean isRecovered;
 
+    private String ghostReason;
+
     @Builder
-    public Ghost(Member ghostTargetMember, Member ghostTriggerMember) {
+    public Ghost(Member ghostTargetMember, Member ghostTriggerMember, String ghostReason) {
         this.ghostTargetMember = ghostTargetMember;
         this.ghostTriggerMember = ghostTriggerMember;
         this.isRecovered = false;
+        this.ghostReason = ghostReason;
     }
 }
