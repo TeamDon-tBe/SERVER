@@ -4,9 +4,8 @@ import com.dontbe.www.DontBeServer.api.auth.SocialPlatform;
 import com.dontbe.www.DontBeServer.api.auth.dto.SocialInfoDto;
 import com.dontbe.www.DontBeServer.api.auth.dto.response.AuthResponseDto;
 import com.dontbe.www.DontBeServer.api.auth.dto.response.AuthTokenResponseDto;
-import com.dontbe.www.DontBeServer.api.auth.dto.*;
 import com.dontbe.www.DontBeServer.api.auth.dto.request.AuthRequestDto;
-import com.dontbe.www.DontBeServer.api.auth.dto.response.*;
+import com.dontbe.www.DontBeServer.api.auth.service.AppleAuthService;
 import com.dontbe.www.DontBeServer.api.auth.service.AuthService;
 import com.dontbe.www.DontBeServer.api.auth.service.KakaoAuthService;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
@@ -32,14 +31,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoAuthService kakaoAuthService;
+    private final AppleAuthService appleAuthService;
     private final MemberRepository memberRepository;
 
     @Override
     @Transactional
     public AuthResponseDto socialLogin(String socialAccessToken, AuthRequestDto authRequestDto) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-         val socialPlatform = SocialPlatform.valueOf(authRequestDto.getSocialPlatform());
-        SocialInfoDto socialData = getSocialData(socialPlatform, socialAccessToken);
+        val socialPlatform = SocialPlatform.valueOf(authRequestDto.getSocialPlatform());
+        SocialInfoDto socialData = getSocialData(socialPlatform, socialAccessToken, authRequestDto.getUserName());
         String refreshToken = jwtTokenProvider.generateRefreshToken();
         Boolean isExistUser = isMemberBySocialId(socialData.getId());
 
@@ -97,19 +97,15 @@ public class AuthServiceImpl implements AuthService {
         return memberRepository.existsBySocialId(socialId);
     }
 
-    private SocialInfoDto getSocialData(SocialPlatform socialPlatform, String socialAccessToken) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private SocialInfoDto getSocialData(SocialPlatform socialPlatform, String socialAccessToken, String userName) {
 
-        return switch (socialPlatform) {
-            case KAKAO -> kakaoAuthService.login(socialAccessToken);
-            default -> {
+        switch (socialPlatform) {
+            case KAKAO:
+                return kakaoAuthService.login(socialAccessToken);
+            case APPLE:
+                return appleAuthService.login(socialAccessToken, userName);
+            default:
                 throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
-            }
-        };
-//        switch (socialPlatform) {
-//            case KAKAO:
-//                return kakaoAuthService.login(socialAccessToken);
-//            default:
-//                throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
-//        }
+        }
     }
 }
