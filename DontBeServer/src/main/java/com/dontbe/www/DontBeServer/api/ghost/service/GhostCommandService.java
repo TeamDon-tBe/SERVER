@@ -1,6 +1,7 @@
 package com.dontbe.www.DontBeServer.api.ghost.service;
 
 import com.dontbe.www.DontBeServer.api.ghost.domain.Ghost;
+import com.dontbe.www.DontBeServer.api.ghost.dto.request.GhostClickRequestDto;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberClickGhostRequestDto;
@@ -54,6 +55,45 @@ public class GhostCommandService {
                     .notificationTriggerMemberId(memberId)
                     .notificationTriggerType("beGhost")
                     .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId())
+                    .isNotificationChecked(false)
+                    .notificationText("")
+                    .build();
+            Notification savedGhostNotification = notificationRepository.save(ghostNotification);
+        }
+    }
+
+    public void clickMemberGhost2(Long memberId, GhostClickRequestDto ghostClickRequestDto) {
+        Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Member targetMember = memberRepository.findMemberByIdOrThrow(ghostClickRequestDto.targetMemberId());
+
+        mySelfGhostBlock(triggerMember,targetMember);
+        isDuplicateMemberGhost(triggerMember,targetMember);
+
+        Ghost ghost = Ghost.builder()
+                .ghostTargetMember(targetMember)
+                .ghostTriggerMember(triggerMember)
+                .ghostReason(ghostClickRequestDto.ghostReason())
+                .build();
+        Ghost savedGhost = ghostRepository.save(ghost);
+
+        Notification notification = Notification.builder()
+                .notificationTargetMember(targetMember)
+                .notificationTriggerMemberId(memberId)
+                .notificationTriggerType(ghostClickRequestDto.alarmTriggerType())
+                .notificationTriggerId(ghostClickRequestDto.alarmTriggerId()) //2차 스프린트 : 에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기(refineNotificationTriggerId에 추가)
+                .isNotificationChecked(false)
+                .notificationText("")
+                .build();
+        Notification savedNotification = notificationRepository.save(notification);
+
+        targetMember.decreaseGhost();
+
+        if(targetMember.getMemberGhost() == -85) {
+            Notification ghostNotification = Notification.builder()
+                    .notificationTargetMember(targetMember)
+                    .notificationTriggerMemberId(memberId)
+                    .notificationTriggerType("beGhost")
+                    .notificationTriggerId(ghostClickRequestDto.alarmTriggerId())
                     .isNotificationChecked(false)
                     .notificationText("")
                     .build();
