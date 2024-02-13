@@ -32,6 +32,7 @@ public enum ErrorStatus {
     UNAUTHORIZED_MEMBER("권한이 없는 유저입니다."),
     UNAUTHORIZED_TOKEN("유효하지 않은 토큰입니다."),
     KAKAO_UNAUTHORIZED_USER("카카오 로그인 실패. 만료되었거나 잘못된 카카오 토큰입니다."),
+    FAILED_TO_VALIDATE_APPLE_LOGIN("애플 로그인 실패. 만료되었거나 잘못된 애플 토큰입니다."),
     SIGNIN_REQUIRED("access, refreshToken 모두 만료되었습니다. 재로그인이 필요합니다."),
     VALID_ACCESS_TOKEN("아직 유효한 accessToken 입니다."),
 

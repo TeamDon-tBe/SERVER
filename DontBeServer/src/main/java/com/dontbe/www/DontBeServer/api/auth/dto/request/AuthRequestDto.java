@@ -11,4 +11,6 @@ import static lombok.AccessLevel.PROTECTED;
 public class AuthRequestDto {
     @NotNull
     private String socialPlatform;
+
+    private String userName;
 }
