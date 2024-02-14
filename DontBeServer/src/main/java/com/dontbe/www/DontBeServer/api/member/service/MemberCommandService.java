@@ -31,7 +31,7 @@ public class MemberCommandService {
         if (memberProfilePatchRequestDto.profile_url() != null) {
             existingMember.updateProfileUrl(memberProfilePatchRequestDto.profile_url());
         }
-        if (memberProfilePatchRequestDto.is_alarm_allowed() | !memberProfilePatchRequestDto.is_alarm_allowed()) {
+        if (memberProfilePatchRequestDto.is_alarm_allowed() != null) {
             existingMember.updateMemberIsAlarmAllowed(memberProfilePatchRequestDto.is_alarm_allowed());
         }
 
