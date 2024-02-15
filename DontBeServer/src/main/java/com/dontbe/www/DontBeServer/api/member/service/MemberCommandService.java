@@ -18,7 +18,7 @@ public class MemberCommandService {
     public void withdrawalMember(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
 
-        notificationRepository.deleteByTargerMemberId(memberId);
+        notificationRepository.deleteBynotificationTargetMember(member);
 
         member.softDelete();
     }

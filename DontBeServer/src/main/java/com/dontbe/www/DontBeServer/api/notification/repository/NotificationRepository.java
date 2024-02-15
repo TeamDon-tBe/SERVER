@@ -32,5 +32,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Slice<Notification> findTop15ByNotificationTargetMemberOrderByCreatedAtDesc(Member memberId, PageRequest pageRequest);
 
     //계정 삭제 시 유저한테 발생 된 알림 삭제
-    void deleteByTargerMemberId(Long memberId);
+    void deleteBynotificationTargetMember(Member targetMember);
 }
