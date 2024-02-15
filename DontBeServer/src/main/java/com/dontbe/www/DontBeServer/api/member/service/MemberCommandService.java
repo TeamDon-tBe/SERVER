@@ -3,6 +3,7 @@ package com.dontbe.www.DontBeServer.api.member.service;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
+import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemberCommandService {
     private final MemberRepository memberRepository;
+    private final NotificationRepository notificationRepository;
 
     public void withdrawalMember(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        notificationRepository.deleteByTargerMemberId(memberId);
         memberRepository.delete(member);
     }
 

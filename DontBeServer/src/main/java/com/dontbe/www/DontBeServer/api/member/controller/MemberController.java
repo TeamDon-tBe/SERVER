@@ -28,9 +28,8 @@ public class MemberController {
     private final MemberQueryService memberQueryService;
 
     @DeleteMapping("withdrawal")
-    @Operation(summary = "유저 탈퇴 API입니다. 앱잼 기간 미사용",description = "MemberWithdrawal")
-    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal)
-    {
+    @Operation(summary = "계정 삭제 API입니다.",description = "MemberWithdrawal")
+    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         memberCommandService.withdrawalMember(memberId);
         return ApiResponse.success(WITHDRAWAL_SUCCESS);
