@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@Where(clause = "isDeleted = false")
+@Where(clause = "is_deleted = false")
 public class Content extends BaseTimeEntity {
 
     private static final long CONTENT_RETENTION_PERIOD = 14L;   // 게시글 삭제 후 보유기간 14일로 설정
