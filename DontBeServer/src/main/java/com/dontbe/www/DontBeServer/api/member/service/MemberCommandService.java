@@ -17,8 +17,10 @@ public class MemberCommandService {
 
     public void withdrawalMember(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
+
         notificationRepository.deleteByTargerMemberId(memberId);
-        memberRepository.delete(member);
+
+        member.softDelete();
     }
 
     public void updateMemberProfile(Long memberId, MemberProfilePatchRequestDto memberProfilePatchRequestDto) {
