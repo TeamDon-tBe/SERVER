@@ -21,7 +21,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@Where(clause = "is_deleted = false")
 public class Member extends BaseTimeEntity {
 
     private static final long ACCOUNT_RETENTION_PERIOD = 30L;   // 계정 삭제 후 보유기간 30일로 설정
