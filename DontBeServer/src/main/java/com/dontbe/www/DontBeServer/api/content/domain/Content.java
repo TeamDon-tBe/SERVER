@@ -42,7 +42,8 @@ public class Content extends BaseTimeEntity {
     @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    private boolean isDeleted = Boolean.FALSE;
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isDeleted;
 
     private LocalDateTime deleteAt;
 
