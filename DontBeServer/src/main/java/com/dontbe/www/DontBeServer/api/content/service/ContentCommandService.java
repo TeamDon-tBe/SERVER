@@ -58,7 +58,9 @@ public class ContentCommandService {
         }
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);
-        contentRepository.deleteById(contentId);
+        Content deleteContent = contentRepository.findContentByIdOrThrow(contentId);
+        deleteContent.softDelete();
+
     }
 
     public void likeContent(Long memberId, Long contentId, ContentLikedRequestDto contentLikedRequestDto) {
@@ -104,6 +106,7 @@ public class ContentCommandService {
         notificationRepository.deleteByNotificationTargetMemberAndNotificationTriggerMemberIdAndNotificationTriggerTypeAndNotificationTriggerId(
                 targetMember, memberId, "contentLiked", contentId);
     }
+
 
     private void deleteValidate(Long memberId, Long contentId) {
         Content content = contentRepository.findById(contentId)
