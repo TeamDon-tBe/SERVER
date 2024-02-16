@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface GhostRepository extends JpaRepository<Ghost, Long> {
     boolean existsByGhostTargetMemberIdAndGhostTriggerMemberId(Long ghostTargetMember, Long ghostTrigger);
@@ -14,4 +15,6 @@ public interface GhostRepository extends JpaRepository<Ghost, Long> {
 
     @Query("DELETE FROM Ghost g WHERE g.isDeleted = true AND g.deleteAt < :currentDate")
     void deleteGhostScheduledForDeletion(LocalDateTime currentDate);
+
+    List<Ghost> findByGhostTargetMember(Member targetMember);
 }
