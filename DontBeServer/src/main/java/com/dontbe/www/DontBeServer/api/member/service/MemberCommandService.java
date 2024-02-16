@@ -1,20 +1,40 @@
 package com.dontbe.www.DontBeServer.api.member.service;
 
+import com.dontbe.www.DontBeServer.api.content.domain.Content;
+import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
+import com.dontbe.www.DontBeServer.api.ghost.domain.Ghost;
+import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
+import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class MemberCommandService {
     private final MemberRepository memberRepository;
+    private final ContentRepository contentRepository;
+    private final GhostRepository ghostRepository;
 
     public void withdrawalMember(Long memberId) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        memberRepository.delete(member);
+    }
+
+    public void testWithdrawalMember(Long memberId){
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        List<Content> contentList = contentRepository.findContentByMember(member);
+        List<Ghost> ghostList1 = ghostRepository.findByGhostTargetMember(member);
+        List<Ghost> ghostList2 = ghostRepository.findByGhostTriggerMember(member);
+        ghostRepository.deleteAll(ghostList1);
+        ghostRepository.deleteAll(ghostList2);
+       contentRepository.deleteAll(contentList);
         memberRepository.delete(member);
     }
 

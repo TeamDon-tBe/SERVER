@@ -1,6 +1,7 @@
 package com.dontbe.www.DontBeServer.api.content.repository;
 
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
+import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.exception.NotFoundException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import org.springframework.data.domain.PageRequest;
@@ -40,4 +41,6 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
         return findContentById(contentId)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_CONTENT.getMessage()));
     }
+
+    List<Content> findContentByMember(Member member);
 }
