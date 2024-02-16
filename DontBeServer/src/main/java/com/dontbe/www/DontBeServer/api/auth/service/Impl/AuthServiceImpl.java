@@ -43,6 +43,14 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtTokenProvider.generateRefreshToken();
         Boolean isExistUser = isMemberBySocialId(socialData.getId());
 
+        Boolean isDeleted = memberRepository.findMemberBySocialId(socialData.getId()).isDeleted();
+
+        //탈퇴한 유저
+        if(isExistUser && isDeleted){
+            throw new BadRequestException(ErrorStatus.WITHDRAWAL_MEMBER.getMessage());
+        }
+
+
         try {
             // 신규 유저 저장
             if (!isExistUser.booleanValue()) {
@@ -62,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
                 member.updateRefreshToken(refreshToken);
 
-                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member .getProfileUrl(), true);
+                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member.getProfileUrl(), true, isDeleted);
 
             }
             else {
@@ -75,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
 
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
 
-                return AuthResponseDto.of(signedMember.getNickname(), signedMember.getId(), accessToken, refreshToken, signedMember.getProfileUrl(), false);
+                return AuthResponseDto.of(signedMember.getNickname(), signedMember.getId(), accessToken, refreshToken, signedMember.getProfileUrl(), false,isDeleted);//, signedMember.getSocialId());
             }
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());

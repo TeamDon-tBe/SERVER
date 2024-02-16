@@ -20,5 +20,7 @@ public class AuthResponseDto {
     private String memberProfileUrl;
 
     private Boolean isNewUser;
+
+    private Boolean isDeleted;
 }
 

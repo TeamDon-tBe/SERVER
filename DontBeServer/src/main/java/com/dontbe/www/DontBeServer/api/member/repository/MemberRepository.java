@@ -35,4 +35,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying
     @Query("DELETE FROM Member m WHERE m.isDeleted = true AND m.deleteAt < :currentDate")
     void deleteMemberScheduledForDeletion(LocalDateTime currentDate);
+
+    Member findMemberBySocialId(String socialId);
 }
