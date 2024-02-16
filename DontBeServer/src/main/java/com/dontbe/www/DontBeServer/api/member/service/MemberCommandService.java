@@ -2,6 +2,7 @@ package com.dontbe.www.DontBeServer.api.member.service;
 
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
+import com.dontbe.www.DontBeServer.api.ghost.domain.Ghost;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
@@ -29,6 +30,12 @@ public class MemberCommandService {
     public void testWithdrawalMember(Long memberId){
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
         List<Content> contentList = contentRepository.findContentByMember(member);
+        List<Ghost> ghostList1 = ghostRepository.findByGhostTargetMember(member);
+        List<Ghost> ghostList2 = ghostRepository.findByGhostTriggerMember(member);
+        ghostRepository.deleteAll(ghostList1);
+        ghostRepository.deleteAll(ghostList2);
+       contentRepository.deleteAll(contentList);
+        memberRepository.delete(member);
     }
 
     public void updateMemberProfile(Long memberId, MemberProfilePatchRequestDto memberProfilePatchRequestDto) {
