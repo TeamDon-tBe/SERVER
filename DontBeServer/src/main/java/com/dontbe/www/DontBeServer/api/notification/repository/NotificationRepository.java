@@ -30,4 +30,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Slice<Notification> findNotificationsNextPage(Long lastNotificationId, Long memberId, PageRequest pageRequest);
 
     Slice<Notification> findTop15ByNotificationTargetMemberOrderByCreatedAtDesc(Member memberId, PageRequest pageRequest);
+
+    List<Notification> findAllByNotificationTargetMember(Member member);
+
+    List<Notification> findAllByNotificationTriggerMemberId(Long memberId);
 }

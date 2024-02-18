@@ -54,13 +54,12 @@ public class ContentCommandService {
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",contentId);
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
             commentLikedRepository.deleteByComment(comment);
-//            commentRepository.deleteById(comment.getId());
+            commentRepository.deleteById(comment.getId());
         }
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);
         Content deleteContent = contentRepository.findContentByIdOrThrow(contentId);
         deleteContent.softDelete();
-
     }
 
     public void likeContent(Long memberId, Long contentId, ContentLikedRequestDto contentLikedRequestDto) {
