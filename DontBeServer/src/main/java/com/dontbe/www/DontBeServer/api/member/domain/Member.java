@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +20,8 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseTimeEntity {
+
+    private static final long ACCOUNT_RETENTION_PERIOD = 30L;   // 계정 삭제 후 보유기간 30일로 설정
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +57,15 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "social_nickname")
     private String socialNickname;
+
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isDeleted;
+
+    @Column(name = "deleted_At")
+    private LocalDateTime deleteAt;
+
+    @Column(name = "deleted_Reason")
+    private String deletedReason;
 
     @OneToMany(mappedBy = "notificationTargetMember",cascade = ALL)
     private List<Notification> targetNotification = new ArrayList<>();
@@ -102,5 +113,13 @@ public class Member extends BaseTimeEntity {
 
     public void updateRefreshToken (String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateDeletedReason(String withdrawlReason){
+        this.deletedReason = withdrawlReason;
+    }
+    public void softDelete() {
+        this.isDeleted = true;
+        this.deleteAt = LocalDateTime.now().plusDays(ACCOUNT_RETENTION_PERIOD);
     }
 }

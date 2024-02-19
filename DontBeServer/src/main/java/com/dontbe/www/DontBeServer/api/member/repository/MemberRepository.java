@@ -4,7 +4,11 @@ import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.exception.NotFoundException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -26,4 +30,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findBySocialId(String socialId);
 
     boolean existsByNickname(String nickname);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Member m " +
+            "SET m.isAlarmAllowed=false , m.memberEmail= '',m.memberGhost=0,m.memberIntro='',m.refreshToken='', m.socialId='',m.socialNickname='',m.socialPlatform='WITHDRAW' " +
+            "WHERE m.isDeleted=true AND m.deleteAt < :currentDate")
+        //@Query("DELETE FROM Member m WHERE m.isDeleted = true AND m.deleteAt < :currentDate")
+    void deleteMemberScheduledForDeletion(LocalDateTime currentDate);
+
+    Member findMemberBySocialId(String socialId);
 }

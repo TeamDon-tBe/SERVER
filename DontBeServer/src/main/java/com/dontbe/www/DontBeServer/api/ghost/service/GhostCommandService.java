@@ -20,7 +20,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Transactional
 public class GhostCommandService {
-    // 생성/ 수정/ 삭제
+
     private final MemberRepository memberRepository;
     private final GhostRepository ghostRepository;
     private final NotificationRepository notificationRepository;

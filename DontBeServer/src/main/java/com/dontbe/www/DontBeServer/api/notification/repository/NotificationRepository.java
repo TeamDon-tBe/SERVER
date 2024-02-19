@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
@@ -30,6 +29,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Slice<Notification> findNotificationsNextPage(Long lastNotificationId, Long memberId, PageRequest pageRequest);
 
     Slice<Notification> findTop15ByNotificationTargetMemberOrderByCreatedAtDesc(Member memberId, PageRequest pageRequest);
+
+    //계정 삭제 시 유저한테 발생 된 알림 삭제
+    void deleteBynotificationTargetMember(Member targetMember);
 
     List<Notification> findAllByNotificationTargetMember(Member member);
 

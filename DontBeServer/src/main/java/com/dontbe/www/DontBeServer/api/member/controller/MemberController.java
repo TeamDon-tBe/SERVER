@@ -1,6 +1,7 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.service.MemberCommandService;
@@ -13,9 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
-
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
 @RestController
@@ -28,11 +27,10 @@ public class MemberController {
     private final MemberQueryService memberQueryService;
 
     @DeleteMapping("withdrawal")
-    @Operation(summary = "유저 탈퇴 API입니다. 앱잼 기간 미사용",description = "MemberWithdrawal")
-    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal)
-    {
+    @Operation(summary = "계정 삭제 API입니다.",description = "MemberWithdrawal")
+    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal, @RequestBody MemberWithdrawRequestDto memberWithdrawRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
-        memberCommandService.withdrawalMember(memberId);
+        memberCommandService.withdrawalMember(memberId, memberWithdrawRequestDto);
         return ApiResponse.success(WITHDRAWAL_SUCCESS);
     }
 

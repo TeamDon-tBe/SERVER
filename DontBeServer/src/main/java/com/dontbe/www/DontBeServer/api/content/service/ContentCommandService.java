@@ -104,7 +104,6 @@ public class ContentCommandService {
                 targetMember, memberId, "contentLiked", contentId);
     }
 
-
     private void deleteValidate(Long memberId, Long contentId) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorStatus.NOT_FOUND_CONTENT.getMessage()));
