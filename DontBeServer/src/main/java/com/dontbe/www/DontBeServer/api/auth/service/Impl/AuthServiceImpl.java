@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
                 member.updateRefreshToken(refreshToken);
 
-                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member.getProfileUrl(), true, false);
+                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member.getProfileUrl(), true);
 
             }
             else {
@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
 
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
 
-                return AuthResponseDto.of(signedMember.getNickname(), signedMember.getId(), accessToken, refreshToken, signedMember.getProfileUrl(), false, false);//, signedMember.getSocialId());
+                return AuthResponseDto.of(signedMember.getNickname(), signedMember.getId(), accessToken, refreshToken, signedMember.getProfileUrl(), false);
             }
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
