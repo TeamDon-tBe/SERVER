@@ -37,4 +37,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         return findCommentById(commentId)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_COMMENT.getMessage()));
     }
+
+    void deleteCommentsByMemberId(Long memberId);
 }

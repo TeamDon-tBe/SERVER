@@ -50,15 +50,14 @@ public class ContentCommandService {
         List<Comment> comments = commentRepository.findCommentsByContentId(contentId);
         for(Comment comment : comments) {
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",comment.getId());
-//            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());   //변경 후 다시 바꾸기
+            //notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());   //변경 후 다시 바꾸기
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",contentId);
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
-            commentLikedRepository.deleteByComment(comment);
-//            commentRepository.deleteById(comment.getId());
         }
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);
-        contentRepository.deleteById(contentId);
+        Content deleteContent = contentRepository.findContentByIdOrThrow(contentId);
+        deleteContent.softDelete();
     }
 
     public void likeContent(Long memberId, Long contentId, ContentLikedRequestDto contentLikedRequestDto) {

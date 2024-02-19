@@ -14,9 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
-
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
 @RestController
@@ -35,6 +33,16 @@ public class MemberController {
         memberCommandService.withdrawalMember(memberId, memberWithdrawRequestDto);
         return ApiResponse.success(WITHDRAWAL_SUCCESS);
     }
+
+    @DeleteMapping("test-withdrawal")
+    @Operation(summary = "앱 심사용 계정 삭제 API입니다.",description = "TestMemberWithdrawal")
+    public ResponseEntity<ApiResponse<Object>> testWithdrawalMember(Principal principal)
+    {
+        Long memberId = MemberUtil.getMemberId(principal);
+        memberCommandService.testWithdrawalMember(memberId);
+        return ApiResponse.success(WITHDRAWAL_SUCCESS);
+    }
+
 
     @GetMapping("member-data")
     @Operation(summary = "유저 상세 정보 조회 API입니다.",description = "MemberData")

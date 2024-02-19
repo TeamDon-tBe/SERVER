@@ -6,6 +6,8 @@ import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CommentLikedRepository extends JpaRepository<CommentLiked, Long> {
     boolean existsByCommentAndMember(Comment comment, Member member);
 
@@ -14,4 +16,6 @@ public interface CommentLikedRepository extends JpaRepository<CommentLiked, Long
     void deleteByCommentAndMember(Comment comment, Member member);
 
     void deleteByComment(Comment comment);
+
+    List<CommentLiked> findAllByMemberId(Long memberId);
 }
