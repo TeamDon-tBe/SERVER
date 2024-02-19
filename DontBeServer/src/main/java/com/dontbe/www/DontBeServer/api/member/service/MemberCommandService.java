@@ -67,7 +67,10 @@ public class MemberCommandService {
         //이대로 진행할 경우 어떤 유저는 평생 default값이 -1일 수도ㅜㅜ
         ghostRepository.deleteAll(ghostList1);
         ghostRepository.deleteAll(ghostList2);
-//        contentRepository.deleteAll(contentList);
+
+        //탈퇴하는 유저가 작성한 답글 삭제
+        commentRepository.deleteCommentsByMemberId(memberId);
+
         memberRepository.delete(member);
     }
 
