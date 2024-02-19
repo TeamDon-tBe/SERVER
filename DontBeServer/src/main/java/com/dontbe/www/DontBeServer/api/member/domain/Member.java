@@ -9,8 +9,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +61,11 @@ public class Member extends BaseTimeEntity {
     @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isDeleted;
 
+    @Column(name = "deleted_At")
     private LocalDateTime deleteAt;
+
+    @Column(name = "deleted_Reason")
+    private String deletedReason;
 
     @OneToMany(mappedBy = "notificationTargetMember",cascade = ALL)
     private List<Notification> targetNotification = new ArrayList<>();
@@ -113,6 +115,9 @@ public class Member extends BaseTimeEntity {
         this.refreshToken = refreshToken;
     }
 
+    public void updateDeletedReason(String withdrawlReason){
+        this.deletedReason = withdrawlReason;
+    }
     public void softDelete() {
         this.isDeleted = true;
         this.deleteAt = LocalDateTime.now().plusDays(ACCOUNT_RETENTION_PERIOD);
