@@ -43,6 +43,7 @@ public class MemberCommandService {
         List<Content> contentList = contentRepository.findContentByMember(member);
         List<Ghost> ghostList1 = ghostRepository.findByGhostTargetMember(member);
         List<Ghost> ghostList2 = ghostRepository.findByGhostTriggerMember(member);
+
         System.out.println("들어옴");
         //게시글들 안에서 각 게시글에 대한 답글들의 좋아요 노티, 투명도 노티, 답글 노티, 답글 삭제 + 게시글 좋아요 삭제, 게시글 투명도 삭제, 게시글 삭제(소프트 딜리트 X)
         for(Content content : contentList) {
@@ -53,8 +54,6 @@ public class MemberCommandService {
 //            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());   //변경 후 다시 바꾸기
                 notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",contentId);
                 notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
-                commentLikedRepository.deleteByComment(comment);
-                commentRepository.deleteById(comment.getId());
             }
             System.out.println("1");
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
@@ -82,6 +81,7 @@ public class MemberCommandService {
         ghostRepository.deleteAll(ghostList1);
         System.out.println("고스트리스트1");
         ghostRepository.deleteAll(ghostList2);
+
         System.out.println("고스트리스트2");
 //        contentRepository.deleteAll(contentList);
 
@@ -90,6 +90,11 @@ public class MemberCommandService {
         List<CommentLiked> commentLiked = commentLikedRepository.findAllByMemberId(memberId);
         contentLikedRepository.deleteAll(contentLiked);
         commentLikedRepository.deleteAll(commentLiked);
+
+        //탈퇴하는 유저가 작성한 답글 삭제
+        commentRepository.deleteCommentsByMemberId(memberId);
+
+
         memberRepository.delete(member);
     }
 
