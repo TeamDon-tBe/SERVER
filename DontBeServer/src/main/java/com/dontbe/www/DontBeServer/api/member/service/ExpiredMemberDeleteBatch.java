@@ -14,8 +14,10 @@ import java.time.LocalDateTime;
 public class ExpiredMemberDeleteBatch {
     private final MemberRepository memberRepository;
 
+    //@Scheduled(cron="0/10 * * * * *")   //10초에 한번씩 실행
     @Scheduled(cron = "0 0 0 * * ?")    //매일 밤 자정에 실행
     public void deleteExpiredUser() {
         memberRepository.deleteMemberScheduledForDeletion(LocalDateTime.now());
+        System.out.println("deleteExpiredUser");
     }
 }

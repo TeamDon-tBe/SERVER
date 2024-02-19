@@ -43,13 +43,6 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtTokenProvider.generateRefreshToken();
         Boolean isExistUser = isMemberBySocialId(socialData.getId());
 
-        Boolean isDeleted = memberRepository.findMemberBySocialId(socialData.getId()).isDeleted();
-
-        //탈퇴한 유저
-        if(isExistUser && isDeleted){
-            throw new BadRequestException(ErrorStatus.WITHDRAWAL_MEMBER.getMessage());
-        }
-
 
         try {
             // 신규 유저 저장
@@ -70,10 +63,18 @@ public class AuthServiceImpl implements AuthService {
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
                 member.updateRefreshToken(refreshToken);
 
-                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member.getProfileUrl(), true, isDeleted);
+                return AuthResponseDto.of(member.getNickname(), member.getId(), accessToken, refreshToken, member.getProfileUrl(), true, false);
 
             }
             else {
+
+                Boolean isDeleted = memberRepository.findMemberBySocialId(socialData.getId()).isDeleted();
+
+                //재가입 방지
+                if(isExistUser && isDeleted){
+                    throw new BadRequestException(ErrorStatus.WITHDRAWAL_MEMBER.getMessage());
+                }
+
                 findMemberBySocialId(socialData.getId()).updateRefreshToken(refreshToken);
 
                 // socialId를 통해서 등록된 유저 찾기
@@ -83,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
 
                 String accessToken = jwtTokenProvider.generateAccessToken(authentication);
 
-                return AuthResponseDto.of(signedMember.getNickname(), signedMember.getId(), accessToken, refreshToken, signedMember.getProfileUrl(), false,isDeleted);//, signedMember.getSocialId());
+                return AuthResponseDto.of(signedMember.getNickname(), signedMember.getId(), accessToken, refreshToken, signedMember.getProfileUrl(), false, false);//, signedMember.getSocialId());
             }
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
@@ -112,6 +113,8 @@ public class AuthServiceImpl implements AuthService {
                 return kakaoAuthService.login(socialAccessToken);
             case APPLE:
                 return appleAuthService.login(socialAccessToken, userName);
+            case WITHDRAW:
+                return null;
             default:
                 throw new IllegalArgumentException(ErrorStatus.ANOTHER_ACCESS_TOKEN.getMessage());
         }
