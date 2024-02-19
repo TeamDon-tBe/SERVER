@@ -18,6 +18,5 @@ public class ExpiredMemberDeleteBatch {
     @Scheduled(cron = "0 0 0 * * ?")    //매일 밤 자정에 실행
     public void deleteExpiredUser() {
         memberRepository.deleteMemberScheduledForDeletion(LocalDateTime.now());
-        System.out.println("deleteExpiredUser");
     }
 }
