@@ -40,7 +40,7 @@ public class MemberCommandService {
         List<Ghost> ghostList1 = ghostRepository.findByGhostTargetMember(member);
         List<Ghost> ghostList2 = ghostRepository.findByGhostTriggerMember(member);
 
-        //게시글들 안에서 각 게시글에 대한 답글들의 좋아요 노티, 투명도 노티, 답글 노티, 답글 삭제 + 게시글 좋아요 삭제, 게시글 투명도 삭제, 게시글 삭제(소프트 딜리트 X)
+        //게시글들 안에서 각 게시글에 대한 답글들의 좋아요 노티, 투명도 노티, 답글 노티, 게시글 투명도 삭제, 게시글 삭제(소프트 딜리트 X)
         for(Content content : contentList) {
             Long contentId = content.getId();
             List<Comment> comments = commentRepository.findCommentsByContentId(contentId);
@@ -49,8 +49,6 @@ public class MemberCommandService {
 //            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());   //변경 후 다시 바꾸기
                 notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",contentId);
                 notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
-                commentLikedRepository.deleteByComment(comment);
-                commentRepository.deleteById(comment.getId());
             }
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);
