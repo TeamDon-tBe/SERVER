@@ -36,7 +36,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("UPDATE Member m " +
             "SET m.isAlarmAllowed=false , m.memberEmail= '',m.memberGhost=0,m.memberIntro='',m.refreshToken='', m.socialId='',m.socialNickname='',m.socialPlatform='WITHDRAW' " +
             "WHERE m.isDeleted=true AND m.deleteAt < :currentDate")
-        //@Query("DELETE FROM Member m WHERE m.isDeleted = true AND m.deleteAt < :currentDate")
     void deleteMemberScheduledForDeletion(LocalDateTime currentDate);
 
     Member findMemberBySocialId(String socialId);
