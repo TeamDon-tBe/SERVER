@@ -52,6 +52,8 @@ public class ContentCommandService {
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",comment.getId());
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
+
+            comment.softDelete();
         }
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);
