@@ -1,7 +1,6 @@
 package com.dontbe.www.DontBeServer.api.content.service;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
-import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.content.domain.ContentLiked;
@@ -31,7 +30,6 @@ public class ContentCommandService {
     private final ContentLikedRepository contentLikedRepository;
     private final NotificationRepository notificationRepository;
     private final CommentRepository commentRepository;
-    private final CommentLikedRepository commentLikedRepository;
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);

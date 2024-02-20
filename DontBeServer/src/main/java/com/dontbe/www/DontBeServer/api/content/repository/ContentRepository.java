@@ -7,7 +7,10 @@ import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +18,8 @@ import java.util.Optional;
 public interface ContentRepository extends JpaRepository<Content, Long> {
     Optional<Content> findContentById(Long contentId);
 
+    @Transactional
+    @Modifying
     @Query("DELETE FROM Content c WHERE c.isDeleted = true AND c.deleteAt < :currentDate")
     void deleteContentScheduledForDeletion(LocalDateTime currentDate);
 

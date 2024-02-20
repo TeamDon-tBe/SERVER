@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@Where(clause = "is_deleted = false")
 public class Comment extends BaseTimeEntity {
 
     private static final long COMMENT_RETENTION_PERIOD = 14L;   //답글 삭제 후 보유기간 14일로 설정
