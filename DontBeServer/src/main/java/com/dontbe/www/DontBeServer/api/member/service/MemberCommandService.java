@@ -61,8 +61,7 @@ public class MemberCommandService {
             List<Comment> comments = commentRepository.findCommentsByContentId(contentId);
             for(Comment comment : comments) {
                 notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",comment.getId());
-//            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());   //변경 후 다시 바꾸기
-                notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",contentId);
+                notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());
                 notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
             }
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);

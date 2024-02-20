@@ -76,8 +76,8 @@ public class NotificationQueryService {
     private long refineNotificationTriggerId (String triggerType, Long triggerId, Notification notification){
 
 //        Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
-        //답글관련(답글좋아요 혹은 답글 작성)시 게시물 id 반환
-        if(triggerType.equals("comment") || triggerType.equals("commentLiked")) {
+        //답글관련(답글좋아요 혹은 답글 작성, 답글 투명도)시 게시물 id 반환
+        if(triggerType.equals("comment") || triggerType.equals("commentLiked") || triggerType.equals("commentGhost")) {
             Comment comment = commentRepository.findCommentByIdOrThrow(triggerId);
             return comment.getContent().getId();
         }else{
