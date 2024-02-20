@@ -26,6 +26,9 @@ public enum ErrorStatus {
     GHOST_MYSELF_BLOCK("본인의 투명도를 내릴 수 없습니다."),
     GHOST_USER("투명도가 -85이하라서 글이나 답글을 작성할 수 없습니다."),
     WITHDRAWAL_MEMBER("계정 삭제 후 30일 이내 회원입니다."),
+    UNVALID_PROFILEIMAGE_TYPE("이미지 확장자는 jpg, png, webp만 가능합니다."),
+    PROFILE_IMAGE_DATA_SIZE("이미지 사이즈는 5MB를 넘을 수 없습니다."),
+
 
     /**
      * 401 UNAUTHORIZED

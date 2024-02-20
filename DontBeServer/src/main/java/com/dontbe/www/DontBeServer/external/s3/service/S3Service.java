@@ -1,5 +1,6 @@
 package com.dontbe.www.DontBeServer.external.s3.service;
 
+import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import com.dontbe.www.DontBeServer.external.s3.config.AWSConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -67,14 +68,13 @@ public class S3Service {
     private void validateExtension(MultipartFile image) {
         String contentType = image.getContentType();
         if (!IMAGE_EXTENSIONS.contains(contentType)) {
-            throw new RuntimeException("이미지 확장자는 jpg, png, webp만 가능합니다.");
+            throw new RuntimeException(ErrorStatus.UNVALID_PROFILEIMAGE_TYPE.getMessage());
         }
     }
 
     private void validateFileSize(MultipartFile image) {
         if (image.getSize() > MAX_FILE_SIZE) {
-            throw new RuntimeException("이미지 사이즈는 5MB를 넘을 수 없습니다.");
+            throw new RuntimeException(ErrorStatus.PROFILE_IMAGE_DATA_SIZE.getMessage());
         }
     }
-
 }
