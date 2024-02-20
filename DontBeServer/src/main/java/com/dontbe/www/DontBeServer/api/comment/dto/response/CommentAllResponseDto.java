@@ -1,7 +1,6 @@
 package com.dontbe.www.DontBeServer.api.comment.dto.response;
 
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
-import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 
 public record CommentAllResponseDto(
         Long commentId, //답글 고유 id
@@ -13,7 +12,8 @@ public record CommentAllResponseDto(
         Boolean isLiked,	//유저가 게시물에 대해 좋아요를 눌렀는지
         int commentLikedNumber,	//댓글의 좋아요 개수
         String commentText,	//댓글 내용
-        String  time	//답글이 작성된 시간을 (년-월-일 시:분:초)
+        String  time,	//답글이 작성된 시간을 (년-월-일 시:분:초)
+        Boolean isDeleted   // 댓글 작성자가 탈퇴한 회원인지 아닌지
 ) {
     public static CommentAllResponseDto of(Long commentId, Member writerMember,boolean isGhost,int memberGhost, boolean isLiked, String time, int likedNumber, String commentText){
         return new CommentAllResponseDto(
@@ -26,7 +26,8 @@ public record CommentAllResponseDto(
                 isLiked,
                 likedNumber,
                 commentText,
-                time
+                time,
+                writerMember.isDeleted()
         );
     }
 }
