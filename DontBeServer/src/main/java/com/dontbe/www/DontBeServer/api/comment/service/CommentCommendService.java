@@ -74,7 +74,7 @@ public class CommentCommendService {
                 .orElseThrow(()-> new IllegalArgumentException(ErrorStatus.NOT_FOUND_COMMENT.getMessage()));
 
         Long commentMemberId = comment.getMember().getId();
-        System.out.println(commentId);
+
         if (!commentMemberId.equals(memberId)) {    //답글작성자 != 현재 유저 >> 권한error
             throw new BadRequestException(ErrorStatus.UNAUTHORIZED_MEMBER.getMessage());
         }
@@ -85,7 +85,6 @@ public class CommentCommendService {
         Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
         Long contentId = comment.getContent().getId();
-
 
         isDuplicateCommentLike(comment, triggerMember);
 
