@@ -27,6 +27,7 @@ import java.security.spec.InvalidKeySpecException;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
+    private final static String GHOST_IMAGE_S3 = "https://dontbe-s3.s3.ap-northeast-2.amazonaws.com/ProfileImage/defalut/image_profile.png";
     private final static String DEFAULT_NICKNAME="";
 
     private final JwtTokenProvider jwtTokenProvider;

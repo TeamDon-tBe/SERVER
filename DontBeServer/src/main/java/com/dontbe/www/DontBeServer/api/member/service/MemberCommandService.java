@@ -40,7 +40,7 @@ public class MemberCommandService {
     private final S3Service s3Service;
     private final String DEFAULT_PROFILE_URL = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
     private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
-
+    private final static String GHOST_IMAGE_S3 = "https://dontbe-s3.s3.ap-northeast-2.amazonaws.com/ProfileImage/defalut/image_profile.png";
     private static final String S3_URL = "https://dontbe-s3.s3.ap-northeast-2.amazonaws.com/";
     public void withdrawalMember(Long memberId, MemberWithdrawRequestDto memberWithdrawRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -141,7 +141,7 @@ public class MemberCommandService {
                 String s3ImageUrl = s3Service.uploadImage(memberId.toString(), multipartFile);
                 existingMember.updateProfileUrl(s3ImageUrl);
 
-                if(!existedImage.equals(GHOST_IMAGE)) {
+                if(!existedImage.equals(GHOST_IMAGE)||!existedImage.equals(GHOST_IMAGE_S3)) {
                     String existedKey = removeBaseUrl(existedImage, S3_URL);
                     s3Service.deleteImage(existedKey);
                 }
