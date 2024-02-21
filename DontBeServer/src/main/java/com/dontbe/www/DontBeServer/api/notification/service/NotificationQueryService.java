@@ -7,6 +7,7 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificaitonCountResponseDto;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDto;
+import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -45,12 +46,11 @@ public class NotificationQueryService {
                         oneNotification.isNotificationChecked(),
                         refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
                                 oneNotification.getNotificationTriggerId(), oneNotification),
-                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType()),
-                        isDeletedMember(oneNotification.getNotificationTriggerMemberId())
+                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType())
                 )).collect(Collectors.toList());
     }
 
-    public List<NotificationAllResponseDto> getNotificationAllPagination(Long memberId, Long cursor){
+    public List<NotificationAllResponseDtoVer2> getNotificationAllPagination(Long memberId, Long cursor){
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
 
         PageRequest pageRequest = PageRequest.of(0, NOTIFICATION_DEFAULT_PAGE_SIZE);
@@ -63,7 +63,7 @@ public class NotificationQueryService {
         }
 
         return notificationList.stream()
-                .map(oneNotification -> NotificationAllResponseDto.of(
+                .map(oneNotification -> NotificationAllResponseDtoVer2.of(
                         usingMember,
                         isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
                         oneNotification,
