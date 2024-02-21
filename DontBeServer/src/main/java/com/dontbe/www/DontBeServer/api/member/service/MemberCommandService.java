@@ -19,6 +19,7 @@ import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepos
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.external.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,8 +41,13 @@ public class MemberCommandService {
     private final S3Service s3Service;
     private final String DEFAULT_PROFILE_URL = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
     private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
-    private final static String GHOST_IMAGE_S3 = "https://dontbe-s3.s3.ap-northeast-2.amazonaws.com/ProfileImage/defalut/image_profile.png";
-    private static final String S3_URL = "https://dontbe-s3.s3.ap-northeast-2.amazonaws.com/";
+
+    @Value("${aws-property.s3-default-image-url}")
+    private String GHOST_IMAGE_S3;
+
+    @Value("${aws-property.s3-domain}")
+    private String S3_URL;
+
     public void withdrawalMember(Long memberId, MemberWithdrawRequestDto memberWithdrawRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
         List<Ghost> ghosts = ghostRepository.findByGhostTargetMember(member);
