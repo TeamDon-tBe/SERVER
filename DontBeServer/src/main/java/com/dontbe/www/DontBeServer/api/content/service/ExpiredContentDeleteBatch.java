@@ -16,7 +16,7 @@ public class ExpiredContentDeleteBatch {
     private final ContentRepository contentRepository;
 
     @Scheduled(cron = "0 0 0 * * ?")    //매일 밤 자정에 실행
-    public void deleteExpiredUser() {
+    public void deleteExpiredContent() {
         contentRepository.deleteContentScheduledForDeletion(LocalDateTime.now());
     }
 }

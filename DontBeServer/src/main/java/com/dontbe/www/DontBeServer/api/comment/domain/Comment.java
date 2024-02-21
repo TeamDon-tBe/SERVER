@@ -4,21 +4,23 @@ import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.Where;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@Where(clause = "is_deleted = false")
 public class Comment extends BaseTimeEntity {
+
+    private static final long COMMENT_RETENTION_PERIOD = 14L;   //답글 삭제 후 보유기간 14일로 설정
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +35,11 @@ public class Comment extends BaseTimeEntity {
 
     private String commentText;
 
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isDeleted;
+
+    private LocalDateTime deleteAt;
+
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommentLiked> commentLikeds = new ArrayList<>();
 
@@ -41,5 +48,10 @@ public class Comment extends BaseTimeEntity {
         this.member = member;
         this.content = content;
         this.commentText = commentText;
+    }
+
+    public void softDelete() {
+        this.isDeleted = true;
+        this.deleteAt = LocalDateTime.now().plusDays(COMMENT_RETENTION_PERIOD);
     }
 }

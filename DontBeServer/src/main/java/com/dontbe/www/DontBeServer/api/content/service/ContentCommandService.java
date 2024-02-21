@@ -1,7 +1,6 @@
 package com.dontbe.www.DontBeServer.api.content.service;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
-import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.content.domain.ContentLiked;
@@ -31,7 +30,6 @@ public class ContentCommandService {
     private final ContentLikedRepository contentLikedRepository;
     private final NotificationRepository notificationRepository;
     private final CommentRepository commentRepository;
-    private final CommentLikedRepository commentLikedRepository;
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -50,9 +48,10 @@ public class ContentCommandService {
         List<Comment> comments = commentRepository.findCommentsByContentId(contentId);
         for(Comment comment : comments) {
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentLiked",comment.getId());
-            //notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());   //변경 후 다시 바꾸기
-            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",contentId);
+            notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
+
+            comment.softDelete();
         }
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);

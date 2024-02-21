@@ -41,7 +41,7 @@ public class GhostCommandService {
                 .notificationTargetMember(targetMember)
                 .notificationTriggerMemberId(memberId)
                 .notificationTriggerType(memberClickGhostRequestDto.alarmTriggerType())
-                .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId()) //2차 스프린트 : 에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기(refineNotificationTriggerId에 추가)
+                .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId())
                 .isNotificationChecked(false)
                 .notificationText("")
                 .build();
@@ -80,7 +80,7 @@ public class GhostCommandService {
                 .notificationTargetMember(targetMember)
                 .notificationTriggerMemberId(memberId)
                 .notificationTriggerType(ghostClickRequestDto.alarmTriggerType())
-                .notificationTriggerId(ghostClickRequestDto.alarmTriggerId()) //2차 스프린트 : 에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기(refineNotificationTriggerId에 추가)
+                .notificationTriggerId(ghostClickRequestDto.alarmTriggerId())
                 .isNotificationChecked(false)
                 .notificationText("")
                 .build();

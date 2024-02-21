@@ -1,6 +1,6 @@
-package com.dontbe.www.DontBeServer.api.ghost.service;
+package com.dontbe.www.DontBeServer.api.comment.service;
 
-import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
+import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class ExpiredGhostDeleteBatch {
-    private final GhostRepository ghostRepository;
+public class ExpiredCommentDeletedBatch {
+    private final CommentRepository commentRepository;
 
     @Scheduled(cron = "0 0 0 * * ?")    //매일 밤 자정에 실행
-    public void deleteExpiredGhost() {
-        ghostRepository.deleteGhostScheduledForDeletion(LocalDateTime.now());
+    public void deleteExpiredComment() {
+        commentRepository.deleteCommentScheduledForDeletion(LocalDateTime.now());
     }
 }
