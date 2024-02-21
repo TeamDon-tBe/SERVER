@@ -4,6 +4,7 @@ import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllByMemberResponseDto;
 import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllResponseDto;
+import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetDetailsResponseDto;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
@@ -63,7 +64,7 @@ public class ContentQueryService {
                 .collect(Collectors.toList());
     }
 
-    public List<ContentGetAllResponseDto> getContentAllPagination(Long memberId, Long cursor) {
+    public List<ContentGetAllResponseDtoVer2> getContentAllPagination(Long memberId, Long cursor) {
         PageRequest pageRequest = PageRequest.of(0, 30);
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         Slice<Content> contentList;
@@ -75,7 +76,7 @@ public class ContentQueryService {
         }
 
         return contentList.stream()
-                .map(oneContent -> ContentGetAllResponseDto.of(
+                .map(oneContent -> ContentGetAllResponseDtoVer2.of(
                         oneContent.getMember(),
                         oneContent,
                         ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(oneContent.getMember(),usingMember),

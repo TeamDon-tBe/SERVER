@@ -7,6 +7,7 @@ import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificaitonCountResponseDto;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDto;
+import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +50,7 @@ public class NotificationQueryService {
                 )).collect(Collectors.toList());
     }
 
-    public List<NotificationAllResponseDto> getNotificationAllPagination(Long memberId, Long cursor){
+    public List<NotificationAllResponseDtoVer2> getNotificationAllPagination(Long memberId, Long cursor){
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
 
         PageRequest pageRequest = PageRequest.of(0, NOTIFICATION_DEFAULT_PAGE_SIZE);
@@ -62,14 +63,15 @@ public class NotificationQueryService {
         }
 
         return notificationList.stream()
-                .map(oneNotification -> NotificationAllResponseDto.of(
+                .map(oneNotification -> NotificationAllResponseDtoVer2.of(
                         usingMember,
                         isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
                         oneNotification,
                         oneNotification.isNotificationChecked(),
                         refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
                                 oneNotification.getNotificationTriggerId(), oneNotification),
-                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType())
+                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType()),
+                        isDeletedMember(oneNotification.getNotificationTriggerMemberId())
                 )).collect(Collectors.toList());
     }
 
@@ -103,5 +105,11 @@ public class NotificationQueryService {
             return memberRepository.findMemberByIdOrThrow(memberId).getNickname();
         }
         else return "System";
+    }
+
+    //탈퇴한 회원인지 아닌지
+    private boolean isDeletedMember(Long triggerMemberId){
+        return memberRepository.findMemberByIdOrThrow(triggerMemberId).isDeleted();
+        //운영 노티인 경우 trigger의 닉네임이 따로 나오지 않아서 별도의 로직 불필요
     }
 }
