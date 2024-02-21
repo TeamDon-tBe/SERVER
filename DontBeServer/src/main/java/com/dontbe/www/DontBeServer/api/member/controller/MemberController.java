@@ -2,6 +2,7 @@ package com.dontbe.www.DontBeServer.api.member.controller;
 
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.ProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
 import com.dontbe.www.DontBeServer.api.member.service.MemberCommandService;
@@ -12,8 +13,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.security.Principal;
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
@@ -62,6 +66,14 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Object>> updateMemberProfile(Principal principal, @RequestBody MemberProfilePatchRequestDto memberProfilePatchRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         memberCommandService.updateMemberProfile(memberId, memberProfilePatchRequestDto);
+        return ApiResponse.success(PATCH_MEMBER_PROFILE);
+    }
+
+    @PatchMapping(value = "user-profile2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "유저 프로필 수정 API입니다.(이미지 수정 버전 추가)",description = "UserProfilePatch(+ProfileImage)")
+    public ResponseEntity<ApiResponse<Object>> updateMemberProfile2(Principal principal, @RequestPart(value = "file", required = false) MultipartFile multipartFile, @RequestPart(value = "info", required = false) ProfilePatchRequestDto profilePatchRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        memberCommandService.updateMemberProfile2(memberId, multipartFile, profilePatchRequestDto);
         return ApiResponse.success(PATCH_MEMBER_PROFILE);
     }
 

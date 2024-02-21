@@ -13,13 +13,18 @@ import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.ProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
+import com.dontbe.www.DontBeServer.external.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -33,7 +38,15 @@ public class MemberCommandService {
     private final CommentRepository commentRepository;
     private final CommentLikedRepository commentLikedRepository;
     private final ContentLikedRepository contentLikedRepository;
+    private final S3Service s3Service;
     private final String DEFAULT_PROFILE_URL = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
+    private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
+
+    @Value("${aws-property.s3-default-image-url}")
+    private String GHOST_IMAGE_S3;
+
+    @Value("${aws-property.s3-domain}")
+    private String S3_URL;
 
     public void withdrawalMember(Long memberId, MemberWithdrawRequestDto memberWithdrawRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -111,8 +124,48 @@ public class MemberCommandService {
         if (memberProfilePatchRequestDto.is_alarm_allowed() != null) {
             existingMember.updateMemberIsAlarmAllowed(memberProfilePatchRequestDto.is_alarm_allowed());
         }
-
         // 저장
         Member savedMember = memberRepository.save(existingMember);
+    }
+
+    public void updateMemberProfile2(Long memberId, MultipartFile multipartFile, ProfilePatchRequestDto profilePatchRequestDto) {
+        Member existingMember = memberRepository.findMemberByIdOrThrow(memberId);
+
+        // 업데이트할 속성만 복사
+        if (profilePatchRequestDto.nickname() != null) {
+            existingMember.updateNickname(profilePatchRequestDto.nickname());
+        }
+        if (profilePatchRequestDto.memberIntro() != null) {
+            existingMember.updateMemberIntro(profilePatchRequestDto.memberIntro());
+        }
+        //이미지를 받았을 경우 S3에 업로드하고, memberTable값 수정하고, 이전에 올라갔던 이미지는 S3에서 삭제
+        //이때 기본 이미지였다면 삭제 과정은 스킵. 현재는 깃허브에 올라간 사진이라서 사라지지 않지만, 추후 기본 이미지를 우리 S3에 올릴 것을 대비.
+        if (!multipartFile.isEmpty()) {
+            String existedImage = existingMember.getProfileUrl();
+
+            try {
+                String s3ImageUrl = s3Service.uploadImage(memberId.toString(), multipartFile);
+                existingMember.updateProfileUrl(s3ImageUrl);
+
+                if(!existedImage.equals(GHOST_IMAGE)||!existedImage.equals(GHOST_IMAGE_S3)) {
+                    String existedKey = removeBaseUrl(existedImage, S3_URL);
+                    s3Service.deleteImage(existedKey);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        if (profilePatchRequestDto.isAlarmAllowed() != null) {
+            existingMember.updateMemberIsAlarmAllowed(profilePatchRequestDto.isAlarmAllowed());
+        }
+        Member savedMember = memberRepository.save(existingMember);
+    }
+
+    private static String removeBaseUrl(String fullUrl, String baseUrl) {
+        if (fullUrl.startsWith(baseUrl)) {
+            return fullUrl.substring(baseUrl.length());
+        } else {
+            return fullUrl; // baseUrl이 존재하지 않는 경우 전체 URL 반환
+        }
     }
 }

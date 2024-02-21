@@ -17,6 +17,7 @@ import com.dontbe.www.DontBeServer.common.config.jwt.UserAuthentication;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ import java.security.spec.InvalidKeySpecException;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
+
+    @Value("${aws-property.s3-default-image-url}")
+    private String GHOST_IMAGE_S3;
     private final static String DEFAULT_NICKNAME="";
 
     private final JwtTokenProvider jwtTokenProvider;
