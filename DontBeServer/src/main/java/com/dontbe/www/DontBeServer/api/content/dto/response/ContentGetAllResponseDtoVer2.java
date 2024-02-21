@@ -3,7 +3,7 @@ package com.dontbe.www.DontBeServer.api.content.dto.response;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 
-public record ContentGetAllResponseDto(
+public record ContentGetAllResponseDtoVer2(
         Long memberId,
         String memberProfileUrl,
         String memberNickname,
@@ -14,10 +14,11 @@ public record ContentGetAllResponseDto(
         int memberGhost,
         boolean isLiked,
         int likedNumber,
-        int commentNumber
+        int commentNumber,
+        Boolean isDeleted
 ) {
-    public static ContentGetAllResponseDto of(Member writerMember, Content content, boolean isGhost, int refinedMemberGhost, boolean isLiked, String time, int likedNumber, int commentNumber) {
-        return new ContentGetAllResponseDto(
+    public static ContentGetAllResponseDtoVer2 of(Member writerMember, Content content, boolean isGhost, int refinedMemberGhost, boolean isLiked, String time, int likedNumber, int commentNumber) {
+        return new ContentGetAllResponseDtoVer2(
                 writerMember.getId(),
                 writerMember.getProfileUrl(),
                 writerMember.getNickname(),
@@ -28,7 +29,8 @@ public record ContentGetAllResponseDto(
                 refinedMemberGhost,
                 isLiked,
                 likedNumber,
-                commentNumber
+                commentNumber,
+                writerMember.isDeleted()
         );
     }
 }

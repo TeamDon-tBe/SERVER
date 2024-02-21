@@ -80,7 +80,7 @@ public class ContentController {
 
     @GetMapping("/contents")
     @Operation(summary = "페이지네이션이 적용된 게시글 전체 조회 API 입니다.",description = "ContentGetPagination")
-    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDto>>> getContentAllPagination(Principal principal, @RequestParam(value = "cursor") Long cursor) {
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDtoVer2>>> getContentAllPagination(Principal principal, @RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllPagination(memberId, cursor));
     }
