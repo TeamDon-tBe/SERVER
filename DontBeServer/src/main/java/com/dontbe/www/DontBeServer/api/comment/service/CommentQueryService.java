@@ -3,6 +3,7 @@ package com.dontbe.www.DontBeServer.api.comment.service;
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberResponseDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDto;
+import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
@@ -64,7 +65,7 @@ public class CommentQueryService {
                 ).collect(Collectors.toList());
     }
 
-    public List<CommentAllResponseDto> getCommentAllPagination(Long memberId, Long contentId, Long cursor) {
+    public List<CommentAllResponseDtoVer2> getCommentAllPagination(Long memberId, Long contentId, Long cursor) {
         contentRepository.findContentByIdOrThrow(contentId);
         PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
         Slice<Comment> commentList;
@@ -72,7 +73,7 @@ public class CommentQueryService {
         commentList = commentRepository.findCommentsByContentNextPage(cursor, contentId, pageRequest);
 
         return commentList.stream()
-                .map(oneComment -> CommentAllResponseDto.of(
+                .map(oneComment -> CommentAllResponseDtoVer2.of(
                         oneComment.getId(),
                         memberRepository.findMemberByIdOrThrow(oneComment.getMember().getId()),
                         checkGhost(memberId, oneComment.getId()),
