@@ -66,8 +66,10 @@ public class CommentCommendService {
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment",commentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost", commentId);
 
-        Comment deleteComment = commentRepository.findCommentByIdOrThrow(commentId);
-        deleteComment.softDelete();
+        //Comment deleteComment = commentRepository.findCommentByIdOrThrow(commentId);
+        //deleteComment.softDelete();
+        commentRepository.deleteById(commentId);
+
     }
 
     public void deleteValidate(Long memberId, Long commentId){
