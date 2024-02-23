@@ -15,7 +15,7 @@ public record MemberDetailGetResponseDto(
                 joinDate,
                 member.getMemberEmail(),
                 member.getSocialPlatform().name() + " SOCIAL LOGIN",
-                "1.0.01"
+                "1.0.0"
         );
     }
 }
