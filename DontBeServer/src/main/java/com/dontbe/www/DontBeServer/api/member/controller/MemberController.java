@@ -1,7 +1,7 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
-import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawalPatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.ProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberDetailGetResponseDto;
 import com.dontbe.www.DontBeServer.api.member.dto.response.MemberGetProfileResponseDto;
@@ -32,9 +32,9 @@ public class MemberController {
 
     @DeleteMapping("withdrawal")
     @Operation(summary = "계정 삭제 API입니다.",description = "MemberWithdrawal")
-    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal, @RequestBody MemberWithdrawRequestDto memberWithdrawRequestDto) {
+    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal, @RequestBody MemberWithdrawalPatchRequestDto memberWithdrawalPatchRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
-        memberCommandService.withdrawalMember(memberId, memberWithdrawRequestDto);
+        memberCommandService.withdrawalMember(memberId, memberWithdrawalPatchRequestDto);
         return ApiResponse.success(WITHDRAWAL_SUCCESS);
     }
 
