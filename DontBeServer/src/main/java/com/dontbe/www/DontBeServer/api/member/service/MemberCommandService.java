@@ -12,7 +12,7 @@ import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
-import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawRequestDto;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawalPatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.ProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
@@ -48,13 +48,13 @@ public class MemberCommandService {
     @Value("${aws-property.s3-domain}")
     private String S3_URL;
 
-    public void withdrawalMember(Long memberId, MemberWithdrawRequestDto memberWithdrawRequestDto) {
+    public void withdrawalMember(Long memberId, MemberWithdrawalPatchRequestDto memberWithdrawalPatchRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
         List<Ghost> ghosts = ghostRepository.findByGhostTargetMember(member);
 
         member.updateNickname("탈퇴한 회원");
         member.updateProfileUrl(DEFAULT_PROFILE_URL);
-        member.updateDeletedReason(memberWithdrawRequestDto.withdrawalReason());
+        member.updateDeletedReason(memberWithdrawalPatchRequestDto.deleted_reason());
 
         notificationRepository.deleteBynotificationTargetMember(member);
         for(Ghost ghost:ghosts){ ghost.softDelete(); }
