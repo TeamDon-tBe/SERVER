@@ -30,7 +30,7 @@ public class MemberController {
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
 
-    @DeleteMapping("withdrawal")
+    @PatchMapping("withdrawal")
     @Operation(summary = "계정 삭제 API입니다.",description = "MemberWithdrawal")
     public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal, @RequestBody MemberWithdrawalPatchRequestDto memberWithdrawalPatchRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
