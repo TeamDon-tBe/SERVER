@@ -140,7 +140,7 @@ public class MemberCommandService {
         }
         //이미지를 받았을 경우 S3에 업로드하고, memberTable값 수정하고, 이전에 올라갔던 이미지는 S3에서 삭제
         //이때 기본 이미지였다면 삭제 과정은 스킵. 현재는 깃허브에 올라간 사진이라서 사라지지 않지만, 추후 기본 이미지를 우리 S3에 올릴 것을 대비.
-        if (!multipartFile.isEmpty()) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
             String existedImage = existingMember.getProfileUrl();
 
             try {
