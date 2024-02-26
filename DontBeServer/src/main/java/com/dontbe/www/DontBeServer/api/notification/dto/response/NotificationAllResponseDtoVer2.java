@@ -14,7 +14,8 @@ public record NotificationAllResponseDtoVer2(
         Long notificationTriggerId ,    //	노티 발생 시 해당 경우의 Id
         String notificationText, //	댓글 노티에 나올 댓글 내용
         boolean isNotificationChecked,    //	유저가 확인한 노티인지 아닌지
-        Boolean isDeleted   //노티 유발자가 탈퇴한 회원인지 아닌지
+        Boolean isDeleted,   //노티 유발자가 탈퇴한 회원인지 아닌지
+        long notificationId //조회된 노티의 id값
 ) {
     public static NotificationAllResponseDtoVer2 of(Member usingMember, String triggerMemberNickname, Notification notification,
                                                     boolean isNotificationChecked, Long notificationTriggerId, String imageUrl, boolean isDeletedMember) {
@@ -28,8 +29,8 @@ public record NotificationAllResponseDtoVer2(
                 notificationTriggerId,
                 notification.getNotificationText(),
                 isNotificationChecked,
-                isDeletedMember
-
+                isDeletedMember,
+                notification.getId()
         );
     }
 
