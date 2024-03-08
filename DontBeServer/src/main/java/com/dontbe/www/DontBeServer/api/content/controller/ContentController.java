@@ -48,6 +48,12 @@ public class ContentController {
         return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetail(MemberUtil.getMemberId(principal), contentId));
     }
 
+    @GetMapping("v2/content/{contentId}/detail")
+    @Operation(summary = "isDeleted가 추가된 게시글 상세 조회 API 입니다.",description = "Content Get Detail")
+    public ResponseEntity<ApiResponse<ContentGetDetailsResponseDtoVer2>> getContentDetailVer2(Principal principal, @PathVariable("contentId") Long contentId) {
+        return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetailVer2(MemberUtil.getMemberId(principal), contentId));
+    }
+
     @PostMapping("v1/content/{contentId}/liked")
     @Operation(summary = "게시글 좋아요 API 입니다.",description = "Content Like")
     public ResponseEntity<ApiResponse<Object>> likeContent(Principal principal, @PathVariable("contentId") Long contentId, @Valid @RequestBody ContentLikedRequestDto contentLikedRequestDto) {
