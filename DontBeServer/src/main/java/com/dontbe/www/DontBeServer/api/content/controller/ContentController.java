@@ -49,7 +49,7 @@ public class ContentController {
     }
 
     @GetMapping("v2/content/{contentId}/detail")
-    @Operation(summary = "isDeleted가 추가된 게시글 상세 조회 API 입니다.",description = "Content Get Detail")
+    @Operation(summary = "isDeleted가 추가된 게시글 상세 조회 API 입니다.",description = "Content Get Detail ver2")
     public ResponseEntity<ApiResponse<ContentGetDetailsResponseDtoVer2>> getContentDetailVer2(Principal principal, @PathVariable("contentId") Long contentId) {
         return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetailVer2(MemberUtil.getMemberId(principal), contentId));
     }
