@@ -2,10 +2,7 @@ package com.dontbe.www.DontBeServer.api.content.service;
 
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.domain.Content;
-import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllByMemberResponseDto;
-import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllResponseDto;
-import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetAllResponseDtoVer2;
-import com.dontbe.www.DontBeServer.api.content.dto.response.ContentGetDetailsResponseDto;
+import com.dontbe.www.DontBeServer.api.content.dto.response.*;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.ghost.repository.GhostRepository;
@@ -46,6 +43,21 @@ public class ContentQueryService {
         int commentNumber = commentRepository.countByContent(content);
 
         return ContentGetDetailsResponseDto.of(writerMember, writerMemberGhost, content, isGhost, isLiked, time, likedNumber, commentNumber);
+    }
+
+    public ContentGetDetailsResponseDtoVer2 getContentDetailVer2(Long memberId, Long contentId) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        Content content = contentRepository.findContentByIdOrThrow(contentId);
+        Member writerMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
+        int writerMemberGhost = GhostUtil.refineGhost(writerMember.getMemberGhost());
+        Long writerMemberId = content.getMember().getId();
+        boolean isGhost = ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(writerMemberId, memberId);
+        boolean isLiked = contentLikedRepository.existsByContentAndMember(content,member);
+        String time = TimeUtilCustom.refineTime(content.getCreatedAt());
+        int likedNumber = contentLikedRepository.countByContent(content);
+        int commentNumber = commentRepository.countByContent(content);
+
+        return ContentGetDetailsResponseDtoVer2.of(writerMember, writerMemberGhost, content, isGhost, isLiked, time, likedNumber, commentNumber);
     }
 
     public List<ContentGetAllResponseDto> getContentAll(Long memberId) {    //페이지네이션 적용 후 지우기
