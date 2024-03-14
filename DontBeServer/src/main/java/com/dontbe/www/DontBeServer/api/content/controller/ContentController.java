@@ -25,6 +25,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 @SecurityRequirement(name = "JWT Auth")
 @Tag(name="게시글 관련", description = "Content API Document")
 public class ContentController {
+    
     private final ContentCommandService contentCommandService;
     private final ContentQueryService contentQueryService;
 
