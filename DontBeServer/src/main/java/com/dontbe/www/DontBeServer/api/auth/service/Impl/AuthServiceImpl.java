@@ -14,6 +14,7 @@ import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import com.dontbe.www.DontBeServer.common.config.jwt.JwtTokenProvider;
 import com.dontbe.www.DontBeServer.common.config.jwt.UserAuthentication;
+import com.dontbe.www.DontBeServer.external.slack.service.SlackService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -37,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
     private final KakaoAuthService kakaoAuthService;
     private final AppleAuthService appleAuthService;
     private final MemberRepository memberRepository;
+    private final SlackService slackService;
 
     @Override
     @Transactional
@@ -61,6 +63,8 @@ public class AuthServiceImpl implements AuthService {
                         .build();
 
                 memberRepository.save(member);
+
+                slackService.sendSlackMessage(memberRepository.count(), "#dontbe-signup");
 
                 Authentication authentication = new UserAuthentication(member.getId(), null, null);
 
