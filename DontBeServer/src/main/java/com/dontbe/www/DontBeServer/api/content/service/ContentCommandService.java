@@ -51,13 +51,13 @@ public class ContentCommandService {
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost",comment.getId());
             notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment", comment.getId());
 
-            //comment.softDelete();
+            comment.softDelete();
         }
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentLiked",contentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("contentGhost",contentId);
 
-        //Content deleteContent = contentRepository.findContentByIdOrThrow(contentId);
-        //deleteContent.softDelete();
+        Content deleteContent = contentRepository.findContentByIdOrThrow(contentId);
+        deleteContent.softDelete();
         contentRepository.deleteById(contentId);
     }
 
