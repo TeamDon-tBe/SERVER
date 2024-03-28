@@ -66,9 +66,9 @@ public class CommentCommendService {
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("comment",commentId);
         notificationRepository.deleteByNotificationTriggerTypeAndNotificationTriggerId("commentGhost", commentId);
 
-        //Comment deleteComment = commentRepository.findCommentByIdOrThrow(commentId);
-        //deleteComment.softDelete();
-        commentRepository.deleteById(commentId);
+        Comment deleteComment = commentRepository.findCommentByIdOrThrow(commentId);
+        deleteComment.softDelete();
+
 
     }
 
