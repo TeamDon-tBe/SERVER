@@ -28,7 +28,6 @@ import java.security.spec.InvalidKeySpecException;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
 
     @Value("${aws-property.s3-default-image-url}")
     private String GHOST_IMAGE_S3;
@@ -57,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
                         .nickname(DEFAULT_NICKNAME)//.nickname(socialData.getNickname())
                         .socialPlatform(socialPlatform)
                         .socialId(socialData.getId())
-                        .profileUrl(GHOST_IMAGE)
+                        .profileUrl(GHOST_IMAGE_S3)
                         .memberEmail(socialData.getEmail())
                         .socialNickname(socialData.getNickname())
                         .build();

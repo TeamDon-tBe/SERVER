@@ -39,7 +39,6 @@ public class MemberCommandService {
     private final CommentLikedRepository commentLikedRepository;
     private final ContentLikedRepository contentLikedRepository;
     private final S3Service s3Service;
-    private final String DEFAULT_PROFILE_URL = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
     private final static String GHOST_IMAGE = "https://github.com/TeamDon-tBe/SERVER/assets/97835512/fb3ea04c-661e-4221-a837-854d66cdb77e";
 
     @Value("${aws-property.s3-default-image-url}")
@@ -53,7 +52,7 @@ public class MemberCommandService {
         List<Ghost> ghosts = ghostRepository.findByGhostTargetMember(member);
 
         member.updateNickname("탈퇴한 회원");
-        member.updateProfileUrl(DEFAULT_PROFILE_URL);
+        member.updateProfileUrl(GHOST_IMAGE_S3);
         member.updateDeletedReason(memberWithdrawalPatchRequestDto.deleted_reason());
 
         notificationRepository.deleteBynotificationTargetMember(member);
