@@ -10,6 +10,7 @@ import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAll
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,9 @@ public class NotificationQueryService {
     private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
     private final CommentRepository commentRepository;
-    private final String SYSTEM_PROFILEURL = "https://github.com/TeamDon-tBe/SERVER/assets/128011308/327d416e-ef1f-4c10-961d-4d9b85632d87";
 
+    @Value("${aws-property.s3-system-image-url}")
+    private String SYSTEM_IMAGE_S3;
     private final int NOTIFICATION_DEFAULT_PAGE_SIZE = 15;
 
     public NotificaitonCountResponseDto countUnreadNotification(Long memberId) {
@@ -95,7 +97,7 @@ public class NotificationQueryService {
             Member triggerMember = memberRepository.findMemberByIdOrThrow(notification.getNotificationTriggerMemberId());
             return triggerMember.getProfileUrl();
         }else{
-            return SYSTEM_PROFILEURL;
+            return SYSTEM_IMAGE_S3;
         }
     }
 
