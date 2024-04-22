@@ -8,6 +8,7 @@ import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificaitonCountResponseDto;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDto;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDtoVer2;
+import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificationAllResponseDtoVer3;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,6 +75,32 @@ public class NotificationQueryService {
                                 oneNotification.getNotificationTriggerId(), oneNotification),
                         profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType()),
                         isDeletedMember(oneNotification.getNotificationTriggerMemberId())
+                )).collect(Collectors.toList());
+    }
+
+    public List<NotificationAllResponseDtoVer3> getNotifications(Long memberId, Long cursor){
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+
+        PageRequest pageRequest = PageRequest.of(0, NOTIFICATION_DEFAULT_PAGE_SIZE);
+        Slice<Notification> notificationList;
+
+        if(cursor==-1){
+            notificationList = notificationRepository.findTop15ByNotificationTargetMemberOrderByCreatedAtDesc(usingMember, pageRequest);
+        }else{
+            notificationList = notificationRepository.findNotificationsNextPage(cursor, memberId, pageRequest);
+        }
+
+        return notificationList.stream()
+                .map(oneNotification -> NotificationAllResponseDtoVer3.of(
+                        usingMember,
+                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
+                        oneNotification,
+                        oneNotification.isNotificationChecked(),
+                        refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
+                                oneNotification.getNotificationTriggerId(), oneNotification),
+                        profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType()),
+                        isDeletedMember(oneNotification.getNotificationTriggerMemberId()),
+                        oneNotification.getNotificationTriggerMemberId()
                 )).collect(Collectors.toList());
     }
 
