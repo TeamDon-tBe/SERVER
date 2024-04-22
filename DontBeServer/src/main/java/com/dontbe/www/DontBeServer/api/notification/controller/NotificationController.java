@@ -53,4 +53,11 @@ public class NotificationController {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAllPagination(memberId, cursor));
     }
+
+    @GetMapping("notifications")
+    @Operation(summary = "노티 전체 리스트 조회 ver3 API 입니다.",description = "GetNotificationsVer3")
+    public ResponseEntity<ApiResponse<Object>> getNotifications(Principal principal,@RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotifications(memberId, cursor));
+    }
 }
