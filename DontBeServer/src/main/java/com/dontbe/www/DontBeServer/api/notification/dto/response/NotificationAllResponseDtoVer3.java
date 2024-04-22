@@ -19,7 +19,7 @@ public record NotificationAllResponseDtoVer3(
         long triggerMemberId    //노티 유발자의 memberId
 ) {
     public static NotificationAllResponseDtoVer3 of(Member usingMember, String triggerMemberNickname, Notification notification,
-                                                    boolean isNotificationChecked, Long notificationTriggerId, String imageUrl, boolean isDeletedMember, long triggerMemberId) {
+                                                    boolean isNotificationChecked, Long notificationTriggerId, String imageUrl, boolean isDeletedMember, Long triggerMemberId) {
         return new NotificationAllResponseDtoVer3(
                 usingMember.getId(),
                 usingMember.getNickname(),
