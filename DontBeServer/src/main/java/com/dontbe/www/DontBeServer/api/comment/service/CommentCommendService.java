@@ -68,8 +68,6 @@ public class CommentCommendService {
 
         Comment deleteComment = commentRepository.findCommentByIdOrThrow(commentId);
         deleteComment.softDelete();
-
-
     }
 
     public void deleteValidate(Long memberId, Long commentId){

@@ -58,7 +58,6 @@ public class ContentCommandService {
 
         Content deleteContent = contentRepository.findContentByIdOrThrow(contentId);
         deleteContent.softDelete();
-        contentRepository.deleteById(contentId);
     }
 
     public void likeContent(Long memberId, Long contentId, ContentLikedRequestDto contentLikedRequestDto) {
