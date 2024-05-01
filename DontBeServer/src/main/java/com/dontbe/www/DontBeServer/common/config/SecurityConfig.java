@@ -72,7 +72,7 @@ public class SecurityConfig {
             "/api/v1/auth",
             "/health",
             "/profile",
-            "/actuator/**"
+            "/actuator/health"
     };
 
     @Bean
