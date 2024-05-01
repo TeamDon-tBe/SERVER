@@ -41,7 +41,7 @@ public class GhostScheduler {
             if(member.getMemberGhost() == -85) {
                 Notification actingContinueNotification = Notification.builder()
                         .notificationTargetMember(member)
-                        .notificationTriggerId(member.getId())
+                        .notificationTriggerMemberId(-1L)
                         .notificationTriggerType("actingContinue")
                         .notificationTriggerId(null)
                         .isNotificationChecked(false)
