@@ -45,8 +45,8 @@ jobs:
 
     - name: docker image 빌드 및 푸시
       run: |
-        docker build --platform linux/amd64 -t dontbedocker/dontbe-server -f Dockerfile-Dev .
-        docker push dontbedocker/dontbe-server
+        docker build --platform linux/amd64 -t dontbedocker/dontbe-dev-server -f Dockerfile-Dev .
+        docker push dontbedocker/dontbe-dev-server
       working-directory: ${{ env.working-directory }}
 
   deploy-cd:      
@@ -59,9 +59,9 @@ jobs:
     - name: 도커 컨테이너 실행
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.RELEASE_SERVER_IP }}
-        username: ${{ secrets.RELEASE_SERVER_USER }}
-        key: ${{ secrets.RELEASE_SERVER_KEY }}
+        host: ${{ secrets.DEVELOP_SERVER_IP }}
+        username: ${{ secrets.DEVELOP_SERVER_USER }}
+        key: ${{ secrets.DEVELOP_SERVER_KEY }}
         script: |
           cd ~
           sudo ./deploy.sh
