@@ -1,8 +1,8 @@
-name: CI
+name: Prod-CI
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "prod" ]
 
 jobs:
   build:
