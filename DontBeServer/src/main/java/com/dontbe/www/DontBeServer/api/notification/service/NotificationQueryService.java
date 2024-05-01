@@ -145,7 +145,12 @@ public class NotificationQueryService {
 
     //탈퇴한 회원인지 아닌지
     private boolean isDeletedMember(Long triggerMemberId){
-        return memberRepository.findMemberByIdOrThrow(triggerMemberId).isDeleted();
+        if(triggerMemberId == -1L)
+        {
+            return false;
+        }
+        else
+            return memberRepository.findMemberByIdOrThrow(triggerMemberId).isDeleted();
         //운영 노티인 경우 trigger의 닉네임이 따로 나오지 않아서 별도의 로직 불필요
     }
 
@@ -157,3 +162,4 @@ public class NotificationQueryService {
             return triggerMemberId;
     }
 }
+
