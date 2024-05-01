@@ -52,7 +52,7 @@ public class GhostCommandService {
         if(targetMember.getMemberGhost() == -85) {
             Notification ghostNotification = Notification.builder()
                     .notificationTargetMember(targetMember)
-                    .notificationTriggerMemberId(memberId)
+                    .notificationTriggerMemberId(-1L)
                     .notificationTriggerType("beGhost")
                     .notificationTriggerId(memberClickGhostRequestDto.alarmTriggerId())
                     .isNotificationChecked(false)
@@ -91,7 +91,7 @@ public class GhostCommandService {
         if(targetMember.getMemberGhost() == -85) {
             Notification ghostNotification = Notification.builder()
                     .notificationTargetMember(targetMember)
-                    .notificationTriggerMemberId(memberId)
+                    .notificationTriggerMemberId(-1L)
                     .notificationTriggerType("beGhost")
                     .notificationTriggerId(ghostClickRequestDto.alarmTriggerId())
                     .isNotificationChecked(false)

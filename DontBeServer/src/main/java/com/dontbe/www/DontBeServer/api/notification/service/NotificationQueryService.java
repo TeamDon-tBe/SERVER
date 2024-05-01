@@ -44,7 +44,8 @@ public class NotificationQueryService {
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDto.of(
                         usingMember,
-                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
+                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId(),
+                                oneNotification.getNotificationTriggerType()),
                         oneNotification,
                         oneNotification.isNotificationChecked(),
                         refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
@@ -68,7 +69,8 @@ public class NotificationQueryService {
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDtoVer2.of(
                         usingMember,
-                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
+                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId(),
+                                oneNotification.getNotificationTriggerType()),
                         oneNotification,
                         oneNotification.isNotificationChecked(),
                         refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
@@ -93,14 +95,16 @@ public class NotificationQueryService {
         return notificationList.stream()
                 .map(oneNotification -> NotificationAllResponseDtoVer3.of(
                         usingMember,
-                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId()),
+                        isSystemOrUser(oneNotification.getNotificationTriggerMemberId(),
+                                oneNotification.getNotificationTriggerType()),//발생유저닉네임
                         oneNotification,
                         oneNotification.isNotificationChecked(),
                         refineNotificationTriggerId(oneNotification.getNotificationTriggerType(),
                                 oneNotification.getNotificationTriggerId(), oneNotification),
                         profileUrl(oneNotification.getId(), oneNotification.getNotificationTriggerType()),
                         isDeletedMember(oneNotification.getNotificationTriggerMemberId()),
-                        oneNotification.getNotificationTriggerMemberId()
+                        refineNotificationTriggerMemberId(oneNotification.getNotificationTriggerMemberId(),
+                                oneNotification.getNotificationTriggerType()) // 발생유저아이디
                 )).collect(Collectors.toList());
     }
 
@@ -129,9 +133,12 @@ public class NotificationQueryService {
     }
 
     //운영 노티의 경우 트리거 유저가 없기 때문에 "System"을 반환하도록 수정
-    private String isSystemOrUser(Long memberId) {
+    private String isSystemOrUser(Long memberId, String triggerType) {
         if(memberId != -1) {
             return memberRepository.findMemberByIdOrThrow(memberId).getNickname();
+        }
+        if(triggerType.equals("commentGhost") || triggerType.equals("contentGhost")) {
+            return "System";
         }
         else return "System";
     }
@@ -146,4 +153,13 @@ public class NotificationQueryService {
             return memberRepository.findMemberByIdOrThrow(triggerMemberId).isDeleted();
         //운영 노티인 경우 trigger의 닉네임이 따로 나오지 않아서 별도의 로직 불필요
     }
+
+    private Long refineNotificationTriggerMemberId(Long triggerMemberId, String triggerType) {
+        if(triggerType.equals("commentGhost") || triggerType.equals("contentGhost")){
+            return -1L;
+        }
+        else
+            return triggerMemberId;
+    }
 }
+
