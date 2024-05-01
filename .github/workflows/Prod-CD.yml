@@ -1,8 +1,8 @@
-name: CD
+name: Prod-CD
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "prod" ]
 
 jobs:
   deploy-ci:
@@ -45,7 +45,7 @@ jobs:
 
     - name: docker image 빌드 및 푸시
       run: |
-        docker build --platform linux/amd64 -t dontbedocker/dontbe-server .
+        docker build --platform linux/amd64 -t dontbedocker/dontbe-server -f Dockerfile-Prod .
         docker push dontbedocker/dontbe-server
       working-directory: ${{ env.working-directory }}
 
