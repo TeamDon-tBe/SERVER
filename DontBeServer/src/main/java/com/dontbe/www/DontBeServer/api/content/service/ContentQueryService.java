@@ -100,6 +100,30 @@ public class ContentQueryService {
                 .collect(Collectors.toList());
     }
 
+    public List<ContentGetAllResponseDtoVer3> getContentAllWithImage(Long memberId, Long cursor) {
+        PageRequest pageRequest = PageRequest.of(0, 30);
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Slice<Content> contentList;
+
+        if (cursor==-1) {
+            contentList = contentRepository.findTop30ByOrderByCreatedAtDesc(pageRequest);
+        } else {
+            contentList = contentRepository.findContentsNextPage(cursor, pageRequest);
+        }
+
+        return contentList.stream()
+                .map(oneContent -> ContentGetAllResponseDtoVer3.of(
+                        oneContent.getMember(),
+                        oneContent,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(oneContent.getMember(),usingMember),
+                        GhostUtil.refineGhost(oneContent.getMember().getMemberGhost()),
+                        contentLikedRepository.existsByContentAndMember(oneContent,usingMember),
+                        TimeUtilCustom.refineTime(oneContent.getCreatedAt()),
+                        contentLikedRepository.countByContent(oneContent),
+                        commentRepository.countByContent(oneContent)))
+                .collect(Collectors.toList());
+    }
+
     public List<ContentGetAllByMemberResponseDto> getContentAllByMember(Long memberId, Long targetMemberId) { //페이지네이션 적용 후 지우기
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);

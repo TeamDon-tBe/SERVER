@@ -102,6 +102,13 @@ public class ContentController {
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllPagination(memberId, cursor));
     }
 
+    @GetMapping("v2/contents")
+    @Operation(summary = "게시글 전체 조회 API(+페이지네이션+이미지) 입니다.",description = "Contents Get with image")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDtoVer3>>> getContentAllWithImage(Principal principal, @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllWithImage(memberId, cursor));
+    }
+
     @GetMapping("v1/member/{memberId}/member-contents")
     @Operation(summary = "페이지네이션이 적용된 멤버에 해당하는 게시글 리스트 조회 API 입니다.",description = "ContentByMemberPagination")
     public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMemberPagination(Principal principal,
