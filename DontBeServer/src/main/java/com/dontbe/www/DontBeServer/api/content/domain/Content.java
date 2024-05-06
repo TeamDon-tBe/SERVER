@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,8 @@ public class Content extends BaseTimeEntity {
     @NotNull
     private String contentText;
 
-    @Column
+    @Setter
+    @Column(columnDefinition = "NULL")
     private String contentImage;
 
     @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
@@ -59,5 +61,4 @@ public class Content extends BaseTimeEntity {
         this.isDeleted = true;
         this.deleteAt = LocalDateTime.now().plusDays(CONTENT_RETENTION_PERIOD);
     }
-
 }
