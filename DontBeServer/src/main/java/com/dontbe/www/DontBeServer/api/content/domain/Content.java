@@ -35,6 +35,9 @@ public class Content extends BaseTimeEntity {
     @NotNull
     private String contentText;
 
+    @Column
+    private String contentImage;
+
     @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
     private List<ContentLiked> contentLikeds = new ArrayList<>();
 
