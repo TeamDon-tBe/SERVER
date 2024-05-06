@@ -166,4 +166,31 @@ public class ContentQueryService {
                         commentRepository.countByContent(oneContent)))
                 .collect(Collectors.toList());
     }
+
+    public List<ContentGetAllByMemberResponseDtoVer2> getContentAllByMemberWithImage(Long memberId, Long targetMemberId, Long cursor) {
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+        Member targetMember = memberRepository.findMemberByIdOrThrow(targetMemberId);
+
+        PageRequest pageRequest = PageRequest.of(0, 20);
+
+        Slice<Content> contentList;
+
+        if (cursor==-1) {
+            contentList = contentRepository.findContestsTop20ByMemberIdOrderByCreatedAtDesc(targetMemberId, pageRequest);
+        } else {
+            contentList = contentRepository.findContentsByMemberNextPage(cursor, targetMemberId ,pageRequest);
+        }
+
+        return contentList.stream()
+                .map(oneContent -> ContentGetAllByMemberResponseDtoVer2.of(
+                        targetMember,
+                        GhostUtil.refineGhost(oneContent.getMember().getMemberGhost()),
+                        oneContent,
+                        ghostRepository.existsByGhostTargetMemberAndGhostTriggerMember(targetMember,usingMember),
+                        contentLikedRepository.existsByContentAndMember(oneContent,usingMember),
+                        TimeUtilCustom.refineTime(oneContent.getCreatedAt()),
+                        contentLikedRepository.countByContent(oneContent),
+                        commentRepository.countByContent(oneContent)))
+                .collect(Collectors.toList());
+    }
 }
