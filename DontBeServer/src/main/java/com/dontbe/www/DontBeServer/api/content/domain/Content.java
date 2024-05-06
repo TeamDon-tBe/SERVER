@@ -35,6 +35,9 @@ public class Content extends BaseTimeEntity {
     @NotNull
     private String contentText;
 
+    @Column(columnDefinition = "NULL")
+    private String contentImage;
+
     @OneToMany(mappedBy = "content", cascade = CascadeType.REMOVE)
     private List<ContentLiked> contentLikeds = new ArrayList<>();
 
@@ -46,6 +49,9 @@ public class Content extends BaseTimeEntity {
 
     private LocalDateTime deleteAt;
 
+    public void setContentImage(String contentImageUrl) {
+        this.contentImage = contentImageUrl ;}
+
     @Builder
     public Content(Member member, String contentText) {
         this.member = member;
@@ -56,5 +62,4 @@ public class Content extends BaseTimeEntity {
         this.isDeleted = true;
         this.deleteAt = LocalDateTime.now().plusDays(CONTENT_RETENTION_PERIOD);
     }
-
 }
