@@ -124,4 +124,10 @@ public class ContentController {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_CONTENT_SUCCESS, contentQueryService.getContentAllByMemberWithImage(memberId, targetMemberId, cursor));
     }
+
+    @GetMapping("v2/content/{contentId}")
+    @Operation(summary = "게시글 상세 조회 API 입니다.",description = "Content Get Detail")
+    public ResponseEntity<ApiResponse<ContentGetDetailsResponseDtoVer3>> getContentDetailWithImage(Principal principal, @PathVariable("contentId") Long contentId) {
+        return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetailWithImage(MemberUtil.getMemberId(principal), contentId));
+    }
 }

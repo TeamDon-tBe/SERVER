@@ -60,6 +60,21 @@ public class ContentQueryService {
         return ContentGetDetailsResponseDtoVer2.of(writerMember, writerMemberGhost, content, isGhost, isLiked, time, likedNumber, commentNumber);
     }
 
+    public ContentGetDetailsResponseDtoVer3 getContentDetailWithImage(Long memberId, Long contentId) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        Content content = contentRepository.findContentByIdOrThrow(contentId);
+        Member writerMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
+        int writerMemberGhost = GhostUtil.refineGhost(writerMember.getMemberGhost());
+        Long writerMemberId = content.getMember().getId();
+        boolean isGhost = ghostRepository.existsByGhostTargetMemberIdAndGhostTriggerMemberId(writerMemberId, memberId);
+        boolean isLiked = contentLikedRepository.existsByContentAndMember(content,member);
+        String time = TimeUtilCustom.refineTime(content.getCreatedAt());
+        int likedNumber = contentLikedRepository.countByContent(content);
+        int commentNumber = commentRepository.countByContent(content);
+
+        return ContentGetDetailsResponseDtoVer3.of(writerMember, writerMemberGhost, content, isGhost, isLiked, time, likedNumber, commentNumber);
+    }
+
     public List<ContentGetAllResponseDto> getContentAll(Long memberId) {    //페이지네이션 적용 후 지우기
         Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
         List<Content> contents = contentRepository.findAllByOrderByCreatedAtDesc();
