@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -36,7 +35,6 @@ public class Content extends BaseTimeEntity {
     @NotNull
     private String contentText;
 
-    @Setter
     @Column(columnDefinition = "NULL")
     private String contentImage;
 
@@ -50,6 +48,9 @@ public class Content extends BaseTimeEntity {
     private boolean isDeleted;
 
     private LocalDateTime deleteAt;
+
+    public void setContentImage(String contentImageUrl) {
+        this.contentImage = contentImageUrl ;}
 
     @Builder
     public Content(Member member, String contentText) {
