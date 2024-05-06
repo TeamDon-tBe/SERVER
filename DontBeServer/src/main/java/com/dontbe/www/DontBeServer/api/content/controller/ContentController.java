@@ -38,7 +38,7 @@ public class ContentController {
 
     @PostMapping("v2/content")
     @Operation(summary = "사진 첨부 기능이 추가된 게시글 작성 API입니다",description = "Content Post +contentImage")
-    public ResponseEntity<ApiResponse<Object>> postContent2(Principal principal, @RequestPart(value = "image") MultipartFile contentImage,
+    public ResponseEntity<ApiResponse<Object>> postContent2(Principal principal, @RequestPart(value = "image", required = false) MultipartFile contentImage,
                                                             @Valid @RequestPart(value="text") ContentPostRequestDto contentPostRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         contentCommandService.postContentVer2(memberId,contentImage,contentPostRequestDto);
