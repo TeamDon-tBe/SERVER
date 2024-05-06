@@ -13,9 +13,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
@@ -34,6 +34,16 @@ public class ContentController {
     public ResponseEntity<ApiResponse<Object>> postContent(Principal principal, @Valid @RequestBody ContentPostRequestDto contentPostRequestDto) {
         contentCommandService.postContent(MemberUtil.getMemberId(principal),contentPostRequestDto);
         return ApiResponse.success(POST_CONTENT_SUCCESS);
+    }
+
+    @PostMapping("v2/content")
+    @Operation(summary = "사진 첨부 기능이 추가된 게시글 작성 API입니다",description = "Content Post +contentImage")
+    public ResponseEntity<ApiResponse<Object>> postContent2(Principal principal, @RequestPart(value = "image") MultipartFile contentImage,
+                                                            @Valid @RequestPart(value="text") ContentPostRequestDto contentPostRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        contentCommandService.postContentVer2(memberId,contentImage,contentPostRequestDto);
+        return ApiResponse.success(POST_CONTENT_SUCCESS);
+
     }
 
     @DeleteMapping("v1/content/{contentId}")
