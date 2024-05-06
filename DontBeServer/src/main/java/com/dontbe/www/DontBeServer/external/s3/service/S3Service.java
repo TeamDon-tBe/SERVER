@@ -18,7 +18,8 @@ import java.util.UUID;
 @Component
 public class S3Service {
 
-    private static final String S3_URL = "https://dontbe-s3.s3.ap-northeast-2.amazonaws.com/";
+    @Value("${aws-property.s3-domain}")
+    private String S3_URL;
     private static final List<String> IMAGE_EXTENSIONS = Arrays.asList("image/jpeg", "image/png", "image/jpg", "image/webp");
     private static final Long MAX_FILE_SIZE = 5 * 1024 * 1024L;
 
