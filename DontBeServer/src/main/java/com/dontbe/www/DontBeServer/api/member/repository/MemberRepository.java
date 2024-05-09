@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -39,4 +40,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     void deleteMemberScheduledForDeletion(LocalDateTime currentDate);
 
     Member findMemberBySocialId(String socialId);
+
+    @Query("SELECT m FROM Member m WHERE m.isDeleted = false")
+    List<Member> findAllActiveMembers();
 }
