@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
@@ -30,6 +31,15 @@ public class CommentController {
     @Operation(summary = "답글 작성 API입니다.", description = "CommentPost")
     public ResponseEntity<ApiResponse<Object>> postComment(Principal principal, @PathVariable Long contentId, @Valid @RequestBody CommentPostRequestDto commentPostRequestDto) {
         commentCommendService.postComment(MemberUtil.getMemberId(principal),contentId, commentPostRequestDto);
+        return ApiResponse.success(POST_COMMENT_SUCCESS);
+    }
+
+    @PostMapping("v2/content/{contentId}/comment")
+    @Operation(summary = "사진 첨부 기능이 추가된 답글 작성 API입니다.", description = "Comment Post +CommentImage")
+    public ResponseEntity<ApiResponse<Object>> postComment2(Principal principal, @PathVariable Long contentId,
+                                                            @RequestPart(value = "image", required = false) MultipartFile commentImage,
+                                                            @Valid @RequestPart(value="text") CommentPostRequestDto commentPostRequestDto) {
+        commentCommendService.postCommentVer2(MemberUtil.getMemberId(principal),contentId, commentImage, commentPostRequestDto);
         return ApiResponse.success(POST_COMMENT_SUCCESS);
     }
 
