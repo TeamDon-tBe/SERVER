@@ -87,7 +87,7 @@ public class CommentController {
         return ApiResponse.success(GET_COMMENT_ALL_SUCCESS, commentQueryService.getCommentAllPagination(memberId, contentId, cursor));
     }
 
-    @Operation(summary = "페이지네이션이 적용된 게시물에 해당하는 답글 리스트 조회 API 입니다.", description = "CommentByContentPagination")
+    @Operation(summary = "게시물에 해당하는 답글 리스트 조회 API(+페이지네이션+이미지) 입니다.", description = "Comments By Content With Image")
     @GetMapping("v2/content/{contentId}/comments")
     public ResponseEntity<ApiResponse<Object>> getCommentAllWithImage(Principal principal, @PathVariable Long contentId, @RequestParam(value = "cursor") Long cursor){    //cursor= last commentId
         Long memberId = MemberUtil.getMemberId(principal);
