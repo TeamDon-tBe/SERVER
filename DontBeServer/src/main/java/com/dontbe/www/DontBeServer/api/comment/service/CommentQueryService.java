@@ -2,8 +2,10 @@ package com.dontbe.www.DontBeServer.api.comment.service;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberResponseDto;
+import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDtoVer2;
+import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDtoVer3;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentLikedRepository;
 import com.dontbe.www.DontBeServer.api.comment.repository.CommentRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
@@ -85,6 +87,27 @@ public class CommentQueryService {
                 .collect(Collectors.toList());
     }
 
+    public List<CommentAllResponseDtoVer3> getCommentAllWithImage(Long memberId, Long contentId, Long cursor) {
+        contentRepository.findContentByIdOrThrow(contentId);
+        PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
+        Slice<Comment> commentList;
+
+        commentList = commentRepository.findCommentsByContentNextPage(cursor, contentId, pageRequest);
+
+        return commentList.stream()
+                .map(oneComment -> CommentAllResponseDtoVer3.of(
+                        oneComment.getId(),
+                        memberRepository.findMemberByIdOrThrow(oneComment.getMember().getId()),
+                        checkGhost(memberId, oneComment.getId()),
+                        checkMemberGhost(oneComment.getId()),
+                        checkLikedComment(memberId,oneComment.getId()),
+                        TimeUtilCustom.refineTime(oneComment.getCreatedAt()),
+                        likedNumber(oneComment.getId()),
+                        oneComment.getCommentText(),
+                        oneComment.getCommentImage()))
+                .collect(Collectors.toList());
+    }
+
     public List<CommentAllByMemberResponseDto> getMemberCommentPagination(Long principalId, Long memberId, Long cursor) {
         memberRepository.findMemberByIdOrThrow(memberId);
 
@@ -99,6 +122,29 @@ public class CommentQueryService {
 
         return commentList.stream()
                 .map(oneComment -> CommentAllByMemberResponseDto.of(
+                        memberRepository.findMemberByIdOrThrow(memberId),
+                        checkLikedComment(principalId, oneComment.getId()),
+                        checkGhost(principalId, oneComment.getId()),
+                        checkMemberGhost(oneComment.getId()),
+                        likedNumber(oneComment.getId()),
+                        oneComment)
+                ).collect(Collectors.toList());
+    }
+
+    public List<CommentAllByMemberResponseDtoVer2> getCommentAllByMemberWithImage(Long principalId, Long memberId, Long cursor) {
+        memberRepository.findMemberByIdOrThrow(memberId);
+
+        PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
+        Slice<Comment> commentList;
+
+        if (cursor==-1) {
+            commentList = commentRepository.findCommentsTop15ByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
+        } else {
+            commentList = commentRepository.findCommentsByMemberNextPage(cursor, memberId, pageRequest);
+        }
+
+        return commentList.stream()
+                .map(oneComment -> CommentAllByMemberResponseDtoVer2.of(
                         memberRepository.findMemberByIdOrThrow(memberId),
                         checkLikedComment(principalId, oneComment.getId()),
                         checkGhost(principalId, oneComment.getId()),
