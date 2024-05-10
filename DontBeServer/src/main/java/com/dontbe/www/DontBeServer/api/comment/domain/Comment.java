@@ -35,6 +35,9 @@ public class Comment extends BaseTimeEntity {
 
     private String commentText;
 
+    @Column(columnDefinition = "NULL")
+    private String commentImage;
+
     @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isDeleted;
 
@@ -48,6 +51,9 @@ public class Comment extends BaseTimeEntity {
         this.member = member;
         this.content = content;
         this.commentText = commentText;
+    }
+    public void setCommentImage(String commentImageUrl) {
+        this.commentImage = commentImageUrl;
     }
 
     public void softDelete() {
