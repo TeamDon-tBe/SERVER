@@ -100,4 +100,11 @@ public class CommentController {
         Long usingMemberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getMemberCommentPagination(usingMemberId,memberId,cursor));
     }
+
+    @Operation(summary = "멤버에 해당하는 답글 리스트 조회 API(+페이지네이션+이미지) 입니다.", description = "Comments By Member With Image")
+    @GetMapping("v2/member/{memberId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getCommentAllByMemberWithImage(Principal principal, @PathVariable Long memberId, @RequestParam(value = "cursor") Long cursor){
+        Long usingMemberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_MEMBER_COMMENT_SECCESS, commentQueryService.getCommentAllByMemberWithImage(usingMemberId,memberId,cursor));
+    }
 }

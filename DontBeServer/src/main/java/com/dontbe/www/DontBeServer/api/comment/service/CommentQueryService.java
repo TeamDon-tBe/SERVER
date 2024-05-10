@@ -2,6 +2,7 @@ package com.dontbe.www.DontBeServer.api.comment.service;
 
 import com.dontbe.www.DontBeServer.api.comment.domain.Comment;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberResponseDto;
+import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllByMemberResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDto;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDtoVer2;
 import com.dontbe.www.DontBeServer.api.comment.dto.response.CommentAllResponseDtoVer3;
@@ -106,6 +107,7 @@ public class CommentQueryService {
                         oneComment.getCommentImage()))
                 .collect(Collectors.toList());
     }
+
     public List<CommentAllByMemberResponseDto> getMemberCommentPagination(Long principalId, Long memberId, Long cursor) {
         memberRepository.findMemberByIdOrThrow(memberId);
 
@@ -120,6 +122,29 @@ public class CommentQueryService {
 
         return commentList.stream()
                 .map(oneComment -> CommentAllByMemberResponseDto.of(
+                        memberRepository.findMemberByIdOrThrow(memberId),
+                        checkLikedComment(principalId, oneComment.getId()),
+                        checkGhost(principalId, oneComment.getId()),
+                        checkMemberGhost(oneComment.getId()),
+                        likedNumber(oneComment.getId()),
+                        oneComment)
+                ).collect(Collectors.toList());
+    }
+
+    public List<CommentAllByMemberResponseDtoVer2> getCommentAllByMemberWithImage(Long principalId, Long memberId, Long cursor) {
+        memberRepository.findMemberByIdOrThrow(memberId);
+
+        PageRequest pageRequest = PageRequest.of(0, COMMENT_DEFAULT_PAGE_SIZE);
+        Slice<Comment> commentList;
+
+        if (cursor==-1) {
+            commentList = commentRepository.findCommentsTop15ByMemberIdOrderByCreatedAtDesc(memberId, pageRequest);
+        } else {
+            commentList = commentRepository.findCommentsByMemberNextPage(cursor, memberId, pageRequest);
+        }
+
+        return commentList.stream()
+                .map(oneComment -> CommentAllByMemberResponseDtoVer2.of(
                         memberRepository.findMemberByIdOrThrow(memberId),
                         checkLikedComment(principalId, oneComment.getId()),
                         checkGhost(principalId, oneComment.getId()),
