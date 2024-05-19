@@ -127,6 +127,8 @@ public class Member extends BaseTimeEntity {
     public void softDelete() {
         this.isDeleted = true;
         this.deleteAt = LocalDateTime.now().plusDays(ACCOUNT_RETENTION_PERIOD);
+        this.isPushAlarmAllowed = false;
+        this.fcmToken = null;
     }
     public void updateMemberIsPushAlarmAllowed(boolean newIsPushAlarmAllowed) { this.isPushAlarmAllowed = newIsPushAlarmAllowed; }
 
