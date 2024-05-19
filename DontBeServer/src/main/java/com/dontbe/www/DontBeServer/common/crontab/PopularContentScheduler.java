@@ -70,7 +70,7 @@ public class PopularContentScheduler {
             if(topContentWriter.isPushAlarmAllowed()) {
                 String FcmMessageTitle = topContentWriter.getNickname() + "님이 작성하신 글이 인기들로 선정 되었어요.";
 
-                FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
+                FcmMessageDto popularContentFcmMessage = FcmMessageDto.builder()
                         .validateOnly(false)
                         .message(FcmMessageDto.Message.builder()
                                 .notificationDetails(FcmMessageDto.NotificationDetails.builder()
@@ -86,7 +86,7 @@ public class PopularContentScheduler {
                                 .build())
                         .build();
 
-                fcmService.sendMessage(commentFcmMessage);
+                fcmService.sendMessage(popularContentFcmMessage);
             }
 
             List<Member> activeMembers = memberRepository.findAllActiveMembers();

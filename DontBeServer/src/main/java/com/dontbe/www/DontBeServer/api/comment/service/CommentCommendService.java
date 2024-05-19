@@ -182,7 +182,7 @@ public class CommentCommendService {
         if(targetMember.isPushAlarmAllowed()) {
             String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 답글을 좋아합니다.";
 
-            FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
+            FcmMessageDto commentLikeFcmMessage = FcmMessageDto.builder()
                     .validateOnly(false)
                     .message(FcmMessageDto.Message.builder()
                             .notificationDetails(FcmMessageDto.NotificationDetails.builder()
@@ -198,7 +198,7 @@ public class CommentCommendService {
                             .build())
                     .build();
 
-            fcmService.sendMessage(commentFcmMessage);
+            fcmService.sendMessage(commentLikeFcmMessage);
         }
     }
 

@@ -118,7 +118,7 @@ public class ContentCommandService {
         if(targetMember.isPushAlarmAllowed()) {
             String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 글을 좋아합니다.";
 
-            FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
+            FcmMessageDto contentLikeFcmMessage = FcmMessageDto.builder()
                     .validateOnly(false)
                     .message(FcmMessageDto.Message.builder()
                             .notificationDetails(FcmMessageDto.NotificationDetails.builder()
@@ -134,7 +134,7 @@ public class ContentCommandService {
                             .build())
                     .build();
 
-            fcmService.sendMessage(commentFcmMessage);
+            fcmService.sendMessage(contentLikeFcmMessage);
         }
     }
 
