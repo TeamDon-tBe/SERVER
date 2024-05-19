@@ -28,6 +28,7 @@ public enum ErrorStatus {
     WITHDRAWAL_MEMBER("계정 삭제 후 30일 이내 회원입니다."),
     UNVALID_PROFILEIMAGE_TYPE("이미지 확장자는 jpg, png, webp만 가능합니다."),
     PROFILE_IMAGE_DATA_SIZE("이미지 사이즈는 5MB를 넘을 수 없습니다."),
+    FCM_SERVICE_ERROR("푸시 알림 발생 과정에 오류가 생겼습니다."),
 
 
     /**
