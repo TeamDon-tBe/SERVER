@@ -128,4 +128,7 @@ public class Member extends BaseTimeEntity {
         this.isDeleted = true;
         this.deleteAt = LocalDateTime.now().plusDays(ACCOUNT_RETENTION_PERIOD);
     }
+    public void updateMemberIsPushAlarmAllowed(boolean newIsPushAlarmAllowed) { this.isPushAlarmAllowed = newIsPushAlarmAllowed; }
+
+    public void updateMemberFcmToken(String newFcmToken) { this.fcmToken = newFcmToken; }
 }
