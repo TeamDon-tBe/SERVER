@@ -144,12 +144,13 @@ public class MemberCommandService {
 
             try {
                 String s3ImageUrl = s3Service.uploadImage(memberId.toString(), multipartFile);
-                existingMember.updateProfileUrl(s3ImageUrl);
 
-                if(!existedImage.equals(GHOST_IMAGE)||!existedImage.equals(GHOST_IMAGE_S3)) {
+                if(!existedImage.equals(GHOST_IMAGE)&&!existedImage.equals(GHOST_IMAGE_S3)) {
                     String existedKey = removeBaseUrl(existedImage, S3_URL);
                     s3Service.deleteImage(existedKey);
                 }
+
+                existingMember.updateProfileUrl(s3ImageUrl);
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
