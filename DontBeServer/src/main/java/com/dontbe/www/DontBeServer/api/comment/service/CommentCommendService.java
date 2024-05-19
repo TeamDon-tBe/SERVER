@@ -178,6 +178,28 @@ public class CommentCommendService {
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
         }
+
+        if(targetMember.isPushAlarmAllowed()) {
+            String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 답글을 좋아합니다.";
+
+            FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
+                    .validateOnly(false)
+                    .message(FcmMessageDto.Message.builder()
+                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                    .title(FcmMessageTitle)
+                                    .body("")
+                                    .build())
+                            .token(targetMember.getFcmToken())
+                            .data(FcmMessageDto.Data.builder()
+                                    .name("commentLike")
+                                    .description("답글 좋아요 푸시 알림")
+                                    .relateContentId(contentId)
+                                    .build())
+                            .build())
+                    .build();
+
+            fcmService.sendMessage(commentFcmMessage);
+        }
     }
 
     public void unlikeComment(Long memberId, Long commentId){
