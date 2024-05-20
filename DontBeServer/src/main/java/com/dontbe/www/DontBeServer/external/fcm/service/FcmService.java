@@ -26,22 +26,17 @@ public class FcmService {
 
     @PostConstruct
     public void initialize() throws IOException {
-//        만약 로컬에서 돌린다면 json파일을 resources디렉토리 밑에 넣고 아래 EC2표시 된 부분을 각주, 아래를 각주 해제해 주세요.
-        //local버전
-//        ClassPathResource resource = new ClassPathResource("fire-base.json");
-//        GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
-//        FirebaseOptions options = FirebaseOptions.builder()
-//                .setCredentials(credentials)
-//                .build();
-
-        //ec2버전(prod or dev)
-        String fireBaseJsonPath = "/home/ubuntu/fcm/fire-base.json";
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(new FileInputStream(fireBaseJsonPath)))
-                .build();
-
-        if (FirebaseApp.getApps().isEmpty()) {
-            FirebaseApp.initializeApp(options);
+        try {
+            ClassPathResource resource = new ClassPathResource("fire-base.json");
+            GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(credentials)
+                    .build();
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
