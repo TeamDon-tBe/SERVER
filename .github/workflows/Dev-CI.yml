@@ -25,6 +25,11 @@ jobs:
           echo "${{ secrets.APPLICATION }}" > src/main/resources/application.yaml
       working-directory: ${{ env.working-directory }}
 
+    - name: fire-base.json 생성
+      run: | 
+          echo "${{ secrets.FIRE_BASE_DEV }}" > src/main/resources/fire-base.json
+      working-directory: ${{ env.working-directory }}
+
     - name: 빌드
       run: |
           chmod +x gradlew
