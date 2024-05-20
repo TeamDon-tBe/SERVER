@@ -30,7 +30,7 @@ jobs:
           echo "${{ secrets.FIRE_BASE_DEV }}" > src/main/resources/fire-base.json
       working-directory: ${{ env.working-directory }}
 
-    - name: 파일 존재 여부 확인
+    - name: fire-base.json파일 생성 여부 확인
       run: |
         if [ -f "src/main/resources/fire-base.json" ]; then
           echo "fire-base.json 파일이 생성되었습니다."
@@ -39,6 +39,16 @@ jobs:
           exit 1
         fi
       working-directory: ${{ env.working-directory }}
+
+    - name: yaml파일 생성 여부 확인
+      run: |
+        if [ -f "src/main/resources/application.yaml" ]; then
+          echo "application.yaml 파일이 생성되었습니다."
+        else
+          echo "application.yaml 파일이 생성되지 않았습니다."
+          exit 1
+        fi
+      working-directory: ${{ env.working-directory }}    
 
     - name: 빌드
       run: |
