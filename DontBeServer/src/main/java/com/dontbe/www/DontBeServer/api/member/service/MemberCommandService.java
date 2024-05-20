@@ -158,6 +158,12 @@ public class MemberCommandService {
         if (profilePatchRequestDto.isAlarmAllowed() != null) {
             existingMember.updateMemberIsAlarmAllowed(profilePatchRequestDto.isAlarmAllowed());
         }
+        if (profilePatchRequestDto.isPushAlarmAllowed() != null) {
+            existingMember.updateMemberIsPushAlarmAllowed(profilePatchRequestDto.isPushAlarmAllowed());
+        }
+        if (profilePatchRequestDto.fcmToken() != null) {
+            existingMember.updateMemberFcmToken(profilePatchRequestDto.fcmToken());
+        }
         Member savedMember = memberRepository.save(existingMember);
     }
 

@@ -15,6 +15,8 @@ import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepos
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
+import com.dontbe.www.DontBeServer.external.fcm.dto.FcmMessageDto;
+import com.dontbe.www.DontBeServer.external.fcm.service.FcmService;
 import com.dontbe.www.DontBeServer.external.s3.service.S3Service;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class ContentCommandService {
     private final NotificationRepository notificationRepository;
     private final CommentRepository commentRepository;
     private final S3Service s3Service;
+    private final FcmService fcmService;
     private static final String POST_IMAGE_FOLDER_NAME = "contents/";
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
@@ -110,6 +113,28 @@ public class ContentCommandService {
                     .notificationText("")
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
+        }
+
+        if(targetMember.isPushAlarmAllowed()) {
+            String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 글을 좋아합니다.";
+
+            FcmMessageDto contentLikeFcmMessage = FcmMessageDto.builder()
+                    .validateOnly(false)
+                    .message(FcmMessageDto.Message.builder()
+                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                    .title(FcmMessageTitle)
+                                    .body("")
+                                    .build())
+                            .token(targetMember.getFcmToken())
+                            .data(FcmMessageDto.Data.builder()
+                                    .name("contentLike")
+                                    .description("답글 좋아요 푸시 알림")
+                                    .relateContentId(contentId)
+                                    .build())
+                            .build())
+                    .build();
+
+            fcmService.sendMessage(contentLikeFcmMessage);
         }
     }
 

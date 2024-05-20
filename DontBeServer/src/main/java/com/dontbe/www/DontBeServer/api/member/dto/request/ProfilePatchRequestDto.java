@@ -5,6 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 public record ProfilePatchRequestDto (
         String nickname,
         Boolean isAlarmAllowed,
-        String memberIntro
+        String memberIntro,
+        Boolean isPushAlarmAllowed,
+        String fcmToken
 ){
 }

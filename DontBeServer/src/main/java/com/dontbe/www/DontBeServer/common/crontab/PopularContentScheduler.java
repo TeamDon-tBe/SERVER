@@ -8,6 +8,8 @@ import com.dontbe.www.DontBeServer.api.member.domain.Member;
 import com.dontbe.www.DontBeServer.api.member.repository.MemberRepository;
 import com.dontbe.www.DontBeServer.api.notification.domain.Notification;
 import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepository;
+import com.dontbe.www.DontBeServer.external.fcm.dto.FcmMessageDto;
+import com.dontbe.www.DontBeServer.external.fcm.service.FcmService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +27,16 @@ public class PopularContentScheduler {
     private final CommentRepository commentRepository;
     private final NotificationRepository notificationRepository;
     private final MemberRepository memberRepository;
+    private final FcmService fcmService;
 
     public PopularContentScheduler(ContentRepository contentRepository, ContentLikedRepository contentLikedRepository,
-                                   CommentRepository commentRepository, NotificationRepository notificationRepository, MemberRepository memberRepository){
+                                   CommentRepository commentRepository, NotificationRepository notificationRepository, MemberRepository memberRepository, FcmService fcmService){
         this.contentRepository = contentRepository;
         this.contentLikedRepository = contentLikedRepository;
         this.commentRepository = commentRepository;
         this.notificationRepository = notificationRepository;
         this.memberRepository = memberRepository;
+        this.fcmService = fcmService;
     }
 
     @Scheduled(cron = "0 0 4 * * ?")
@@ -62,6 +66,28 @@ public class PopularContentScheduler {
                     .notificationText("")
                     .build();
             Notification savedPopularWriterNotification = notificationRepository.save(popularWriterNotification);
+
+            if(topContentWriter.isPushAlarmAllowed()) {
+                String FcmMessageTitle = topContentWriter.getNickname() + "님이 작성하신 글이 인기들로 선정 되었어요.";
+
+                FcmMessageDto popularContentFcmMessage = FcmMessageDto.builder()
+                        .validateOnly(false)
+                        .message(FcmMessageDto.Message.builder()
+                                .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                        .title(FcmMessageTitle)
+                                        .body("")
+                                        .build())
+                                .token(topContentWriter.getFcmToken())
+                                .data(FcmMessageDto.Data.builder()
+                                        .name("popularContent")
+                                        .description("인기글 관련 푸시 알림")
+                                        .relateContentId(topContent.getId())
+                                        .build())
+                                .build())
+                        .build();
+
+                fcmService.sendMessage(popularContentFcmMessage);
+            }
 
             List<Member> activeMembers = memberRepository.findAllActiveMembers();
 

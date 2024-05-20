@@ -15,6 +15,8 @@ import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepos
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
+import com.dontbe.www.DontBeServer.external.fcm.dto.FcmMessageDto;
+import com.dontbe.www.DontBeServer.external.fcm.service.FcmService;
 import com.dontbe.www.DontBeServer.external.s3.service.S3Service;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class CommentCommendService {
     private final CommentLikedRepository commentLikedRepository;
     private final NotificationRepository notificationRepository;
     private final S3Service s3Service;
+    private final FcmService fcmService;
     private static final String POST_IMAGE_FOLDER_NAME = "contents/";
 
     public void postComment(Long memberId, Long contentId, CommentPostRequestDto commentPostRequestDto){
@@ -102,6 +105,28 @@ public class CommentCommendService {
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
         }
+
+        if(contentWritingMember.isPushAlarmAllowed()) {
+            String FcmMessageTitle = usingMember.getNickname() + "님이 답글을 작성했습니다.";
+
+            FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
+                    .validateOnly(false)
+                    .message(FcmMessageDto.Message.builder()
+                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                    .title(FcmMessageTitle)
+                                    .body(content.getContentText())
+                                    .build())
+                            .token(contentWritingMember.getFcmToken())
+                            .data(FcmMessageDto.Data.builder()
+                                    .name("comment")
+                                    .description("답글 푸시 알림")
+                                    .relateContentId(contentId)
+                                    .build())
+                            .build())
+                    .build();
+
+            fcmService.sendMessage(commentFcmMessage);
+        }
     }
 
     public void deleteComment(Long memberId, Long commentId) {
@@ -152,6 +177,28 @@ public class CommentCommendService {
                     .notificationText(comment.getCommentText())
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
+        }
+
+        if(targetMember.isPushAlarmAllowed()) {
+            String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 답글을 좋아합니다.";
+
+            FcmMessageDto commentLikeFcmMessage = FcmMessageDto.builder()
+                    .validateOnly(false)
+                    .message(FcmMessageDto.Message.builder()
+                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                    .title(FcmMessageTitle)
+                                    .body("")
+                                    .build())
+                            .token(targetMember.getFcmToken())
+                            .data(FcmMessageDto.Data.builder()
+                                    .name("commentLike")
+                                    .description("답글 좋아요 푸시 알림")
+                                    .relateContentId(contentId)
+                                    .build())
+                            .build())
+                    .build();
+
+            fcmService.sendMessage(commentLikeFcmMessage);
         }
     }
 

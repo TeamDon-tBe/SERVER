@@ -40,6 +40,12 @@ public class Member extends BaseTimeEntity {
     @Column(name = "is_alarm_allowed")
     private boolean isAlarmAllowed;
 
+    @Column(name = "is_push_alarm_allowed")
+    private boolean isPushAlarmAllowed;
+
+    @Column(name = "fcm_token")
+    private String fcmToken;
+
     @Column(nullable = false, name = "social_id")
     private String socialId;
 
@@ -121,5 +127,10 @@ public class Member extends BaseTimeEntity {
     public void softDelete() {
         this.isDeleted = true;
         this.deleteAt = LocalDateTime.now().plusDays(ACCOUNT_RETENTION_PERIOD);
+        this.isPushAlarmAllowed = false;
+        this.fcmToken = null;
     }
+    public void updateMemberIsPushAlarmAllowed(boolean newIsPushAlarmAllowed) { this.isPushAlarmAllowed = newIsPushAlarmAllowed; }
+
+    public void updateMemberFcmToken(String newFcmToken) { this.fcmToken = newFcmToken; }
 }
