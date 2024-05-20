@@ -10,12 +10,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -25,8 +23,6 @@ public class FcmService {
 
     private final ObjectMapper objectMapper;
 
-    @Value("${firebase.config.path}") // 외부 설정 파일로부터 파일 경로를 읽어옵니다.
-    private String firebaseConfigPath;
     @PostConstruct
     public void initialize() throws IOException {
         // fire-base.json 파일 읽기
