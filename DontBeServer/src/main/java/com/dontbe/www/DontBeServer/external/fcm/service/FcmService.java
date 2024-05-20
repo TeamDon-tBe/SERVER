@@ -29,10 +29,17 @@ public class FcmService {
     private String firebaseConfigPath;
     @PostConstruct
     public void initialize() throws IOException {
+        // fire-base.json 파일 읽기
+        ClassPathResource resource = new ClassPathResource("fire-base.json");
+        GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(new FileInputStream(firebaseConfigPath)))
-//                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("fire-base.json").getInputStream()))
+                .setCredentials(credentials)
                 .build();
+
+        // JSON 파일 내용 출력
+        Map<String, Object> jsonMap = objectMapper.readValue(resource.getInputStream(), Map.class);
+        System.out.println("fire-base.json 내용: " + jsonMap);
+
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
         }
@@ -49,7 +56,7 @@ public class FcmService {
                 .putAllData(objectMapper.convertValue(fcmMessageDto.getMessage().getData(), Map.class))
                 .build();
 
-        try{
+        try {
             FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {
             throw new BadRequestException(e.getMessage());
