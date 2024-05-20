@@ -30,6 +30,17 @@ jobs:
           echo "${{ secrets.FIRE_BASE_DEV }}" > src/main/resources/fire-base.json
       working-directory: ${{ env.working-directory }}
 
+    - name: fire-base.json 파일 확인
+      run: |
+        if [ -f "src/main/resources/fire-base.json" ]; then
+          echo "fire-base.json 파일이 존재합니다."
+          cat src/main/resources/fire-base.json
+        else
+          echo "fire-base.json 파일이 존재하지 않습니다."
+          exit 1
+        fi
+      working-directory: ${{ env.working-directory }}
+
     - name: 빌드
       run: |
           chmod +x gradlew
