@@ -39,7 +39,7 @@ public class SlackService {
         }
     }
 
-    public void sendReportSlackMessage(Long triggerMemberId, ReportSlackRequestDto reportSlackRequestDto, String channel) {
+    public void sendReportSlackMessage(Long triggerMemberId, ReportSlackRequestDto reportSlackRequestDto) {
         String triggerMemberNickname = memberRepository.findMemberByIdOrThrow(triggerMemberId).getNickname();
         String relateText = TextUtil.cuttingText(30, reportSlackRequestDto.relateText());
         String message = triggerMemberNickname + "님이" + reportSlackRequestDto.reportTargetNickname() + "님을 신고했습니다."
@@ -48,7 +48,7 @@ public class SlackService {
             MethodsClient methods = Slack.getInstance().methods(slackToken);
 
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                    .channel(channel)
+                    .channel("#dontbe-report-slack")
                     .text(message)
                     .build();
             methods.chatPostMessage(request);
