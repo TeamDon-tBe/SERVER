@@ -106,7 +106,7 @@ public class CommentCommendService {
             Notification savedNotification = notificationRepository.save(notification);
         }
 
-        if(contentWritingMember.isPushAlarmAllowed()) {
+        if(Boolean.TRUE.equals(contentWritingMember.getIsPushAlarmAllowed())) {
             String FcmMessageTitle = usingMember.getNickname() + "님이 답글을 작성했습니다.";
 
             FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
@@ -179,7 +179,7 @@ public class CommentCommendService {
             Notification savedNotification = notificationRepository.save(notification);
         }
 
-        if(targetMember.isPushAlarmAllowed()) {
+        if(Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
             String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 답글을 좋아합니다.";
 
             FcmMessageDto commentLikeFcmMessage = FcmMessageDto.builder()

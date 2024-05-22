@@ -41,7 +41,7 @@ public class Member extends BaseTimeEntity {
     private boolean isAlarmAllowed;
 
     @Column(name = "is_push_alarm_allowed")
-    private boolean isPushAlarmAllowed;
+    private Boolean isPushAlarmAllowed;
 
     @Column(name = "fcm_token")
     private String fcmToken;

@@ -115,7 +115,7 @@ public class ContentCommandService {
             Notification savedNotification = notificationRepository.save(notification);
         }
 
-        if(targetMember.isPushAlarmAllowed()) {
+        if(Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
             String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 글을 좋아합니다.";
 
             FcmMessageDto contentLikeFcmMessage = FcmMessageDto.builder()
