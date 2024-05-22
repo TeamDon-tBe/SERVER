@@ -1,9 +1,5 @@
 package com.dontbe.www.DontBeServer.common.util;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-
 public class TextUtil {
     public static String cuttingText(int number, String text) {
         if(text == null) {

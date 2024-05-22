@@ -67,7 +67,7 @@ public class PopularContentScheduler {
                     .build();
             Notification savedPopularWriterNotification = notificationRepository.save(popularWriterNotification);
 
-            if(topContentWriter.isPushAlarmAllowed()) {
+            if(Boolean.TRUE.equals(topContentWriter.getIsPushAlarmAllowed())) {
                 String FcmMessageTitle = topContentWriter.getNickname() + "님이 작성하신 글이 인기들로 선정 되었어요.";
 
                 FcmMessageDto popularContentFcmMessage = FcmMessageDto.builder()

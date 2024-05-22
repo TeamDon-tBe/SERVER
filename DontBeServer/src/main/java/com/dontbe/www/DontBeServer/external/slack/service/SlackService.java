@@ -7,6 +7,7 @@ import com.slack.api.Slack;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,9 @@ import java.io.IOException;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SlackService {
     private final MemberRepository memberRepository;
-    public SlackService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     @Value(value = "${slack.token}")
     String slackToken;
@@ -42,7 +41,7 @@ public class SlackService {
     public void sendReportSlackMessage(Long triggerMemberId, ReportSlackRequestDto reportSlackRequestDto) {
         String triggerMemberNickname = memberRepository.findMemberByIdOrThrow(triggerMemberId).getNickname();
         String relateText = TextUtil.cuttingText(30, reportSlackRequestDto.relateText());
-        String message = triggerMemberNickname + "님이" + reportSlackRequestDto.reportTargetNickname() + "님을 신고했습니다."
+        String message = triggerMemberNickname + " 님이 " + reportSlackRequestDto.reportTargetNickname() + " 님을 신고했습니다."
                 + "\n" + "관련 내용 : " + relateText;
         try {
             MethodsClient methods = Slack.getInstance().methods(slackToken);

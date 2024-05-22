@@ -26,7 +26,7 @@ public class ReportController {
 
     @PostMapping("report/slack")
     @Operation(summary = "신고 시에 슬랙 알림 API입니다.",description = "ReportSlack")
-    public ResponseEntity<ApiResponse<Object>> withdrawalMember(Principal principal, @RequestBody ReportSlackRequestDto reportSlackRequestDto) {
+    public ResponseEntity<ApiResponse<Object>> SlackReportMember(Principal principal, @RequestBody ReportSlackRequestDto reportSlackRequestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         slackService.sendReportSlackMessage(memberId, reportSlackRequestDto);
         return ApiResponse.success(REPORT_SLACK_ALARM_SUCCESS);

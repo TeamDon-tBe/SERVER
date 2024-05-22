@@ -52,7 +52,7 @@ public enum SuccessStatus {
     READ_NOTIFICATION_SUCCESS(HttpStatus.OK,"노티 체크 성공"),
     COUNT_NOTIFICATION_SUCCESS(HttpStatus.OK,"노티 개수 체크 완료"),
     /**
-     * notification
+     * report
      */
     REPORT_SLACK_ALARM_SUCCESS(HttpStatus.CREATED, "신고 관련 슬랙 알림 발생 성공")
     ;
