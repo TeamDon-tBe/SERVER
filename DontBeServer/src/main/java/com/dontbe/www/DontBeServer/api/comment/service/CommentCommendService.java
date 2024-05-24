@@ -93,7 +93,7 @@ public class CommentCommendService {
         //답글 작성 시 게시물 작상자에게 알림 발생
         Member contentWritingMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
 
-        if(usingMember != contentWritingMember){  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
+        if(usingMember != contentWritingMember) {  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
             //노티 엔티티와 연결
             Notification notification = Notification.builder()
                     .notificationTargetMember(contentWritingMember)
@@ -104,28 +104,29 @@ public class CommentCommendService {
                     .notificationText(comment.getCommentText())
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
-        }
 
-        if(Boolean.TRUE.equals(contentWritingMember.getIsPushAlarmAllowed())) {
-            String FcmMessageTitle = usingMember.getNickname() + "님이 답글을 작성했습니다.";
 
-            FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
-                    .validateOnly(false)
-                    .message(FcmMessageDto.Message.builder()
-                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
-                                    .title(FcmMessageTitle)
-                                    .body(content.getContentText())
-                                    .build())
-                            .token(contentWritingMember.getFcmToken())
-                            .data(FcmMessageDto.Data.builder()
-                                    .name("comment")
-                                    .description("답글 푸시 알림")
-                                    .relateContentId(contentId)
-                                    .build())
-                            .build())
-                    .build();
+            if (Boolean.TRUE.equals(contentWritingMember.getIsPushAlarmAllowed())) {
+                String FcmMessageTitle = usingMember.getNickname() + "님이 답글을 작성했습니다.";
 
-            fcmService.sendMessage(commentFcmMessage);
+                FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
+                        .validateOnly(false)
+                        .message(FcmMessageDto.Message.builder()
+                                .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                        .title(FcmMessageTitle)
+                                        .body(content.getContentText())
+                                        .build())
+                                .token(contentWritingMember.getFcmToken())
+                                .data(FcmMessageDto.Data.builder()
+                                        .name("comment")
+                                        .description("답글 푸시 알림")
+                                        .relateContentId(String.valueOf(contentId))
+                                        .build())
+                                .build())
+                        .build();
+
+                fcmService.sendMessage(commentFcmMessage);
+            }
         }
     }
 
@@ -166,7 +167,7 @@ public class CommentCommendService {
                 .build();
         CommentLiked savedCommentLiked = commentLikedRepository.save(commentLiked);
 
-        if(triggerMember != targetMember){  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
+        if(triggerMember != targetMember) {  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
             //노티 엔티티와 연결
             Notification notification = Notification.builder()
                     .notificationTargetMember(targetMember)
@@ -177,28 +178,29 @@ public class CommentCommendService {
                     .notificationText(comment.getCommentText())
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
-        }
 
-        if(Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
-            String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 답글을 좋아합니다.";
 
-            FcmMessageDto commentLikeFcmMessage = FcmMessageDto.builder()
-                    .validateOnly(false)
-                    .message(FcmMessageDto.Message.builder()
-                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
-                                    .title(FcmMessageTitle)
-                                    .body("")
-                                    .build())
-                            .token(targetMember.getFcmToken())
-                            .data(FcmMessageDto.Data.builder()
-                                    .name("commentLike")
-                                    .description("답글 좋아요 푸시 알림")
-                                    .relateContentId(contentId)
-                                    .build())
-                            .build())
-                    .build();
+            if (Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
+                String FcmMessageTitle = triggerMember.getNickname() + "님이 " + targetMember.getNickname() + "님의 답글을 좋아합니다.";
 
-            fcmService.sendMessage(commentLikeFcmMessage);
+                FcmMessageDto commentLikeFcmMessage = FcmMessageDto.builder()
+                        .validateOnly(false)
+                        .message(FcmMessageDto.Message.builder()
+                                .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                        .title(FcmMessageTitle)
+                                        .body("")
+                                        .build())
+                                .token(targetMember.getFcmToken())
+                                .data(FcmMessageDto.Data.builder()
+                                        .name("commentLike")
+                                        .description("답글 좋아요 푸시 알림")
+                                        .relateContentId(String.valueOf(contentId))
+                                        .build())
+                                .build())
+                        .build();
+
+                fcmService.sendMessage(commentLikeFcmMessage);
+            }
         }
     }
 
