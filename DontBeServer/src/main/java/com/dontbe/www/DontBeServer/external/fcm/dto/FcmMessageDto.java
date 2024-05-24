@@ -36,6 +36,6 @@ public class FcmMessageDto {
     public static class Data {
         private String name;
         private String description;
-        private Long relateContentId;
+        private String relateContentId;
     }
 }

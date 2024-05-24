@@ -103,7 +103,7 @@ public class ContentCommandService {
 
 
         //위에가 게시물 좋아요 관련, 아래는 노티 테이블 채우기. 노티에 게시글 내용이 없어서 빈스트링 제공.
-        if(triggerMember != targetMember){  //자신 게시물에 대한 좋아요 누르면 알림 발생 x
+        if(triggerMember != targetMember) {  //자신 게시물에 대한 좋아요 누르면 알림 발생 x
             Notification notification = Notification.builder()
                     .notificationTargetMember(targetMember)
                     .notificationTriggerMemberId(triggerMember.getId())
@@ -113,28 +113,29 @@ public class ContentCommandService {
                     .notificationText("")
                     .build();
             Notification savedNotification = notificationRepository.save(notification);
-        }
 
-        if(Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
-            String FcmMessageTitle = triggerMember.getNickname() + "님이" + targetMember.getNickname() + "님의 글을 좋아합니다.";
 
-            FcmMessageDto contentLikeFcmMessage = FcmMessageDto.builder()
-                    .validateOnly(false)
-                    .message(FcmMessageDto.Message.builder()
-                            .notificationDetails(FcmMessageDto.NotificationDetails.builder()
-                                    .title(FcmMessageTitle)
-                                    .body("")
-                                    .build())
-                            .token(targetMember.getFcmToken())
-                            .data(FcmMessageDto.Data.builder()
-                                    .name("contentLike")
-                                    .description("답글 좋아요 푸시 알림")
-                                    .relateContentId(contentId)
-                                    .build())
-                            .build())
-                    .build();
+            if (Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
+                String FcmMessageTitle = triggerMember.getNickname() + "님이 " + targetMember.getNickname() + "님의 글을 좋아합니다.";
 
-            fcmService.sendMessage(contentLikeFcmMessage);
+                FcmMessageDto contentLikeFcmMessage = FcmMessageDto.builder()
+                        .validateOnly(false)
+                        .message(FcmMessageDto.Message.builder()
+                                .notificationDetails(FcmMessageDto.NotificationDetails.builder()
+                                        .title(FcmMessageTitle)
+                                        .body("")
+                                        .build())
+                                .token(targetMember.getFcmToken())
+                                .data(FcmMessageDto.Data.builder()
+                                        .name("contentLike")
+                                        .description("게시글 좋아요 푸시 알림")
+                                        .relateContentId(String.valueOf(contentId))
+                                        .build())
+                                .build())
+                        .build();
+
+                fcmService.sendMessage(contentLikeFcmMessage);
+            }
         }
     }
 

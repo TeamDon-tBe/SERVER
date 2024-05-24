@@ -81,7 +81,7 @@ public class PopularContentScheduler {
                                 .data(FcmMessageDto.Data.builder()
                                         .name("popularContent")
                                         .description("인기글 관련 푸시 알림")
-                                        .relateContentId(topContent.getId())
+                                        .relateContentId(String.valueOf(topContent.getId()))
                                         .build())
                                 .build())
                         .build();
