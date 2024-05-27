@@ -31,7 +31,7 @@ jobs:
       with:
         name: "fire-base.json"
         json: ${{ secrets.FIRE_BASE_DEV }}
-        dir: 'src/main/resources/'
+        dir: 'DontBeServer/src/main/resources/'
 
     - name: fire-base.json 파일 확인
       run: |
