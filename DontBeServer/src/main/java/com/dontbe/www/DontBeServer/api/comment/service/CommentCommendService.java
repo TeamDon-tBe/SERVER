@@ -114,7 +114,7 @@ public class CommentCommendService {
                         .message(FcmMessageDto.Message.builder()
                                 .notificationDetails(FcmMessageDto.NotificationDetails.builder()
                                         .title(FcmMessageTitle)
-                                        .body(content.getContentText())
+                                        .body(commentPostRequestDto.commentText())
                                         .build())
                                 .token(contentWritingMember.getFcmToken())
                                 .data(FcmMessageDto.Data.builder()
