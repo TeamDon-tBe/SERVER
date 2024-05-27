@@ -27,7 +27,7 @@ jobs:
 
     - name: fire-base.json 생성
       id: create-json
-      uses: jsdaniell/create-json@v1.2.2
+      uses: jsdaniell/create-json@v1.2.3
       with:
         name: "fire-base.json"
         json: ${{ secrets.FIRE_BASE_DEV }}
