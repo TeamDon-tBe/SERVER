@@ -14,10 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Service
@@ -27,34 +24,10 @@ public class FcmService {
     private final ObjectMapper objectMapper;
 
     @PostConstruct
-//    public void initialize() throws IOException {
-//        try {
-//            ClassPathResource resource = new ClassPathResource("fire-base.json");
-//
-//            String jsonString = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-//            System.out.println("Firebase JSON content: " + jsonString);
-//
-//            GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
-//            FirebaseOptions options = FirebaseOptions.builder()
-//                    .setCredentials(credentials)
-//                    .build();
-//            if (FirebaseApp.getApps().isEmpty()) {
-//                FirebaseApp.initializeApp(options);
-//            }
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
     public void initialize() throws IOException {
         try {
             ClassPathResource resource = new ClassPathResource("fire-base.json");
-
-            String jsonString = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-            System.out.println("Firebase JSON content: " + jsonString);
-
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(jsonString.getBytes(StandardCharsets.UTF_8));
-
-            GoogleCredentials credentials = GoogleCredentials.fromStream(byteArrayInputStream);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
                     .build();
@@ -65,6 +38,7 @@ public class FcmService {
             System.out.println(e.getMessage());
         }
     }
+
 
     public void sendMessage(FcmMessageDto fcmMessageDto) {
         Message message = Message.builder()
