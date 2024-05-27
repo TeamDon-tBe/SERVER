@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Service
@@ -28,6 +29,10 @@ public class FcmService {
     public void initialize() throws IOException {
         try {
             ClassPathResource resource = new ClassPathResource("fire-base.json");
+
+            String jsonString = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            System.out.println("Firebase JSON content: " + jsonString);
+
             GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
