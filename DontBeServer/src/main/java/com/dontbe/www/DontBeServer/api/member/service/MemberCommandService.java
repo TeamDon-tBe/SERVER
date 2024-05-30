@@ -149,7 +149,7 @@ public class MemberCommandService {
                     String existedKey = removeBaseUrl(existedImage, S3_URL);
                     s3Service.deleteImage(existedKey);
                 }
-                
+
                 existingMember.updateProfileUrl(s3ImageUrl);
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage());

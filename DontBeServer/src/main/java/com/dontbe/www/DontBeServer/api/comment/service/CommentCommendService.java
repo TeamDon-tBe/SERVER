@@ -15,9 +15,12 @@ import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepos
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
+import com.dontbe.www.DontBeServer.external.s3.service.S3Service;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,8 @@ public class CommentCommendService {
     private final MemberRepository memberRepository;
     private final CommentLikedRepository commentLikedRepository;
     private final NotificationRepository notificationRepository;
+    private final S3Service s3Service;
+    private static final String POST_IMAGE_FOLDER_NAME = "contents/";
 
     public void postComment(Long memberId, Long contentId, CommentPostRequestDto commentPostRequestDto){
         Content content = contentRepository.findContentByIdOrThrow(contentId); // 게시물id 잘못됐을 때 에러
@@ -41,6 +46,46 @@ public class CommentCommendService {
                 .commentText(commentPostRequestDto.commentText())
                 .build();
         Comment savedComment = commentRepository.save(comment);
+
+        //답글 작성 시 게시물 작상자에게 알림 발생
+        Member contentWritingMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
+
+        if(usingMember != contentWritingMember){  ////자신 게시물에 대한 좋아요 누르면 알림 발생 x
+            //노티 엔티티와 연결
+            Notification notification = Notification.builder()
+                    .notificationTargetMember(contentWritingMember)
+                    .notificationTriggerMemberId(usingMember.getId())
+                    .notificationTriggerType(commentPostRequestDto.notificationTriggerType())
+                    .notificationTriggerId(comment.getId())   //에러수정을 위한 notificationTriggerId에 답글id 저장, 알림 조회시 답글id로 게시글id 반환하도록하기
+                    .isNotificationChecked(false)
+                    .notificationText(comment.getCommentText())
+                    .build();
+            Notification savedNotification = notificationRepository.save(notification);
+        }
+    }
+
+    public void postCommentVer2(Long memberId, Long contentId, MultipartFile commentImage, CommentPostRequestDto commentPostRequestDto){
+        Content content = contentRepository.findContentByIdOrThrow(contentId);
+        Member usingMember = memberRepository.findMemberByIdOrThrow(memberId);
+
+        GhostUtil.isGhostMember(usingMember.getMemberGhost());
+
+        Comment comment = Comment.builder()
+                .member(usingMember)
+                .content(content)
+                .commentText(commentPostRequestDto.commentText())
+                .build();
+        Comment savedComment = commentRepository.save(comment);
+
+        if(commentImage != null){   //이미지를 업로드 했다면
+            try {
+                final String commentImageUrl = s3Service.uploadImage2(POST_IMAGE_FOLDER_NAME+contentId.toString()
+                        +"/comments/"+comment.getId().toString()+"/", commentImage);
+                comment.setCommentImage(commentImageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
 
         //답글 작성 시 게시물 작상자에게 알림 발생
         Member contentWritingMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());

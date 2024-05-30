@@ -47,4 +47,7 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
     }
 
     List<Content> findContentByMember(Member member);
+
+    @Query("SELECT c FROM Content c WHERE c.createdAt BETWEEN :startTime AND :endTime ORDER BY c.createdAt ASC")
+    List<Content> findAllContentsBetweenDatesOrderedByAsc(LocalDateTime startTime, LocalDateTime endTime);
 }

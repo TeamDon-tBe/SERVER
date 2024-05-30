@@ -15,11 +15,14 @@ import com.dontbe.www.DontBeServer.api.notification.repository.NotificationRepos
 import com.dontbe.www.DontBeServer.common.exception.BadRequestException;
 import com.dontbe.www.DontBeServer.common.response.ErrorStatus;
 import com.dontbe.www.DontBeServer.common.util.GhostUtil;
+import com.dontbe.www.DontBeServer.external.s3.service.S3Service;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,8 @@ public class ContentCommandService {
     private final ContentLikedRepository contentLikedRepository;
     private final NotificationRepository notificationRepository;
     private final CommentRepository commentRepository;
+    private final S3Service s3Service;
+    private static final String POST_IMAGE_FOLDER_NAME = "contents/";
 
     public void postContent(Long memberId, ContentPostRequestDto contentPostRequestDto) {
         Member member = memberRepository.findMemberByIdOrThrow(memberId);
@@ -41,6 +46,26 @@ public class ContentCommandService {
                 .contentText(contentPostRequestDto.contentText())
                 .build();
         Content savedContent = contentRepository.save(content);
+    }
+
+    public void postContentVer2(Long memberId, MultipartFile contentImage, ContentPostRequestDto contentPostRequestDto) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+
+        GhostUtil.isGhostMember(member.getMemberGhost());
+
+        Content content = contentRepository.save(Content.builder()
+                .member(member)
+                .contentText(contentPostRequestDto.contentText())
+                .build());
+
+        if(contentImage != null){   //이미지를 업로드 했다면
+            try {
+                final String contentImageUrl = s3Service.uploadImage2(POST_IMAGE_FOLDER_NAME+content.getId().toString()+"/", contentImage);
+                content.setContentImage(contentImageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
     }
 
     public void deleteContent(Long memberId, Long contentId) {

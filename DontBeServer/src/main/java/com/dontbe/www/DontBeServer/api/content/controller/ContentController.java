@@ -13,9 +13,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 
@@ -34,6 +34,16 @@ public class ContentController {
     public ResponseEntity<ApiResponse<Object>> postContent(Principal principal, @Valid @RequestBody ContentPostRequestDto contentPostRequestDto) {
         contentCommandService.postContent(MemberUtil.getMemberId(principal),contentPostRequestDto);
         return ApiResponse.success(POST_CONTENT_SUCCESS);
+    }
+
+    @PostMapping("v2/content")
+    @Operation(summary = "사진 첨부 기능이 추가된 게시글 작성 API입니다",description = "Content Post +contentImage")
+    public ResponseEntity<ApiResponse<Object>> postContent2(Principal principal, @RequestPart(value = "image", required = false) MultipartFile contentImage,
+                                                            @Valid @RequestPart(value="text") ContentPostRequestDto contentPostRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        contentCommandService.postContentVer2(memberId,contentImage,contentPostRequestDto);
+        return ApiResponse.success(POST_CONTENT_SUCCESS);
+
     }
 
     @DeleteMapping("v1/content/{contentId}")
@@ -92,11 +102,32 @@ public class ContentController {
         return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllPagination(memberId, cursor));
     }
 
+    @GetMapping("v2/contents")
+    @Operation(summary = "게시글 전체 조회 API(+페이지네이션+이미지) 입니다.",description = "Contents Get with image")
+    public ResponseEntity<ApiResponse<List<ContentGetAllResponseDtoVer3>>> getContentAllWithImage(Principal principal, @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_CONTENT_ALL_SUCCESS, contentQueryService.getContentAllWithImage(memberId, cursor));
+    }
+
     @GetMapping("v1/member/{memberId}/member-contents")
     @Operation(summary = "페이지네이션이 적용된 멤버에 해당하는 게시글 리스트 조회 API 입니다.",description = "ContentByMemberPagination")
     public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDto>>> getContentAllByMemberPagination(Principal principal,
                                                                                                      @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponse.success(GET_MEMBER_CONTENT_SUCCESS, contentQueryService.getContentAllByMemberPagination(memberId, targetMemberId, cursor));
+    }
+
+    @GetMapping("v2/member/{memberId}/contents")
+    @Operation(summary = "멤버에 해당하는 게시글 리스트 조회 API(+페이지네이션+이미지) 입니다.",description = "Contents By Member with image")
+    public ResponseEntity<ApiResponse<List<ContentGetAllByMemberResponseDtoVer2>>> getContentAllByMemberWithImage(Principal principal,
+                                                                                                               @PathVariable("memberId") Long targetMemberId,  @RequestParam(value = "cursor") Long cursor) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        return ApiResponse.success(GET_MEMBER_CONTENT_SUCCESS, contentQueryService.getContentAllByMemberWithImage(memberId, targetMemberId, cursor));
+    }
+
+    @GetMapping("v2/content/{contentId}")
+    @Operation(summary = "게시글 상세 조회 API 입니다.",description = "Content Get Detail")
+    public ResponseEntity<ApiResponse<ContentGetDetailsResponseDtoVer3>> getContentDetailWithImage(Principal principal, @PathVariable("contentId") Long contentId) {
+        return ApiResponse.success(GET_CONTENT_DETAIL_SUCCESS, contentQueryService.getContentDetailWithImage(MemberUtil.getMemberId(principal), contentId));
     }
 }
