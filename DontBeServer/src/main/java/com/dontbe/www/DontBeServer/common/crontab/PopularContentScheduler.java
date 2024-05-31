@@ -35,47 +35,47 @@ public class PopularContentScheduler {
         this.memberRepository = memberRepository;
     }
 
-    @Scheduled(cron = "0 0 4 * * ?")
-    @Transactional
-    public void popularContentNotification() {
-        LocalDateTime startOfYesterday = LocalDateTime.now().minusDays(1).toLocalDate().atStartOfDay();
-        LocalDateTime endOfYesterday = startOfYesterday.plusDays(1).minusSeconds(1);
+    // @Scheduled(cron = "0 0 4 * * ?")
+    // @Transactional
+    // public void popularContentNotification() {
+    //     LocalDateTime startOfYesterday = LocalDateTime.now().minusDays(1).toLocalDate().atStartOfDay();
+    //     LocalDateTime endOfYesterday = startOfYesterday.plusDays(1).minusSeconds(1);
 
-        List<Content> contents = contentRepository.findAllContentsBetweenDatesOrderedByAsc(startOfYesterday, endOfYesterday);
+    //     List<Content> contents = contentRepository.findAllContentsBetweenDatesOrderedByAsc(startOfYesterday, endOfYesterday);
 
-        Content topContent = contents.stream()
-                .map(c -> new AbstractMap.SimpleEntry<>(c, contentLikedRepository.countByContent(c) + commentRepository.countByContent(c) * 1.6))
-                .filter(e -> e.getValue() >= 5)
-                .max(Comparator.comparingDouble(Map.Entry::getValue))
-                .map(Map.Entry::getKey)
-                .orElse(null);
+    //     Content topContent = contents.stream()
+    //             .map(c -> new AbstractMap.SimpleEntry<>(c, contentLikedRepository.countByContent(c) + commentRepository.countByContent(c) * 1.6))
+    //             .filter(e -> e.getValue() >= 5)
+    //             .max(Comparator.comparingDouble(Map.Entry::getValue))
+    //             .map(Map.Entry::getKey)
+    //             .orElse(null);
 
-        if (topContent != null) {
-            Member topContentWriter = topContent.getMember();
+    //     if (topContent != null) {
+    //         Member topContentWriter = topContent.getMember();
 
-            Notification popularWriterNotification = Notification.builder()
-                    .notificationTargetMember(topContentWriter)
-                    .notificationTriggerMemberId(-1L)
-                    .notificationTriggerType("popularWriter")
-                    .notificationTriggerId(topContent.getId())
-                    .isNotificationChecked(false)
-                    .notificationText("")
-                    .build();
-            Notification savedPopularWriterNotification = notificationRepository.save(popularWriterNotification);
+    //         Notification popularWriterNotification = Notification.builder()
+    //                 .notificationTargetMember(topContentWriter)
+    //                 .notificationTriggerMemberId(-1L)
+    //                 .notificationTriggerType("popularWriter")
+    //                 .notificationTriggerId(topContent.getId())
+    //                 .isNotificationChecked(false)
+    //                 .notificationText("")
+    //                 .build();
+    //         Notification savedPopularWriterNotification = notificationRepository.save(popularWriterNotification);
 
-            List<Member> activeMembers = memberRepository.findAllActiveMembers();
+    //         List<Member> activeMembers = memberRepository.findAllActiveMembers();
 
-            for (Member activeMember : activeMembers) {
-                Notification popularContentNotification = Notification.builder()
-                        .notificationTargetMember(activeMember)
-                        .notificationTriggerMemberId(-1L)
-                        .notificationTriggerType("popularContent")
-                        .notificationTriggerId(topContent.getId())
-                        .isNotificationChecked(false)
-                        .notificationText(topContent.getContentText())
-                        .build();
-                Notification savedPopularContentNotification = notificationRepository.save(popularContentNotification);
-            }
-        }
-    }
+    //         for (Member activeMember : activeMembers) {
+    //             Notification popularContentNotification = Notification.builder()
+    //                     .notificationTargetMember(activeMember)
+    //                     .notificationTriggerMemberId(-1L)
+    //                     .notificationTriggerType("popularContent")
+    //                     .notificationTriggerId(topContent.getId())
+    //                     .isNotificationChecked(false)
+    //                     .notificationText(topContent.getContentText())
+    //                     .build();
+    //             Notification savedPopularContentNotification = notificationRepository.save(popularContentNotification);
+    //         }
+    //     }
+    // }
 }
