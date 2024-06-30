@@ -69,7 +69,7 @@ public class PopularContentScheduler {
 
             if(Boolean.TRUE.equals(topContentWriter.getIsPushAlarmAllowed())) {
                 String FcmMessageTitle = topContentWriter.getNickname() + "님이 작성하신 글이 인기들로 선정 되었어요.";
-
+                topContentWriter.increaseFcmBadge();
                 FcmMessageDto popularContentFcmMessage = FcmMessageDto.builder()
                         .validateOnly(false)
                         .message(FcmMessageDto.Message.builder()
