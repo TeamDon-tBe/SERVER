@@ -122,7 +122,7 @@ public class CommentCommendService {
                                         .description("답글 푸시 알림")
                                         .relateContentId(String.valueOf(contentId))
                                         .build())
-                                .badge(String.valueOf(contentWritingMember.getFcmBadge()))
+                                .badge(contentWritingMember.getFcmBadge())
                                 .build())
                         .build();
 
@@ -197,7 +197,7 @@ public class CommentCommendService {
                                         .description("답글 좋아요 푸시 알림")
                                         .relateContentId(String.valueOf(contentId))
                                         .build())
-                                .badge(String.valueOf(targetMember.getFcmBadge()))
+                                .badge(targetMember.getFcmBadge())
                                 .build())
                         .build();
 
