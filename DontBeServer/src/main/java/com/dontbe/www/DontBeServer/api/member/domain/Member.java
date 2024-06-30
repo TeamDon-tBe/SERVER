@@ -73,6 +73,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "deleted_Reason")
     private String deletedReason;
 
+    @Column(name = "fcm_badge", columnDefinition = "INTEGER DEFAULT 0")
+    private int fcmBadge;
+
     @OneToMany(mappedBy = "notificationTargetMember",cascade = ALL)
     private List<Notification> targetNotification = new ArrayList<>();
 
@@ -95,6 +98,7 @@ public class Member extends BaseTimeEntity {
         this.memberGhost = 0;
         this.memberEmail = memberEmail;
         this.socialNickname = socialNickname;
+        this.fcmBadge = 0;
     }
 
     public void decreaseGhost() {
@@ -133,4 +137,10 @@ public class Member extends BaseTimeEntity {
     public void updateMemberIsPushAlarmAllowed(boolean newIsPushAlarmAllowed) { this.isPushAlarmAllowed = newIsPushAlarmAllowed; }
 
     public void updateMemberFcmToken(String newFcmToken) { this.fcmToken = newFcmToken; }
+
+    public void increaseFcmBadge() {this.fcmBadge++; }
+
+    public void resetFcmBadge() { this.fcmBadge = 0;}
+
+    public void updateFcmBadge(int newFcmBadge) { this.fcmBadge = newFcmBadge;}
 }

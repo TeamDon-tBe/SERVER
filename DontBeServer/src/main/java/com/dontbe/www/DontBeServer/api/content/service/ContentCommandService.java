@@ -95,7 +95,7 @@ public class ContentCommandService {
         isDuplicateContentLike(content, triggerMember);
 
         Member targetMember = memberRepository.findMemberByIdOrThrow(content.getMember().getId());
-        ContentLiked contentLiked =  ContentLiked.builder()
+        ContentLiked contentLiked = ContentLiked.builder()
                 .content(content)
                 .member(triggerMember)
                 .build();
@@ -103,7 +103,7 @@ public class ContentCommandService {
 
 
         //위에가 게시물 좋아요 관련, 아래는 노티 테이블 채우기. 노티에 게시글 내용이 없어서 빈스트링 제공.
-        if(triggerMember != targetMember) {  //자신 게시물에 대한 좋아요 누르면 알림 발생 x
+        if (triggerMember != targetMember) {  //자신 게시물에 대한 좋아요 누르면 알림 발생 x
             Notification notification = Notification.builder()
                     .notificationTargetMember(targetMember)
                     .notificationTriggerMemberId(triggerMember.getId())
@@ -117,7 +117,7 @@ public class ContentCommandService {
 
             if (Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
                 String FcmMessageTitle = triggerMember.getNickname() + "님이 " + targetMember.getNickname() + "님의 글을 좋아합니다.";
-
+                targetMember.increaseFcmBadge();
                 FcmMessageDto contentLikeFcmMessage = FcmMessageDto.builder()
                         .validateOnly(false)
                         .message(FcmMessageDto.Message.builder()
@@ -131,6 +131,7 @@ public class ContentCommandService {
                                         .description("게시글 좋아요 푸시 알림")
                                         .relateContentId(String.valueOf(contentId))
                                         .build())
+                                .badge(String.valueOf(targetMember.getFcmBadge()))
                                 .build())
                         .build();
 
@@ -138,6 +139,7 @@ public class ContentCommandService {
             }
         }
     }
+
 
     public void unlikeContent(Long memberId, Long contentId) {
         Member triggerMember = memberRepository.findMemberByIdOrThrow(memberId);

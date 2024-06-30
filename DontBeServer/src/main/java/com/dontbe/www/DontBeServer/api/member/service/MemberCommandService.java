@@ -11,6 +11,7 @@ import com.dontbe.www.DontBeServer.api.content.domain.ContentLiked;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentLikedRepository;
 import com.dontbe.www.DontBeServer.api.content.repository.ContentRepository;
 import com.dontbe.www.DontBeServer.api.member.domain.Member;
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberPatchFcmBadgeRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawalPatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.ProfilePatchRequestDto;
@@ -165,6 +166,16 @@ public class MemberCommandService {
             existingMember.updateMemberFcmToken(profilePatchRequestDto.fcmToken());
         }
         Member savedMember = memberRepository.save(existingMember);
+    }
+
+    public void resetMemberFcmBadge(Long memberId) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        member.resetFcmBadge();
+    }
+
+    public void updateMemberFcmBadge(Long memberId, MemberPatchFcmBadgeRequestDto memberPatchFcmBadgeRequestDto) {
+        Member member = memberRepository.findMemberByIdOrThrow(memberId);
+        member.updateFcmBadge(Math.max(memberPatchFcmBadgeRequestDto.fcmBadge(), 0));
     }
 
     private static String removeBaseUrl(String fullUrl, String baseUrl) {

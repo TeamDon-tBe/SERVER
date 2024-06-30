@@ -1,5 +1,6 @@
 package com.dontbe.www.DontBeServer.api.member.controller;
 
+import com.dontbe.www.DontBeServer.api.member.dto.request.MemberPatchFcmBadgeRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberProfilePatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.MemberWithdrawalPatchRequestDto;
 import com.dontbe.www.DontBeServer.api.member.dto.request.ProfilePatchRequestDto;
@@ -83,5 +84,13 @@ public class MemberController {
         Long memberId = MemberUtil.getMemberId(principal);
         memberQueryService.checkNicknameValidate(memberId, nickname);
         return ApiResponse.success(NICKNAME_CHECK_SUCCESS);
+    }
+
+    @PatchMapping(value = "fcmbadge")
+    @Operation(summary = "유저 아이콘 배지 값 수정 API입니다.", description = "FcmBadgePatch")
+    public ResponseEntity<ApiResponse<Object>> updateMemberFcmBadge(Principal principal, @RequestBody MemberPatchFcmBadgeRequestDto memberPatchFcmBadgeRequestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        memberCommandService.updateMemberFcmBadge(memberId,memberPatchFcmBadgeRequestDto);
+        return ApiResponse.success(UPDATE_FCM_BADGE_SUCCESS);
     }
 }

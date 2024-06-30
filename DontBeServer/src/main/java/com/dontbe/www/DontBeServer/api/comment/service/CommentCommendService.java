@@ -108,7 +108,7 @@ public class CommentCommendService {
 
             if (Boolean.TRUE.equals(contentWritingMember.getIsPushAlarmAllowed())) {
                 String FcmMessageTitle = usingMember.getNickname() + "님이 답글을 작성했습니다.";
-
+                contentWritingMember.increaseFcmBadge();
                 FcmMessageDto commentFcmMessage = FcmMessageDto.builder()
                         .validateOnly(false)
                         .message(FcmMessageDto.Message.builder()
@@ -122,6 +122,7 @@ public class CommentCommendService {
                                         .description("답글 푸시 알림")
                                         .relateContentId(String.valueOf(contentId))
                                         .build())
+                                .badge(String.valueOf(contentWritingMember.getFcmBadge()))
                                 .build())
                         .build();
 
@@ -182,7 +183,7 @@ public class CommentCommendService {
 
             if (Boolean.TRUE.equals(targetMember.getIsPushAlarmAllowed())) {
                 String FcmMessageTitle = triggerMember.getNickname() + "님이 " + targetMember.getNickname() + "님의 답글을 좋아합니다.";
-
+                targetMember.increaseFcmBadge();
                 FcmMessageDto commentLikeFcmMessage = FcmMessageDto.builder()
                         .validateOnly(false)
                         .message(FcmMessageDto.Message.builder()
@@ -196,6 +197,7 @@ public class CommentCommendService {
                                         .description("답글 좋아요 푸시 알림")
                                         .relateContentId(String.valueOf(contentId))
                                         .build())
+                                .badge(String.valueOf(targetMember.getFcmBadge()))
                                 .build())
                         .build();
 

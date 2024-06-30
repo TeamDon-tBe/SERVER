@@ -49,8 +49,9 @@ public class FcmService {
                         .build()
                 )
                 .putAllData(objectMapper.convertValue(fcmMessageDto.getMessage().getData(), Map.class))
+                .putData("badge", fcmMessageDto.getMessage().getBadge())
                 .build();
-
+        System.out.println(fcmMessageDto.getMessage().getBadge());
         try {
             FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {
