@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -48,10 +46,14 @@ public class FcmService {
                         .setBody(fcmMessageDto.getMessage().getNotificationDetails().getBody())
                         .build()
                 )
+                .setApnsConfig(ApnsConfig.builder()
+                        .setAps(Aps.builder()
+                                .setBadge(fcmMessageDto.getMessage().getBadge())
+                                .build())
+                        .build())
                 .putAllData(objectMapper.convertValue(fcmMessageDto.getMessage().getData(), Map.class))
-                .putData("badge", fcmMessageDto.getMessage().getBadge())
                 .build();
-        System.out.println(fcmMessageDto.getMessage().getBadge());
+        System.out.println(fcmMessageDto.getMessage().getNotificationDetails().getBadge());
         try {
             FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {

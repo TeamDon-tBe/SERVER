@@ -131,7 +131,7 @@ public class ContentCommandService {
                                         .description("게시글 좋아요 푸시 알림")
                                         .relateContentId(String.valueOf(contentId))
                                         .build())
-                                .badge(String.valueOf(targetMember.getFcmBadge()))
+                                .badge(targetMember.getFcmBadge())
                                 .build())
                         .build();
 

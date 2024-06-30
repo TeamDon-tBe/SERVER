@@ -20,7 +20,7 @@ public class FcmMessageDto {
         private NotificationDetails notificationDetails;
         private String token;
         private Data data;
-        private String badge;
+        private int badge;
     }
 
     @Builder
@@ -29,6 +29,7 @@ public class FcmMessageDto {
     public static class NotificationDetails {
         private String title;
         private String body;
+        private Integer badge;
     }
 
     @Builder
