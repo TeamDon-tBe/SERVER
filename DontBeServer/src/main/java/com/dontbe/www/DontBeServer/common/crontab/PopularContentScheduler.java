@@ -83,6 +83,7 @@ public class PopularContentScheduler {
                                         .description("인기글 관련 푸시 알림")
                                         .relateContentId(String.valueOf(topContent.getId()))
                                         .build())
+                                .badge(String.valueOf(topContentWriter.getFcmBadge()))
                                 .build())
                         .build();
 

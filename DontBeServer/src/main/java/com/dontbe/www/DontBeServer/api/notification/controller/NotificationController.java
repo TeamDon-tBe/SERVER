@@ -1,5 +1,6 @@
 package com.dontbe.www.DontBeServer.api.notification.controller;
 
+import com.dontbe.www.DontBeServer.api.member.service.MemberCommandService;
 import com.dontbe.www.DontBeServer.api.notification.dto.response.NotificaitonCountResponseDto;
 import com.dontbe.www.DontBeServer.api.notification.service.NotificationCommandService;
 import com.dontbe.www.DontBeServer.api.notification.service.NotificationQueryService;
@@ -24,6 +25,7 @@ import static com.dontbe.www.DontBeServer.common.response.SuccessStatus.*;
 public class NotificationController {
     private final NotificationCommandService notificationCommandService;
     private final NotificationQueryService notificationQueryService;
+    private final MemberCommandService memberCommandService;
 
     @PatchMapping("notification-check")
     @Operation(summary = "노티 체크 API 입니다.",description = "NotificationCheck")
@@ -51,6 +53,7 @@ public class NotificationController {
     @Operation(summary = "페이지네이션이 적용된 노티 전체 리스트 조회 API 입니다.",description = "NotificationGetPagination")
     public ResponseEntity<ApiResponse<Object>> getNotificationAllPagination(Principal principal,@RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
+        memberCommandService.resetMemberFcmBadge(memberId);
         return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotificationAllPagination(memberId, cursor));
     }
 
@@ -58,6 +61,7 @@ public class NotificationController {
     @Operation(summary = "노티 전체 리스트 조회 ver3 API 입니다.",description = "GetNotificationsVer3")
     public ResponseEntity<ApiResponse<Object>> getNotifications(Principal principal,@RequestParam(value = "cursor") Long cursor) {
         Long memberId = MemberUtil.getMemberId(principal);
+        memberCommandService.resetMemberFcmBadge(memberId);
         return ApiResponse.success(NOTIFICATION_ALL_SUCCESS, notificationQueryService.getNotifications(memberId, cursor));
     }
 }

@@ -26,6 +26,7 @@ public enum SuccessStatus {
     CONTENT_UNLIKE_SUCCESS(HttpStatus.OK,"게시글 좋아요 취소 성공"),
     GET_CONTENT_ALL_SUCCESS(HttpStatus.OK, "게시물 리스트 조회 성공"),
     GET_MEMBER_CONTENT_SUCCESS(HttpStatus.OK,"유저에 해당하는 게시글 리스트 조회"),
+    UPDATE_FCM_BADGE_SUCCESS(HttpStatus.OK, "유저의 배지값 수정 완료"),
 
     /**
      * comment
